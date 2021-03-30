@@ -74,13 +74,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
             isQuickCompetition: false,
             onNextClicked: false,
             addOrRemoveVenues: false,
-            finalTypeRefId: null
+            finalTypeRefId: null,
+            competitionId: 0,
         };
 
         this.formRef = React.createRef();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.getDivisionFieldConfigAction();
         this.props.updateVenueConstraintsData(null, null, 'clearData', this.props.location.state)
         this.props.getVenuesTypeAction('all');
@@ -89,26 +90,33 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
+        // const compId = storedCompetitionId || this.props.appState.own_CompetitionArr[0].id;
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (yearId && storedCompetitionId && propsData && compData) {
             let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == storedCompetitionId && x.isQuickCompetition == 1);
+           
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
                 getDataLoading: true,
                 isQuickCompetition: quickComp != undefined,
-                finalTypeRefId: storedfinalTypeRefId
+                finalTypeRefId: storedfinalTypeRefId,
+                competitionId: storedCompetitionId || 0 
             })
             this.props.venueConstraintListAction(yearId, storedCompetitionId, 1)
         } else {
             if (yearId !== undefined) {
-                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
+                await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
                 this.setState({
                     yearRefId: JSON.parse(yearId),
+                    competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
+                    ? this.props.appState.own_CompetitionArr[0].id : this.state.firstTimeCompId
                 })
             } else {
-                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
+                await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
+                this.setState({ competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
+                    ? this.props.appState.own_CompetitionArr[0].id : this.state.firstTimeCompId  })
             }
         }
         this.syncDivisionsFieldsConfigurationsFormData()
@@ -325,13 +333,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
         </Header>
     );
 
-    onYearClick(yearId) {
+    async onYearClick(yearId) {
         setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
         this.setState({ yearRefId: yearId, firstTimeCompId: null, competitionStatus: 0, finalTypeRefId: null, })
-        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition",)
+        await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition",)
+        this.setState({ competitionId: this.props.appState.own_CompetitionArr[0].id })
     }
 
     onCompetitionClick(competitionId) {
