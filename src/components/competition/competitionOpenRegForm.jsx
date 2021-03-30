@@ -15,6 +15,7 @@ import {
     message,
     Tooltip,
     InputNumber,
+    Popover,
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { captializedString, isImageFormatValid, isImageSizeValid } from "../../util/helpers"
@@ -97,13 +98,17 @@ const divisionTableColumns = [
                 name={`divisionName${record.parentIndex}${index}`}
                 rules={[{ required: true, message: ValidationConstants.divisionName }]}
             >
-                <Input
-                    className="input-inside-table-fees"
-                    required="required-field pt-0 pb-0"
-                    value={divisionName}
-                    onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
-                    disabled={(this_Obj.state.competitionStatus == 1 || this_Obj.state.permissionState.divisionsDisable)}
-                />
+                <Popover content={divisionName}>
+                    <div>
+                        <Input
+                            className="input-inside-table-fees"
+                            required="required-field pt-0 pb-0"
+                            value={divisionName}
+                            onChange={e => this_Obj.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
+                            disabled={(this_Obj.state.competitionStatus == 1 || this_Obj.state.permissionState.divisionsDisable)}
+                        />
+                    </div>
+                </Popover>
             </Form.Item>
         )
     },

@@ -17,6 +17,7 @@ import {
   Tooltip,
   Switch,
   InputNumber,
+  Popover,
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import {
@@ -117,11 +118,15 @@ const playerSeasonalTable = [
     key: "membershipType",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -130,15 +135,19 @@ const playerSeasonalTable = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
-          record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
-        }
-      />
+      <Popover content={division}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -3257,20 +3266,24 @@ class RegistrationCompetitionFee extends Component {
                   },
                 ]}
               >
-                <Input
-                  className="input-inside-table-fees"
-                  required="required-field pt-0 pb-0"
-                  value={divisionName}
-                  onChange={(e) =>
-                    this.divisionTableDataOnchange(
-                      e.target.value,
-                      record,
-                      index,
-                      "divisionName"
-                    )
-                  }
-                  disabled={this.state.permissionState.divisionsDisable}
-                />
+                <Popover content={divisionName}>
+                  <div>
+                    <Input
+                      className="input-inside-table-fees"
+                      required="required-field pt-0 pb-0"
+                      value={divisionName}
+                      onChange={(e) =>
+                        this.divisionTableDataOnchange(
+                          e.target.value,
+                          record,
+                          index,
+                          "divisionName"
+                        )
+                      }
+                      disabled={this.state.permissionState.divisionsDisable}
+                    />
+                  </div>
+                </Popover>
               </Form.Item>
             );
           },
