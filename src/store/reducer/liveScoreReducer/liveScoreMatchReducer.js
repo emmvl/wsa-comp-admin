@@ -662,7 +662,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 // state.umpireReserve = action.data;
             }
             else if (action.key === "umpireCoach") {
-                let umpireResList = state.umpireList
+                let umpireResList = state.coachList
                 if (action.data === state.umpire1NameMainId) {
                     state.umpire1NameMainId = null
                 }
@@ -679,9 +679,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                         state.umpireCoachId = umpireResList[i].umpireId
                     }
                 }
-                state.umpireCoach = action.data
-            }
-            else if (action.key === "umpireCoach") {
                 state.umpireCoach = action.data
             }
             else if (action.key === "umpire2Orag") {
@@ -814,7 +811,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             // state.umpireReserve = umpireReserveData ? umpireReserveData : null
             state.umpireReserve = getUmpureReserveId(state.umpireList, umpireReserveData)
             // state.umpireCoach = umpireCoachData ? umpireCoachData : null
-            state.umpireCoach = getUmpureReserveId(state.umpireList, umpireCoachData)
+            state.umpireCoach = getUmpureReserveId(state.coachList, umpireCoachData)
             if (umpires_1) {
 
                 let umpir1UserId = getUmpureUserId(state.umpireList, umpires_1)
