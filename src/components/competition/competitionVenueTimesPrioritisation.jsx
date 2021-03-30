@@ -708,9 +708,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         return !!venueConstrainstData.competitionDivisionsFieldsConfigurations
             .filter((div) => !!div)
-            .find(selectedConfig => {
-                return selectedConfig.competitionDivisionId === divisionId && !!selectedConfig.divisionFieldConfigurationId
-            })
+            .some(selectedConfig => selectedConfig.competitionDivisionId === divisionId && selectedConfig.divisionFieldConfigurationId > 1)
     }
 
     divisionFieldRow = (field, rowIndex) => {
