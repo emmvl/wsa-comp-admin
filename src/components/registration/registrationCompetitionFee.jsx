@@ -135,7 +135,13 @@ const playerSeasonalTable = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Popover content={division}>
+      <Popover
+        content={
+          record.competitionMembershipProductDivisionId
+          ? record.divisionName
+          : "N/A"
+        }
+      >
         <div>
           <Input
             className="input-inside-table-fees"
@@ -307,11 +313,15 @@ const playerCasualTable = [
     key: "membershipProductTypeName",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -320,15 +330,25 @@ const playerCasualTable = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -485,11 +505,15 @@ const playerSeasonalTableAssociation = [
     key: "membershipType",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -498,15 +522,25 @@ const playerSeasonalTableAssociation = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -766,11 +800,15 @@ const playerCasualTableAssociation = [
     key: "membershipProductTypeName",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -779,15 +817,25 @@ const playerCasualTableAssociation = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1045,11 +1093,15 @@ const playerSeasonalTableClub = [
     key: "membershipType",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1058,15 +1110,25 @@ const playerSeasonalTableClub = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1326,11 +1388,15 @@ const playerCasualTableClub = [
     key: "membershipProductTypeName",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1339,15 +1405,25 @@ const playerCasualTableClub = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1606,11 +1682,15 @@ const playerSeasonalTableTeamAssociation = [
     key: "membershipType",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1619,15 +1699,25 @@ const playerSeasonalTableTeamAssociation = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1898,11 +1988,15 @@ const playerSeasonalTableTeamClub = [
     key: "membershipType",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -1911,15 +2005,25 @@ const playerSeasonalTableTeamClub = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2190,11 +2294,15 @@ const playerSeasonalTeamTable = [
     key: "membershipType",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2203,15 +2311,25 @@ const playerSeasonalTeamTable = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2375,11 +2493,15 @@ const playerCasualTableTeamAssociation = [
     key: "membershipProductTypeName",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2388,15 +2510,25 @@ const playerCasualTableTeamAssociation = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2684,11 +2816,15 @@ const playerCasualTableTeamClub = [
     key: "membershipProductTypeName",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2697,15 +2833,25 @@ const playerCasualTableTeamClub = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -2994,11 +3140,15 @@ const playerCasualTeamTable = [
     key: "membershipProductTypeName",
     width: 84,
     render: (membershipProductTypeName) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={membershipProductTypeName}
-      />
+      <Popover content={membershipProductTypeName}>
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={membershipProductTypeName}
+          />
+        </div>
+      </Popover>
     ),
   },
   {
@@ -3007,15 +3157,25 @@ const playerCasualTeamTable = [
     key: "division",
     width: 84,
     render: (division, record) => (
-      <Input
-        className="input-inside-table-fees"
-        disabled
-        value={
+      <Popover
+        content={
           record.competitionMembershipProductDivisionId
-            ? record.divisionName
-            : "N/A"
+          ? record.divisionName
+          : "N/A"
         }
-      />
+      >
+        <div>
+          <Input
+            className="input-inside-table-fees"
+            disabled
+            value={
+              record.competitionMembershipProductDivisionId
+                ? record.divisionName
+                : "N/A"
+            }
+          />
+        </div>
+      </Popover>
     ),
   },
   {
