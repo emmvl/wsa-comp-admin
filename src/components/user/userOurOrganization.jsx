@@ -1019,8 +1019,8 @@ class UserOurOrganization extends Component {
                     </Radio.Group>
                 </div>
             
-                {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR")
-                                        || (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && 
+                {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 22 && this.state.sourcePage != "DIR")
+                                        || (this.state.organisationTypeRefId == 22 && this.state.sourcePage == "DIR")) && 
                 <div className="discount-view pt-5">
                     <span className="form-heading">{AppConstants.stateTermsAndConditions}</span>
                     <Radio.Group
