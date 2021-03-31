@@ -1113,7 +1113,6 @@ function VenueTimeState(state = initialState, action) {
                     config[rowIndex].divisions = competitionDivisionIds;
                 }
                 state.venueConstrainstData.fieldLinkage = config;
-                console.log(config);
                 const newCompDivConfig = config.reduce((acc, field) => {
                     const divisionFieldConfigurationId = FIELD_SIZES_COUNT - field.row;
                     if (field && !!field.divisions && !!field.divisions.length) {
@@ -1128,7 +1127,6 @@ function VenueTimeState(state = initialState, action) {
                     
                 }, []);
                  
-                console.log('UPDATED CONFIG: ', newCompDivConfig);
                 state.venueConstrainstData.competitionDivisionsFieldsConfigurations = newCompDivConfig;
             }
             else {
