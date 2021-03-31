@@ -53,6 +53,7 @@ import { saveCompetitionDivisionsAction } from '../../store/actions/competitionM
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+const FIELD_SIZES_COUNT = 4;
 
 class CompetitionVenueTimesPrioritisation extends Component {
     constructor(props) {
@@ -232,22 +233,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     syncDivisionsFieldsConfigurationsFormData = () => {
-        const { venueTimeState } = this.props;
-        const {
-            competitionDivisionsFieldsConfigurations = [],
-        } = venueTimeState.venueConstrainstData;
+        const { venueTimeState: { venueConstrainstData: { fieldLinkage }} } = this.props;
 
-        competitionDivisionsFieldsConfigurations.forEach((field) => {
-            if (field && field.divisionFieldConfigurationId) {
-                const key = `divisionsFieldsConfigurations_${field.divisionFieldConfigurationId}`;
-                if (field.competitionDivisionId) {
-                    this.formRef.current.setFieldsValue({
-                        [key]: field.competitionDivisionId,
-                    })
-                } else {
-                    this.formRef.current.resetFields([key])
-                }
-            }
+        fieldLinkage.forEach((field) => {
+            const key = `divisionsFieldsConfigurations_${FIELD_SIZES_COUNT-field.row}`;
+            
+            this.formRef.current.setFieldsValue({
+                [key]: field.divisions
+            })
         })
     }
 
@@ -712,23 +705,23 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
-    isDivisionFieldSelected = (divisionId) => {
-        const { venueConstrainstData } = this.props.venueTimeState;
+    isDivisionFieldSelected = (divisionId, row) => {
+        const { venueConstrainstData: { fieldLinkage} } = this.props.venueTimeState;
 
-        return !!venueConstrainstData.competitionDivisionsFieldsConfigurations
-            .filter((div) => !!div)
-            .some(selectedConfig => selectedConfig.competitionDivisionId === divisionId && selectedConfig.divisionFieldConfigurationId > 1)
+        const notDisabled = [
+            ...fieldLinkage[FIELD_SIZES_COUNT-1].divisions,
+            ...fieldLinkage[row].divisions
+        ]
+        return !notDisabled.includes(divisionId);
     }
 
     divisionFieldRow = (field, rowIndex) => {
         const { venueTimeState } = this.props;
         const {
             divisionGrades = [],
-            competitionDivisionsFieldsConfigurations = [],
+            fieldLinkage
         } = venueTimeState.venueConstrainstData;
-        const currentFieldConfig = competitionDivisionsFieldsConfigurations
-            .filter((div) => !!div)
-            .find((div) => div.divisionFieldConfigurationId === field.id);
+        const fieldValues = fieldLinkage[rowIndex].divisions || [];
 
         return (
             <div
@@ -745,17 +738,16 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         name={`divisionsFieldsConfigurations_${field.id}`}
                     >
                         <Select
-                            allowClear
-                            className="w-100"
-                            style={{ paddingRight: 1, minWidth: 182 }}
-                            // value={currentFieldConfig?.competitionDivisionId}
-                            onChange={(val) => this.setDivisionsFieldsConfigurations(rowIndex, val, field.id)}
+                            mode="multiple"
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            value={fieldValues}
+                            onChange={(divisions) => this.setDivisionsFieldsConfigurations(rowIndex, divisions)}
                         >
-                            {divisionGrades.map((div) => (
+                            {(divisionGrades || []).map((div) => (
                                 <Option
                                     key={'compMemProdDiv_' + div.competitionMembershipProductDivisionId}
                                     value={div.competitionMembershipProductDivisionId}
-                                    disabled={this.isDivisionFieldSelected(div.competitionMembershipProductDivisionId)}
+                                    disabled={this.isDivisionFieldSelected(div.competitionMembershipProductDivisionId, rowIndex)}
                                 >
                                     {div.divisionName}
                                 </Option>
@@ -764,6 +756,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     </Form.Item>
                 </div>
             </div>
+            
         )
     }
 
@@ -772,7 +765,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
         const sortedDivisionFieldConfigList = [...divisionFieldConfigList].sort((a, b) => {
             return b.sortOrder - a.sortOrder
         });
-
         return (
             <div className="formView">
                 <div className="content-view">
@@ -1051,11 +1043,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
         this.props.updateVenueConstraintsData(val, index, key, 'matchPreference')
     }
 
-    setDivisionsFieldsConfigurations = (rowIndex, competitionDivisionId = null, divisionFieldConfigurationId) => {
-        this.props.updateVenueConstraintsData({
-            competitionDivisionId,
-            divisionFieldConfigurationId,
-        }, rowIndex, null, 'competitionDivisionsFieldsConfigurations')
+    setDivisionsFieldsConfigurations = (rowIndex, competitionDivisionIds = []) => {
+        this.props.updateVenueConstraintsData(competitionDivisionIds, rowIndex, null, 'competitionDivisionsFieldsConfigurations')
     }
 
     onChangeSetLDValue = (val, key, index) => {
