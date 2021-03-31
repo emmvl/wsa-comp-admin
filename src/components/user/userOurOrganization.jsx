@@ -968,7 +968,8 @@ class UserOurOrganization extends Component {
         const affiliate = this.props.userState.affiliateOurOrg;
         return (
             <>
-                {affiliate.organisationTypeRefId !== 2 && <div className="discount-view pt-5">
+                {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR")
+                                        || (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && <div className="discount-view pt-5">
                     <span className="form-heading">{AppConstants.termsAndConditions}</span>
                     <Radio.Group
                         className="reg-competition-radio"
