@@ -525,7 +525,7 @@ class UmpirePayments extends Component {
                                     className="year-select reg-filter-select1 ml-3"
                                     style={{ minWidth: 200, maxWidth: 250 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
-                                    value={this.state.selectedComp}
+                                    value={this.state.selectedComp || ""}
                                 >
                                     {competition.map((item) => (
                                         <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
