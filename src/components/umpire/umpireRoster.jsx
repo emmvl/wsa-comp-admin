@@ -218,10 +218,14 @@ class UmpireRoster extends Component {
         let { organisationId, } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
 
-        let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-        this.setState({
-            compOrgId: competitionOrganisation.id
-        })
+        const umpireCompetitionData = getUmpireCompetitonData();
+        const parsedData = umpireCompetitionData ? JSON.parse(umpireCompetitionData) : {};
+        let competitionOrganisation = parsedData ? parsedData.competitionOrganisation : {};
+        if (competitionOrganisation && competitionOrganisation.id) {
+            this.setState({
+                compOrgId: competitionOrganisation.id
+            })
+        }
         checkLivScoreCompIsParent().then((value) => {
             this.setState({
                 compIsParent: value
