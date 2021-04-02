@@ -63,8 +63,7 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "DESC") {
         sortBy = sortOrder = null;
     }
-    let { pageSize } = this_obj.props.umpireDashboardState;
-    pageSize = pageSize ? pageSize : 10;
+    const { pageSize = 10 } = this_obj.props.umpireDashboardState;
     const body = {
         paging: {
             limit: pageSize,
@@ -72,16 +71,19 @@ function tableSort(key) {
         },
     };
     this_obj.setState({ sortBy, sortOrder });
-    this_obj.props.getUmpireDashboardList({
-        compId: this_obj.state.selectedComp,
-        divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
-        venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
-        orgId: this_obj.state.org_Id,
-        roundId: this_obj.state.round === "All" ? "" : Array.isArray(this_obj.state.round) ? this_obj.state.round : [this_obj.state.round],
-        pageData: body,
-        sortBy,
-        sortOrder,
-    });
+    if (this_obj.state.selectedComp && this_obj.state.org_Id) {
+        this_obj.props.getUmpireDashboardList({
+            compId: this_obj.state.selectedComp,
+            divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
+            venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
+            orgId: this_obj.state.org_Id,
+            roundId: this_obj.state.round === "All" ? "" : Array.isArray(this_obj.state.round) ? this_obj.state.round : [this_obj.state.round],
+            pageData: body,
+            sortBy,
+            sortOrder,
+        });
+    }
+    
 }
 
 const listeners = (key) => ({
@@ -651,10 +653,13 @@ class UmpireDashboard extends Component {
         }
 
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
-            let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
-            let orgId = getOrganisationData() ? getOrganisationData().organisationId : null;
+            const organisationData = localStorage.getItem("setOrganisationData");
+            const parsedData = organisationData ? JSON.parse(organisationData) : {};
+            let organisationId = (parsedData && parsedData.organisationId) ? parsedData.organisationId : 0;
+            const orgData = getOrganisationData();
+            let orgId =  (orgData && orgData.organisationId) ? orgData.organisationId : null;
             this.setState({ loading: true, orgId });
-            this.props.umpireCompetitionListAction(null, null, organisationId, null, null, null, true, this.state.isParticipateInCompetition);
+            if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, null, null, null, true, this.state.isParticipateInCompetition);
         } else {
             history.push("/");
         }
@@ -664,43 +669,44 @@ class UmpireDashboard extends Component {
         let { sortBy, sortOrder } = this.state
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && !this.props.umpireCompetitionState.onLoad) {
-                let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
+                let compList = (this.props.umpireCompetitionState.umpireComptitionList 
+                    && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList))
                     ? this.props.umpireCompetitionState.umpireComptitionList
                     : [];
-                let firstComp = (compList && compList.length > 0) ? compList[0].id : 0;
-                let compData = (compList && compList.length > 0) ? compList[0] : null;
-
-                if (getUmpireCompetiton()) {
+                let firstComp = (compList && compList.length) ? compList[0].id : null;
+                let compData = (compList && compList.length) ? compList[0] : null;
+                let tempJson;
+                const unparsed = getUmpireCompetiton();
+                const umpireCompetition = unparsed ? JSON.parse(unparsed) : null;
+                if (umpireCompetition) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
-                        this.setState({
-                            org_Id: compData ? compData.organisationId : 0
-                        })
-                        firstComp = JSON.parse(getLiveScoreUmpireCompition());
-                        compData = JSON.parse(getLiveScoreUmpireCompitionData());
-                        setUmpireCompition(firstComp);
+                        this.setState({ org_Id: compData?.organisationId });
+                        tempJson = getLiveScoreUmpireCompition();
+                        firstComp = tempJson ? JSON.parse(tempJson) : null;
+                        tempJson = getLiveScoreUmpireCompitionData();
+                        compData = tempJson ? JSON.parse(tempJson) : null;
+                        if (firstComp) setUmpireCompition(firstComp);
                         if (compData) setUmpireCompitionData(JSON.stringify(compData));
                     } else {
-                        firstComp = JSON.parse(getUmpireCompetiton());
-                        compData = JSON.parse(getUmpireCompetitonData());
-                        this.setState({
-                            org_Id: compData ? compData.organisationId : 0
-                        })
+                        firstComp = umpireCompetition;
+                        tempJson = getUmpireCompetitonData();
+                        compData = tempJson ? JSON.parse(tempJson) : null;
+                        this.setState({ org_Id: compData?.organisationId });
                     }
                 } else {
-                    setUmpireCompition(firstComp);
+                    if (firstComp) setUmpireCompition(firstComp);
                     if (compData) setUmpireCompitionData(JSON.stringify(compData));
-                    this.setState({
-                        org_Id: compData ? compData.organisationId : 0
-                    })
+                    this.setState({ org_Id: compData?.organisationId });
                 }
 
                 if (!!firstComp) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
-                        let compId = JSON.parse(getLiveScoreUmpireCompition());
+                        let liveScoreUmpireCompetition = getLiveScoreUmpireCompition();
+                        let compId = liveScoreUmpireCompetition ? JSON.parse(liveScoreUmpireCompetition) : null;
                         if (compId) this.props.getUmpireDashboardVenueList(compId);
-
-                        const { uniqueKey, organisationId } = JSON.parse(getLiveScoreUmpireCompitionData());
-                        let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
+                        liveScoreUmpireCompetition = getLiveScoreUmpireCompitionData();
+                        let compObjData = liveScoreUmpireCompetition? JSON.parse(liveScoreUmpireCompetition) : null;
+                        const { uniqueKey, organisationId } = compObjData;
 
                         this.setState({
                             selectedComp: compId,
@@ -712,8 +718,8 @@ class UmpireDashboard extends Component {
                             org_Id: organisationId
                         });
                     } else {
-                        this.props.getUmpireDashboardVenueList(firstComp);
-                        let compKey = (compList && compList.length > 0) ? compList[0].competitionUniqueKey : 0;
+                        if (firstComp) this.props.getUmpireDashboardVenueList(firstComp);
+                        let compKey = (compList && compList.length && compList[0].competitionUniqueKey) ? compList[0].competitionUniqueKey : 0;
                         this.setState({
                             selectedComp: firstComp,
                             loading: false,
@@ -731,15 +737,14 @@ class UmpireDashboard extends Component {
 
         if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
             if (this.props.umpireDashboardState.onVenueLoad === false && this.state.venueLoad === true) {
-                this.props.getUmpireDashboardDivisionList(this.state.selectedComp);
+                if (this.state.selectedComp) this.props.getUmpireDashboardDivisionList(this.state.selectedComp);
                 this.setState({ venueLoad: false, divisionLoad: true });
             }
         }
 
         if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
             if (this.props.umpireDashboardState.onDivisionLoad === false && this.state.divisionLoad === true) {
-                let { pageSize } = this_obj.props.umpireDashboardState;
-                pageSize = pageSize ? pageSize : 10;
+                const { pageSize = 10 } = this_obj.props.umpireDashboardState;
                 const body = {
                     paging: {
                         limit: pageSize,
@@ -747,18 +752,19 @@ class UmpireDashboard extends Component {
                     },
                 };
                 this.setState({ divisionLoad: false });
-                this.props.getUmpireDashboardList({
-                    compId: this.state.selectedComp,
-                    divisionId: this.state.division === "All" ? "" : this.state.division,
-                    venueId: this.state.venue === "All" ? "" : this.state.venue,
-                    orgId: this.state.org_Id,
-                    roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
-                    pageData: body,
-                    sortBy,
-                    sortOrder,
-                });
+                if (this.state.selectedComp && this.state.org_Id) 
+                    this.props.getUmpireDashboardList({
+                        compId: this.state.selectedComp,
+                        divisionId: this.state.division === "All" ? "" : this.state.division,
+                        venueId: this.state.venue === "All" ? "" : this.state.venue,
+                        orgId: this.state.org_Id,
+                        roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+                        pageData: body,
+                        sortBy,
+                        sortOrder,
+                    });
 
-                this.props.umpireRoundListAction(this.state.selectedComp, this.state.division === "All" ? "" : this.state.division);
+                if (this.state.selectedComp) this.props.umpireRoundListAction(this.state.selectedComp, this.state.division === "All" ? "" : this.state.division);
             }
         }
     }
@@ -790,8 +796,7 @@ class UmpireDashboard extends Component {
     handlePageChange = async (page) => {
         await this.props.setPageNumberAction(page);
         let { sortBy, sortOrder } = this.state
-        let { pageSize } = this.props.umpireDashboardState;
-        pageSize = pageSize ? pageSize : 10;
+        const { pageSize = 10 } = this.props.umpireDashboardState;
         let offsetData = page ? pageSize * (page - 1) : 0;
         this.setState({ offsetData });
 
@@ -802,22 +807,23 @@ class UmpireDashboard extends Component {
             },
         };
 
-        this.props.getUmpireDashboardList({
-            compId: this.state.selectedComp,
-            divisionId: this.state.division === "All" ? "" : this.state.division,
-            venueId: this.state.venue === "All" ? "" : this.state.venue,
-            orgId: this.state.org_Id,
-            roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
-            pageData: body,
-            sortBy,
-            sortOrder,
-        });
+        if (this.state.selectedComp && this.state.org_Id) 
+            this.props.getUmpireDashboardList({
+                compId: this.state.selectedComp,
+                divisionId: this.state.division === "All" ? "" : this.state.division,
+                venueId: this.state.venue === "All" ? "" : this.state.venue,
+                orgId: this.state.org_Id,
+                roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+                pageData: body,
+                sortBy,
+                sortOrder,
+            });
     };
 
     contentView = () => {
         const { umpireDashboardList, totalPages, currentPage, pageSize } = this.props.umpireDashboardState
-        let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
-        let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
+        let umpireListResult = (umpireDashboardList && isArrayNotEmpty(umpireDashboardList)) ? umpireDashboardList : []
+        let umpireType = (this.state.compititionObj && this.state.compititionObj.recordUmpireType) ? this.state.compititionObj.recordUmpireType : ""
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -854,45 +860,43 @@ class UmpireDashboard extends Component {
     };
 
     onChangeComp = (compID) => {
-        let selectedComp = compID.comp;
-        let compKey = compID.competitionUniqueKey;
+        let selectedComp = (compID && compID.comp) ? compID.comp : null;
+        let compKey = (compID && compID.competitionUniqueKey) ? compID.competitionUniqueKey : null;
 
-        this.props.getUmpireDashboardVenueList(selectedComp);
-        this.props.getUmpireDashboardDivisionList(selectedComp);
+        if (selectedComp) {
+            this.props.getUmpireDashboardVenueList(selectedComp);
+            this.props.getUmpireDashboardDivisionList(selectedComp);
+        }
+    
+        const compObj = this.state.compArray.find(comp => comp?.id === compID?.comp) || null; 
 
-        let compObj = null;
-        for (let i in this.state.compArray) {
-            if (compID.comp === this.state.compArray[i].id) {
-                compObj = this.state.compArray[i];
-                break;
-            }
+        if (selectedComp) {
+            setUmpireCompition(selectedComp);
+            setLiveScoreUmpireCompition(selectedComp);
+        }
+        if (compObj) {
+            setUmpireCompitionData(JSON.stringify(compObj));
+            setLiveScoreUmpireCompitionData(JSON.stringify(compObj));
         }
 
-        setUmpireCompition(selectedComp);
-        setUmpireCompitionData(JSON.stringify(compObj));
-
-        setLiveScoreUmpireCompition(selectedComp);
-        setLiveScoreUmpireCompitionData(JSON.stringify(compObj));
-
-        this.setState({
-            selectedComp,
-            competitionUniqueKey: compKey,
-            venueLoad: true,
-            divisionLoad: true,
-            venue: "All",
-            division: "All",
-            competitionObj: compObj,
-            round: "All",
-            sortBy: "",
-            sortOrder: "",
-            offsetData: 0
-        });
+            this.setState({
+                selectedComp,
+                competitionUniqueKey: compKey,
+                venueLoad: true,
+                divisionLoad: true,
+                venue: "All",
+                division: "All",
+                competitionObj: compObj,
+                round: "All",
+                sortBy: "",
+                sortOrder: "",
+                offsetData: 0
+            });
     };
 
     onVenueChange = (venueId) => {
         let { sortBy, sortOrder } = this.state
-        let { pageSize } = this.props.umpireDashboardState
-        pageSize = pageSize ? pageSize : 10;
+        const { pageSize = 10 } = this.props.umpireDashboardState;
         const body = {
             paging: {
                 limit: pageSize,
@@ -900,16 +904,17 @@ class UmpireDashboard extends Component {
             },
         };
 
-        this.props.getUmpireDashboardList({
-            compId: this.state.selectedComp,
-            divisionId: this.state.division === "All" ? "" : this.state.division,
-            venueId: venueId === "All" ? "" : venueId,
-            orgId: this.state.org_Id,
-            roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
-            pageData: body,
-            sortBy,
-            sortOrder,
-        });
+        if (this.state.selectedComp && this.state.org_Id) 
+            this.props.getUmpireDashboardList({
+                compId: this.state.selectedComp,
+                divisionId: this.state.division === "All" ? "" : this.state.division,
+                venueId: venueId === "All" ? "" : venueId,
+                orgId: this.state.org_Id,
+                roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+                pageData: body,
+                sortBy,
+                sortOrder,
+            });
 
         this.setState({ venue: venueId });
     };
@@ -917,8 +922,7 @@ class UmpireDashboard extends Component {
     onDivisionChange = (divisionId) => {
         this.setState({ division: divisionId, round: "All" });
         let { sortBy, sortOrder } = this.state
-        let { pageSize } = this.props.umpireDashboardState
-        pageSize = pageSize ? pageSize : 10;
+        const { pageSize = 10 } = this.props.umpireDashboardState;
         const body = {
             paging: {
                 limit: pageSize,
@@ -927,6 +931,7 @@ class UmpireDashboard extends Component {
         };
 
         setTimeout(() => {
+            if (this.state.selectedComp && this.state.org_Id) 
             this.props.getUmpireDashboardList({
                 compId: this.state.selectedComp,
                 divisionId: divisionId === "All" ? "" : divisionId,
@@ -939,7 +944,7 @@ class UmpireDashboard extends Component {
             });
         }, 100);
 
-        this.props.umpireRoundListAction(this.state.selectedComp, divisionId === "All" ? "" : divisionId);
+        if (this.state.selectedComp) this.props.umpireRoundListAction(this.state.selectedComp, divisionId === "All" ? "" : divisionId);
 
         this.setState({ division: divisionId, round: "All" });
     };
@@ -949,8 +954,7 @@ class UmpireDashboard extends Component {
             this.props.umpireDashboardUpdate(roundId);
         }
         let { sortBy, sortOrder } = this.state
-        let { pageSize } = this.props.umpireDashboardState
-        pageSize = pageSize ? pageSize : 10;
+        const { pageSize = 10 } = this.props.umpireDashboardState;
         const body = {
             paging: {
                 limit: pageSize,
@@ -958,6 +962,7 @@ class UmpireDashboard extends Component {
             },
         };
         const { allRoundIds } = this.props.umpireDashboardState;
+        if (this.state.selectedComp && this.state.org_Id)
         this.props.getUmpireDashboardList({
             compId: this.state.selectedComp,
             divisionId: this.state.division === "All" ? "" : this.state.division,
@@ -973,8 +978,10 @@ class UmpireDashboard extends Component {
     };
 
     onExport = () => {
-        let url = AppConstants.umpireDashboardExport + `competitionId=${this.state.selectedComp}&organisationId=${this.state.orgId}`;
-        this.props.exportFilesAction(url);
+        if (this.state.orgId && this.state.selectedComp) {
+            let url = AppConstants.umpireDashboardExport + `competitionId=${this.state.selectedComp}&organisationId=${this.state.orgId}`;
+             this.props.exportFilesAction(url);
+        }
     };
 
     headerView = () => {
@@ -1067,7 +1074,7 @@ class UmpireDashboard extends Component {
         let venueList = isArrayNotEmpty(umpireVenueList) ? umpireVenueList : [];
         let divisionList = isArrayNotEmpty(umpireDivisionList) ? umpireDivisionList : [];
         let roundList = isArrayNotEmpty(umpireRoundList) ? umpireRoundList : [];
-        let umpireType = this.state.competitionObj ? this.state.competitionObj.recordUmpireType : null;
+        let umpireType = this.state.competitionObj ? this.state.competitionObj?.recordUmpireType : null;
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">

@@ -79,6 +79,7 @@ const MatchesDetailView = (props) => {
     const fields = [
         { key: "firstName", title: AppConstants.firstName },
         { key: "lastName", title: AppConstants.lastName },
+        { key: "middleName", title: AppConstants.middleName },
         {
             key: "dateOfBirth",
             title: AppConstants.dateOfBirth,
@@ -117,6 +118,10 @@ const MatchesDetailView = (props) => {
             title: AppConstants.checkExpiryDate,
             onValueFormat: getDateTypeValue,
         },
+        { key: "postalCode", title: AppConstants.postalCode },
+        { key: "street1", title: AppConstants.street1 },
+        { key: "street2", title: AppConstants.street2 },
+        { key: "suburb", title: AppConstants.suburb },
     ];
 
     const getNewValuesByKey = (userKey) => {

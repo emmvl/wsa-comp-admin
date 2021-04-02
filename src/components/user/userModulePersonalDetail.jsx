@@ -1079,10 +1079,10 @@ const columnsDocuments = [
         dataIndex: "docUrl",
         key: "docUrl",
         render: (data, record) => {
-            const bucket = data.match(/(?<=https:\/\/).*?(?=.s3)/)[0];
-            const filename = unescape(data.match(/(?<=.com\/).*?$/)[0]);
-            return <a href={`${process.env.REACT_APP_COMMON_API_URL}/file/download?bucket=${bucket}&filename=${filename}`}><span>{filename}</span></a>
-        },
+            let filename = unescape(data);
+            filename = filename.slice(filename.indexOf('filename=')+9);
+            return <a href={`${data}`}><span>{filename}</span></a>
+        }
     },
     {
         title: "Action",
@@ -2965,7 +2965,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
 
                 {/* Upload Documents */}
-                <div>
+                {/* <div>
                     <div
                         className="user-module-row-heading"
                         style={{ marginTop: 30 }}
@@ -2991,7 +2991,7 @@ class UserModulePersonalDetail extends Component {
                             loading={userState.isDocumentLoading && true}
                         />
                     </div>
-                </div>
+                </div> */}
             </div>
         );
     };
