@@ -364,26 +364,26 @@ const teamRegistrationColumns = [
         width: 80,
         render: (data, record) => (
             <div>
-                {record.status == "Registered"
-                    ? (
-                        <Menu
-                            className="action-triple-dot-submenu"
-                            theme="light"
-                            mode="horizontal"
-                            style={{ lineHeight: "25px" }}
-                        >
-                            <SubMenu
-                                key="sub1"
-                                title={(
-                                    <img
-                                        className="dot-image"
-                                        src={AppImages.moreTripleDot}
-                                        alt=""
-                                        width="16"
-                                        height="16"
-                                    />
-                                )}
-                            >
+                <Menu
+                    className="action-triple-dot-submenu"
+                    theme="light"
+                    mode="horizontal"
+                    style={{ lineHeight: "25px" }}
+                >
+                    <SubMenu
+                        key="sub1"
+                        title={(
+                            <img
+                                className="dot-image"
+                                src={AppImages.moreTripleDot}
+                                alt=""
+                                width="16"
+                                height="16"
+                            />
+                        )}
+                    >
+                        {record.status == "Registered"
+                            ? (
                                 <Menu.Item
                                     key="1"
                                     onClick={() => history.push("/deregistration", {
@@ -394,19 +394,19 @@ const teamRegistrationColumns = [
                                 >
                                     <span>{AppConstants.registrationChange}</span>
                                 </Menu.Item>
-                                <Menu.Item key="1">
-                                    <span
-                                        onClick={() => openInvoicePage({
-                                            registrationId: record.registrationUniqueKey,
-                                        })}
-                                    >
-                                        {AppConstants.invoice}
-                                    </span>
-                                </Menu.Item>
-                            </SubMenu>
-                        </Menu>
-                    )
-                    : null}
+                            )
+                            : null}
+                        <Menu.Item key="2">
+                            <span
+                                onClick={() => openInvoicePage({
+                                    registrationId: record.registrationUniqueKey,
+                                })}
+                            >
+                                {AppConstants.invoice}
+                            </span>
+                        </Menu.Item>
+                    </SubMenu>
+                </Menu>
             </div>
         ),
     },
