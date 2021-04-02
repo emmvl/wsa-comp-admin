@@ -114,6 +114,7 @@ const AppConstants = {
     agreeTerm: "I have read and agree to the  ",
     termsAndConditions: "Terms and Conditions",
     stateTermsAndConditions: "Admin Terms and Conditions",
+    termsAndConditionsLinkOfWorldSportAction: 'https://storage.googleapis.com/download/storage/v1/b/world-sport-action-dev-c1019.appspot.com/o/%2Forganisation%2FtermsAndCondition_org_18238b32-1d44-40a3-b72a-0c106315bf9f_1617390905373.pdf?generation=1617390915516798&alt=media',
     reviewOrder: "Review Order",
     checkOptions: "Checkout Options",
     voucherLink: "Voucher link",
