@@ -109,7 +109,7 @@ class UmpirePoolAllocation extends Component {
 
                 const competitionListCopy = competitionList ? JSON.parse(JSON.stringify(competitionList)) : [];
 
-                if (competitionListCopy && organisationId) competitionListCopy.forEach(item => {
+                competitionListCopy.forEach(item => {
                     if (item.organisationId === organisationId) {
                         item.isOrganiser = true;
                     } else {
@@ -120,7 +120,7 @@ class UmpirePoolAllocation extends Component {
                 const isOrganiser = (competitionListCopy && firstComp) 
                     ? competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser : false;
 
-                if (competitionListCopy && firstComp && compKey) {
+                if (competitionListCopy && firstComp) {
                     this.setState({ 
                         competitionList: competitionListCopy,
                         selectedComp: firstComp,
