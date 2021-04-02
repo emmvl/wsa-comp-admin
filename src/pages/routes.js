@@ -179,7 +179,8 @@ import MergeUserMatches from 'components/user/mergeUserMatches';
 import MergeUserDetail from 'components/user/mergeUserDetail';
 import AddTeamMember from 'components/user/addTeamMember';
 import TeamMemberRegPayment from 'components/user/teamMemberRegPayment';
-import RegistrationInvoiceNew from 'components/registration/registrationInvoiceNew';
+// import RegistrationInvoiceNew from 'components/registration/registrationInvoiceNew';
+import Invoice from 'components/invoice/invoice';
 
 import { routeAdminRole, routeUmpireRole, routeFinanceRole } from './routeAccess';
 import NotFound from './404';
@@ -786,7 +787,7 @@ class Routes extends React.Component {
 
                 <PrivateRoute
                     path="/invoice"
-                    component={this.haveAccess(userRoleId, '/invoice') ? lazyLoad(RegistrationInvoiceNew) : lazyLoad(NotFound)}
+                    component={this.haveAccess(userRoleId, '/invoice') ? lazyLoad(Invoice) : lazyLoad(NotFound)}
                 />
 
                 <PrivateRoute

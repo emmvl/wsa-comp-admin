@@ -319,6 +319,7 @@ function stripe(state = initialState, action) {
         //         onLoad: false,
         //     }
         ///get invoice
+        case ApiConstants.API_GET_SHOP_INVOICE_LOAD:
         case ApiConstants.API_GET_INVOICE_LOAD:
             return {
                 ...state,
@@ -326,6 +327,14 @@ function stripe(state = initialState, action) {
                 error: null,
 
             }
+
+        case ApiConstants.API_GET_SHOP_INVOICE_SUCCESS: {
+            state.invoiceData = action.result
+            return {
+                ...state,
+                onLoad: false,
+            }
+        }
 
         case ApiConstants.API_GET_INVOICE_SUCCESS:
             state.invoiceData = action.result
@@ -412,7 +421,7 @@ function stripe(state = initialState, action) {
                 ...state,
                 paymentListPage: action.pageNum,
             }
-    
+
         case ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD:
             return { ...state, refundAmountLoad: true }
 
@@ -448,6 +457,10 @@ function stripe(state = initialState, action) {
                 ...state,
                 participantSummaryListPage: action.pageNum,
             }
+
+        case ApiConstants.CLEAR_INVOICE_DATA: {
+            return { ...initialState }
+        }
 
         default:
             return state;

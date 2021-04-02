@@ -1330,6 +1330,7 @@ const AppConstants = {
     bulkScoreUpload: "Bulk Scores Upload",
     umpireRoster: "Umpire Roster",
     registrationDivisions: "Registration Divisions",
+    membershipProductRestrictions: "Membership Product Restrictions",
     activeUmpireReserves: "Activate Umpire reserves",
     simultaneousMatchAllocations: "Simultaneous match allocations",
     poolName: "Pool Name",
@@ -1872,7 +1873,6 @@ const AppConstants = {
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
     cancelTransferReg: "Cancel Transfer registration",
-    fee: "Fee",
     feeStatus: "Fee Status",
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
@@ -2037,7 +2037,6 @@ const AppConstants = {
     competition_name: "Competition name",
     instalmentPortion: "Instalment Portion",
     redeemed: "Redeemed",
-    partialRefund: "Partial Refund",
     governmentVoucherNumber: "Government Voucher Number",
     incorrectProductDetails: "You have entered incorrect product details.",
     voucherOrDiscountCode: "Voucher/Discount Code",
@@ -2047,6 +2046,7 @@ const AppConstants = {
     refunded: "Refunded",
     markAsPaidReg: "Mark as Paid Registration",
     invoicePaid: "Invoice Paid",
+    invoice: "Invoice",
     regPaidModalMsg: "Do you want to mark the invoice as paid?",
 };
 
