@@ -2886,7 +2886,7 @@ class UserModulePersonalDetail extends Component {
                 </div>
                 
                 {/* Upload Documents */}
-                {/* <div>
+                <div>
                     <div
                         className="user-module-row-heading"
                         style={{ marginTop: 30 }}
@@ -2912,7 +2912,7 @@ class UserModulePersonalDetail extends Component {
                             loading={userState.isDocumentLoading && true}
                         />
                     </div>
-                </div> */}
+                </div>
             </div>
         );
     };
