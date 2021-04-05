@@ -30,7 +30,8 @@ const initialState = {
     onSaveLoad: false,
 
     registrationSelection: [
-        { id: 1, value: "De-register", helpMsg: "What is de-registration? I am leaving netball and no longer want to participate in netball. I have not taken the court for training, grading or competition games." }
+        { id: 1, value: "De-register", helpMsg: "What is de-registration? I am leaving netball and no longer want to participate in netball. I have not taken the court for training, grading or competition games." },
+        { id: 2, value: "Transfer", helpMsg: "What is a transfer? I am wanting to move to another Netball Club or Association for the upcoming season." }
     ],
     DeRegistionMainOption: [
         { id: 1, value: "Yes" },
