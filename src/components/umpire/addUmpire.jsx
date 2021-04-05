@@ -145,11 +145,11 @@ class AddUmpire extends Component {
             if (!this.state.isCompParent) {
                 this.props.updateAddUmpireData([umpireNewAffiliateName], 'partcipateAffiliateId')
             }
-            if (umpireNewAffiliateName) {
-                this.formRef.current.setFieldsValue({
-                    umpireNewAffiliateName,
-                })
-            }
+            // if (umpireNewAffiliateName) {
+            //     this.formRef.current.setFieldsValue({
+            //         umpireNewAffiliateName,
+            //     })
+            // }
         }
     }
 
