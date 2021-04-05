@@ -379,7 +379,6 @@ class Umpire extends Component {
         if (organisationId) await this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
         this.props.getRefBadgeData(this.props.appstate.accreditation);
         const competitionId = JSON.parse(localStorage.getItem("umpireCompetitionId"));
-        console.log(competitionId);
         if (!!competitionId ) {
             this.props.getRankedUmpiresCount({ competitionId });
         }
@@ -609,7 +608,7 @@ class Umpire extends Component {
     };
 
     onExport = () => {
-        const url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleId=${15}`;
+        const url = AppConstants.umpireListExport + `entityTypeId=${1}&entityId=${this.state.selectedComp}&roleIds=[15,19,20]`;
         this.props.userExportFilesAction(url, 'umpire');
     };
 
