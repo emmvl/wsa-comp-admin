@@ -6700,6 +6700,7 @@ class RegistrationCompetitionFee extends Component {
                       pagination={false}
                       Divider="false"
                       key={index}
+                      scroll={{ x: 'calc(100%)' }}
                     />
                   </div>
                   <a>
@@ -6976,6 +6977,7 @@ class RegistrationCompetitionFee extends Component {
                             }
                             pagination={false}
                             Divider="false"
+                            scroll={{ x: 'calc(100%)' }}
                           />
                         </div>
                       )}
@@ -7010,6 +7012,7 @@ class RegistrationCompetitionFee extends Component {
                             }
                             pagination={false}
                             Divider="false"
+                            scroll={{ x: 'calc(100%)' }}
                           />
                         </div>
                       )}
@@ -7184,6 +7187,7 @@ class RegistrationCompetitionFee extends Component {
                             }
                             pagination={false}
                             Divider="false"
+                            scroll={{ x: 'calc(100%)' }}
                           />
                         </div>
                       )}
