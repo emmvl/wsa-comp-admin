@@ -86,6 +86,15 @@ function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     }
 }
 
+function getShopInvoice(shopUniqueKey, invoiceId) {
+    const action = {
+        type: ApiConstants.API_GET_SHOP_INVOICE_LOAD,
+        shopUniqueKey,
+        invoiceId,
+    };
+    return action;
+}
+
 // payment dashboard
 function getPaymentList(
     offset,
@@ -322,6 +331,13 @@ function partialRefundAmountAction(payload) {
     };
 }
 
+function clearInvoiceDataAction() {
+    const action = {
+        type: ApiConstants.CLEAR_INVOICE_DATA,
+    };
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -330,7 +346,9 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
+    getShopInvoice,
     getInvoice,
+    clearInvoiceDataAction,
     getPaymentList,
     exportPaymentApi,
     getStripeRefundsListAction,

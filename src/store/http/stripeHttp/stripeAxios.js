@@ -141,7 +141,18 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    ///get invoice
+    // get invoice for new shop
+    getShopInvoice(shopUniqueKey, invoiceId) {
+        const body = {
+            shopUniqueKey,
+            invoiceId
+        }
+        const url = '/api/shop/invoice';
+        const config = { baseURL: process.env.REACT_APP_SHOP_API_URL };
+        return Method.dataPost(url, token, body, config);
+    },
+
+    // get invoice
     getInvoice(registrationId, userRegId, invoiceId, teamMemberRegId) {
         let body = {
             registrationId: registrationId,
@@ -405,7 +416,7 @@ let AxiosApi = {
 };
 
 const Method = {
-    async dataPost(newurl, authorization, body) {
+    async dataPost(newurl, authorization, body, config = {}) {
         const url = newurl;
         return await new Promise((resolve, reject) => {
             http
@@ -414,8 +425,9 @@ const Method = {
                         "Content-Type": "application/json",
                         "Access-Control-Allow-Origin": "*",
                         Authorization: "BWSA " + authorization,
-                        "SourceSystem": "WebAdmin"
-                    }
+                        "SourceSystem": "WebAdmin",
+                    },
+                    ...config,
                 })
 
                 .then(result => {

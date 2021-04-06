@@ -3576,12 +3576,13 @@ class RegistrationCompetitionFee extends Component {
                   className="comp-venue-time-datepicker w-100"
                   style={{ minWidth: 135 }}
                   onChange={(date) =>
-                    this.divisionTableDataOnchange(
-                      moment(date).format("YYYY-MM-DD"),
-                      record,
-                      index,
-                      "fromDate"
-                    )
+                    { date !== null && this.divisionTableDataOnchange(
+                        moment(date).format("YYYY-MM-DD"),
+                        record,
+                        index,
+                        "fromDate"
+                      )
+                    }
                   }
                   format="DD-MM-YYYY"
                   showTime={false}
@@ -3619,12 +3620,13 @@ class RegistrationCompetitionFee extends Component {
                   className="comp-venue-time-datepicker w-100"
                   style={{ minWidth: 135 }}
                   onChange={(date) =>
-                    this.divisionTableDataOnchange(
-                      moment(date).format("YYYY-MM-DD"),
-                      record,
-                      index,
-                      "toDate"
-                    )
+                    { date != null && this.divisionTableDataOnchange(
+                        moment(date).format("YYYY-MM-DD"),
+                        record,
+                        index,
+                        "toDate"
+                      )
+                    }
                   }
                   format="DD-MM-YYYY"
                   showTime={false}

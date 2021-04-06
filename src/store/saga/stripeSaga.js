@@ -197,6 +197,23 @@ function* getTransactionPayoutListSaga(action) {
   }
 }
 
+export function* getShopInvoiceSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getShopInvoice, action.shopUniqueKey, action.invoiceId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_SHOP_INVOICE_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get invoice saga
 function* getInvoiceSaga(action) {
   try {
@@ -459,6 +476,7 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, getStripePayoutListSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD, getStripeRefundListSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, getTransactionPayoutListSaga);
+  yield takeEvery(ApiConstants.API_GET_SHOP_INVOICE_LOAD, getShopInvoiceSaga);
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, getPaymentListSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, exportPaymentSaga);
