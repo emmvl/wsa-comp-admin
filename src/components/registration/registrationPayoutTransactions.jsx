@@ -31,12 +31,10 @@ const columns = [
     },
     {
         title: AppConstants.description,
-        dataIndex: 'source_transfer',
-        key: 'source_transfer',
-        sorter: false,
-        render: (sourceTransfer) => (
-            <span>{sourceTransfer ? sourceTransfer.description : "N/A"}</span>
-        ),
+        dataIndex: 'description',
+        key: 'description',
+        sorter: false
+        
     },
     {
         title: AppConstants.date,

@@ -252,13 +252,18 @@ class UserProfileEdit extends Component {
                 ...additionalSettings,
                 isSameEmail: data.isInActive
             }
-            let docList = docUrl ? [{
-                uid: '1',
-                name: 'document',
-                status: 'done',
-                url: docUrl,
-                thumbUrl: '',
-            }] : [];
+            let docList = [];
+            if (docUrl) {
+                let filename = unescape(docUrl);
+                filename = filename.slice(filename.indexOf('filename=')+9);
+                docList = [{
+                    uid: '1',
+                    name: filename,
+                    status: 'done',
+                    url: docUrl,
+                    thumbUrl: '',
+                }];
+            }
             setTimeout(() => {
                 this.setState({
                     displaySection: moduleFrom,
