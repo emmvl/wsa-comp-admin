@@ -732,6 +732,7 @@ const AppConstants = {
     affiliatedToOrgId: "affiliatedToOrgId",
     street1: "street1",
     street2: "street2",
+    stripeCustomerAccountId: "Stripe Customer ID",
     suburbField: "suburb",
     stateRefId: "stateRefId",
     middleName: "Middle Name",

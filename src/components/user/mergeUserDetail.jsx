@@ -122,6 +122,7 @@ const MatchesDetailView = (props) => {
         { key: "street1", title: AppConstants.street1 },
         { key: "street2", title: AppConstants.street2 },
         { key: "suburb", title: AppConstants.suburb },
+        { key: "stripeCustomerAccountId", title: AppConstants.stripeCustomerAccountId },
     ];
 
     const getNewValuesByKey = (userKey) => {
