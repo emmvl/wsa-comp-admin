@@ -2943,7 +2943,7 @@ class LiveScoreMatchDetails extends Component {
                         <div className="comp-buttons-view mr-3">
                             {this.state.teamAttendance && (
                                 <Button
-                                    onClick={() => trackResultData.length > 0 && this.onSavePlayerTrack(trackResultData)}
+                                    onClick={() => this.onSavePlayerTrack(trackResultData)}
                                     // onClick={() => trackResultData.length > 0 && this.onSavePlayerTrack(trackResultData, this.state.matchId)}
                                     className="publish-button save-draft-text mr-0"
                                     htmlType="submit"
