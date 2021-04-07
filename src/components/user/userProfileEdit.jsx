@@ -43,6 +43,7 @@ import { regexNumberExpression } from '../../util/helpers';
 import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 import UserAxiosApi from "../../store/http/userHttp/userAxiosApi";
 import { getUserParentDataAction } from '../../store/actions/userAction/userAction';
+import RelationshipSelect from './relationshipSelect';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -117,6 +118,7 @@ class UserProfileEdit extends Component {
                 emergencyFirstName: "",
                 emergencyLastName: "",
                 emergencyContactNumber: "",
+                emergencyContactRelationshipId: null,
                 existingMedicalCondition: "",
                 regularMedication: "",
                 disabilityCareNumber: '',
@@ -363,6 +365,7 @@ class UserProfileEdit extends Component {
             emergencyFirstName: userData.emergencyFirstName,
             emergencyLastName: userData.emergencyLastName,
             emergencyContactNumber: userData.emergencyContactNumber,
+            emergencyContactRelationshipId: userData.emergencyContactRelationshipId,
         });
     }
 
@@ -1088,6 +1091,13 @@ class UserProfileEdit extends Component {
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyContactNumber")}
                             />
                         </Form.Item>
+                    </div>
+                    <div className="col-sm-12 col-md-6">
+                        <RelationshipSelect
+                            value={userData.emergencyContactRelationshipId}
+                            form={this.formRef}
+                            onFormChange={this.onChangeSetValue}
+                        />
                     </div>
                 </div>
             </div>

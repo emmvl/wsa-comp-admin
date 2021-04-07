@@ -739,6 +739,7 @@ function userReducer(state = initialState, action) {
           emergencyFirstName: personalData.emergencyFirstName,
           emergencyLastName: personalData.emergencyLastName,
           emergencyContactNumber: personalData.emergencyContactNumber,
+          emergencyContactRelationshipId: personalData.emergencyContactRelationshipId,
           userId: personalData.userId,
         };
         arr.push(obj);
