@@ -514,7 +514,7 @@ class UmpirePoolAllocation extends Component {
     }
     
     handleOkRemoveUmpireFromPool = (e) => {
-        const { assignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
+        const { assignedData, unassignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -525,11 +525,17 @@ class UmpirePoolAllocation extends Component {
             }
         });
 
+        const assignedUmpires = assignedDataCopy.reduce((acc, pool) => [...acc, ...pool.umpires.map(umpire => umpire.id)], []);
+        const updatedUnassigned = !assignedUmpires.includes(umpireForAction.id) ? [...unassignedData, umpireForAction] : unassignedData;
+        const totalUnassigned = updatedUnassigned.length
+
         this.setState({
             removeUmpireFromPoolModalVisible: false,
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            unassignedData: updatedUnassigned,
             assignedData: assignedDataCopy,
+            totalUnassigned,
         });
     }
     
@@ -921,7 +927,7 @@ class UmpirePoolAllocation extends Component {
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
-                                            {totalUnassigned > 1 ? totalUnassigned + " Umpires" : totalUnassigned + " Umpire"}
+                                            {unassignedData.length !== 1 ? `${unassignedData.length} Umpires` : "1 Umpire"}
                                         </span>
                                     </div>
                                     { isOrganiserView &&
