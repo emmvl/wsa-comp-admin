@@ -10,7 +10,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
     accountBalanceAction, saveStripeAccountAction,
-    getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi
+    getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi,
+    exportCustomerTransactionApi
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
@@ -168,6 +169,17 @@ class RegistrationPayments extends Component {
         );
     }
 
+    //on customer transaction export button click
+    onCustomerTransactionExport() {
+        const { stripeCustomerAccountId } = JSON.parse(
+            localStorage.getItem("setOrganisationData"),
+        );
+        const customerId = stripeCustomerAccountId;
+        this.props.exportCustomerTransactionApi(
+            customerId
+        );
+    }
+
     headerView = () => {
         const stripeConnected = this.stripeConnected()
         const isBecsSetupDone = this.isBecsSetupDone();
@@ -207,7 +219,7 @@ class RegistrationPayments extends Component {
                                                 </Button>
                                             ) : ('')}
                                             {isBecsSetupDone ? (
-                                                <Button type="primary" onClick={() => this.onExport()}>
+                                                <Button type="primary" onClick={() => this.onCustomerTransactionExport()}>
                                                     <img
                                                         src={AppImages.export}
                                                         alt=""
@@ -651,7 +663,8 @@ function mapDispatchToProps(dispatch) {
         saveStripeAccountAction,
         getStripeLoginLinkAction,
         getStripeTransferListAction,
-        exportPaymentApi
+        exportPaymentApi,
+        exportCustomerTransactionApi
     }, dispatch)
 }
 

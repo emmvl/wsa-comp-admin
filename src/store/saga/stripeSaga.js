@@ -294,6 +294,27 @@ function* exportPaymentSaga(action) {
   }
 }
 
+// Export Customer Transaction saga
+function* exportCustomerTransactionSaga(action) {
+  try {
+    const {
+      customerId
+    } = action;
+    const result = yield call(AxiosApi.exportCustomerTransactionApi, customerId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_CUSTOMER_TRANSACTION_EXPORT_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Export transaction saga
 function* exportPayoutsTransactionSaga(action) {
     try {
@@ -480,6 +501,7 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, getPaymentListSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, exportPaymentSaga);
+  yield takeEvery(ApiConstants.API_CUSTOMER_TRANSACTION_EXPORT_LOAD, exportCustomerTransactionSaga);
   yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD, exportPaymentDashboardSaga);
   yield takeEvery(ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD, exportPayoutsTransactionSaga);

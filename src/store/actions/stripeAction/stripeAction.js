@@ -150,6 +150,14 @@ function exportPaymentApi(key, year, dateFrom, dateTo) {
     };
 }
 
+// export customer transaction data
+function exportCustomerTransactionApi(customerId) {
+    return {
+        type: ApiConstants.API_CUSTOMER_TRANSACTION_EXPORT_LOAD,
+        customerId,
+    };
+}
+
 function getInvoiceStatusAction(registrationid, userRegId, invoiceId, teamMemberRegId) {
     return {
         type: ApiConstants.API_GET_INVOICE_STATUS_LOAD,
@@ -362,4 +370,5 @@ export {
     partialRefundAmountAction,
     getParticipantSummaryAction,
     exportParticipantSummaryApiAction,
+    exportCustomerTransactionApi,
 };
