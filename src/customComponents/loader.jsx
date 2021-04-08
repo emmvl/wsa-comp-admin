@@ -2,11 +2,22 @@ import React, { Component } from "react";
 import { Modal, Spin } from "antd";
 
 class Loader extends Component {
+    state = {
+        visible: this.props.visible
+    };
+
+    componentDidUpdate(nextProps) {
+        const { visible } = this.props;
+
+        if (nextProps.visible !== visible) {
+            this.setState({visible: !nextProps.visible});
+        }
+    }
     render() {
         return (
             <Modal
                 // title="WSA 1"
-                visible={this.props.visible}
+                visible={this.state.visible}
                 // onOk={this.handleOk}
                 // onCancel={this.handleCancel}
                 cancelButtonProps={{ style: { display: 'none' } }}
