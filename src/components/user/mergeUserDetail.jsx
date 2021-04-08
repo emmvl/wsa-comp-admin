@@ -232,6 +232,7 @@ const MatchesDetailView = (props) => {
         const CompInfoResultPromise = UserAxiosApi.getUserModulePersonalByCompData({
             userId,
             organisationId,
+            getStripeCustomerID: true
         });
 
         const [PersonalInfoResult, CompInfoResult] = await Promise.all([PersonalInfoResultPromise, CompInfoResultPromise])
