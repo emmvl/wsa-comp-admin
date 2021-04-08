@@ -111,7 +111,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             if (yearId !== undefined) {
                 await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
                 this.setState({
-                    yearRefId: JSON.parse(yearId),
+                    // yearRefId: JSON.parse(yearId),
                     competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
                         ? this.props.appState.own_CompetitionArr[0].id : this.state.firstTimeCompId ? this.state.firstTimeCompId : null
                 })
@@ -120,7 +120,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 this.setState({ competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
                     ? this.props.appState.own_CompetitionArr[0].id : this.state.firstTimeCompId ? this.state.firstTimeCompId : null })
             }
-            console.log('this.state.firstTimeCompId: ',this.state.firstTimeCompId)
         }
         this.syncDivisionsFieldsConfigurationsFormData()
         // this.setState({ loading: false })
@@ -229,9 +228,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
         const { venueTimeState: { venueConstrainstData: { fieldLinkage }} } = this.props;
 
         fieldLinkage.forEach((field) => {
-            const key = (field && field.row) ? `divisionsFieldsConfigurations_${FIELD_SIZES_COUNT-field.row}` : null;
+            const key = `divisionsFieldsConfigurations_${FIELD_SIZES_COUNT-field.row}`;
             
-            if (key && field && field.divisions && this.formRef && this.formRef.current) 
+            if (this.formRef && this.formRef.current) 
             this.formRef.current.setFieldsValue({
                 [key]: field.divisions
             })
