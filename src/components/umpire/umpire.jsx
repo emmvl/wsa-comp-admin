@@ -26,6 +26,7 @@ import {
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import { isEqual } from 'lodash';
 
 import "./umpire.css";
 
@@ -386,7 +387,7 @@ class Umpire extends Component {
 
     async componentDidUpdate(nextProps) {
         // const { sortBy, sortOrder } = this.state;
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(nextProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
                     ? this.props.umpireCompetitionState.umpireComptitionList

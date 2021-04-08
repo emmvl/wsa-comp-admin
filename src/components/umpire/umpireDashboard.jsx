@@ -44,6 +44,7 @@ import {
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import { isEqual } from 'lodash';
 
 import "./umpire.css";
 
@@ -667,7 +668,7 @@ class UmpireDashboard extends Component {
 
     componentDidUpdate(nextProps) {
         let { sortBy, sortOrder } = this.state
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(nextProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading && !this.props.umpireCompetitionState.onLoad) {
                 let compList = (this.props.umpireCompetitionState.umpireComptitionList 
                     && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList))
@@ -735,14 +736,14 @@ class UmpireDashboard extends Component {
             }
         }
 
-        if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
+        if (!isEqual(nextProps.umpireDashboardState, this.props.umpireDashboardState)) {
             if (this.props.umpireDashboardState.onVenueLoad === false && this.state.venueLoad === true) {
                 if (this.state.selectedComp) this.props.getUmpireDashboardDivisionList(this.state.selectedComp);
                 this.setState({ venueLoad: false, divisionLoad: true });
             }
         }
 
-        if (nextProps.umpireDashboardState !== this.props.umpireDashboardState) {
+        if (!isEqual(nextProps.umpireDashboardState, this.props.umpireDashboardState)) {
             if (this.props.umpireDashboardState.onDivisionLoad === false && this.state.divisionLoad === true) {
                 const { pageSize = 10 } = this_obj.props.umpireDashboardState;
                 const body = {

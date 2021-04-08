@@ -39,6 +39,7 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from 'util/history';
+import { isEqual } from 'lodash';
 
 const { 
     // Header, 
@@ -86,7 +87,7 @@ class UmpirePoolAllocation extends Component {
 
         const { deletedUmpirePoolId, newUmpirePool } = this.props.umpirePoolAllocationState;
 
-        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let competitionList = (this.props.umpireCompetitionState.umpireComptitionList 
                     && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) 
@@ -100,7 +101,7 @@ class UmpirePoolAllocation extends Component {
                     if (firstComp) setUmpireCompId(firstComp)
                 }
 
-                if (organisationId && firstComp && JSON.parse(getUmpireCompetitonData())) {
+                if (organisationId && firstComp) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp })
                 }
 
@@ -135,7 +136,7 @@ class UmpirePoolAllocation extends Component {
         const { unassignedData, selectedComp } = this.state;
         const { umpireListDataNew } = this.props.umpireState;
 
-        if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
+        if (!!this.state.selectedComp && !isEqual(prevState.selectedComp, this.state.selectedComp)) {
             this.props.getUmpireList({ 
                 organisationId, 
                 competitionId: this.state.selectedComp, 
@@ -152,7 +153,7 @@ class UmpirePoolAllocation extends Component {
 
         // handle state after pool add
 
-        else if (!!newUmpirePool && newUmpirePool !== prevProps.umpirePoolAllocationState.newUmpirePool) {
+        else if (!!newUmpirePool && !isEqual(newUmpirePool, prevProps.umpirePoolAllocationState.newUmpirePool)) {
             this.handleUpdatePoolAfterAdd();
         }
 
@@ -163,7 +164,7 @@ class UmpirePoolAllocation extends Component {
             this.handleSetPoolDataAfterUpdate();
 
             // handle state after load more
-            if ((umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedData.length) 
+            if (!isEqual(umpireListDataNew, prevProps.umpireState.umpireListDataNew) 
                 && selectedComp === prevState.selectedComp 
             ) {
                 this.handleUpdateUnassignedAfterLoadMore();
@@ -513,7 +514,7 @@ class UmpirePoolAllocation extends Component {
     }
     
     handleOkRemoveUmpireFromPool = (e) => {
-        const { assignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
+        const { assignedData, unassignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -524,11 +525,17 @@ class UmpirePoolAllocation extends Component {
             }
         });
 
+        const assignedUmpires = assignedDataCopy.reduce((acc, pool) => [...acc, ...pool.umpires.map(umpire => umpire.id)], []);
+        const updatedUnassigned = !assignedUmpires.includes(umpireForAction.id) ? [...unassignedData, umpireForAction] : unassignedData;
+        const totalUnassigned = updatedUnassigned.length
+
         this.setState({
             removeUmpireFromPoolModalVisible: false,
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            unassignedData: updatedUnassigned,
             assignedData: assignedDataCopy,
+            totalUnassigned,
         });
     }
     
@@ -920,7 +927,7 @@ class UmpirePoolAllocation extends Component {
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
-                                            {totalUnassigned > 1 ? totalUnassigned + " Umpires" : totalUnassigned + " Umpire"}
+                                            {unassignedData.length !== 1 ? `${unassignedData.length} Umpires` : "1 Umpire"}
                                         </span>
                                     </div>
                                     { isOrganiserView &&

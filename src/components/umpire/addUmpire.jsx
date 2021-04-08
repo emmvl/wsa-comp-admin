@@ -68,7 +68,7 @@ class AddUmpire extends Component {
             let isCompParent = userOrganisationId === compOrgId
             this.setState({ isCompParent });
             this.props.umpireListAction({ refRoleId: JSON.stringify([5]), entityTypes: 1, compId: compId, offset: 0 })
-            if (compId !== null) {
+            if (compId) {
                 this.props.getUmpireAffiliateList({ id: compId })
                 this.setState({ isUmpireAffiliate: true })
             }
@@ -93,7 +93,7 @@ class AddUmpire extends Component {
             }
         }
 
-        if (this.props.umpireState.umpireList !== nextProps.umpireState.umpireList) {
+        if (!isEqual(this.props.umpireState.umpireList, nextProps.umpireState.umpireList)) {
             if (this.state.loader === true && this.props.umpireState.onLoad === false) {
                 this.filterUmpireList()
                 if (this.state.isEdit === true) {
@@ -109,7 +109,7 @@ class AddUmpire extends Component {
             }
         }
 
-        if (this.props.umpireState.umpireData.affiliates !== nextProps.umpireState.umpireData.affiliates) {
+        if (!isEqual(this.props.umpireState.umpireData.affiliates, nextProps.umpireState.umpireData.affiliates)) {
             if (this.state.affiliateLoader === true) {
                 const { umpireData } = this.props.umpireState
                 this.setSelectedAffiliateValue(umpireData.affiliates)
@@ -600,7 +600,7 @@ class AddUmpire extends Component {
                 const getUmpireObjectIndex = umpireListData.findIndex((x) => x.id == exsitingUmpireId)
                 const getUmpireObject = getUmpireObjectIndex < 0 ? null : umpireListData[getUmpireObjectIndex]
                 const teamsIds = umpireData.teams.map(team => ({ id: team.id }));
-                if (getUmpireObject !== null) {
+                if (getUmpireObject) {
                     const body = {
                         id: getUmpireObject.id,
                         firstName: getUmpireObject.firstName ? getUmpireObject.firstName : "",
