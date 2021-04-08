@@ -32,7 +32,7 @@ import {
 import { liveScoreGetDivision } from "../../store/actions/LiveScoreAction/liveScoreTeamAction";
 import { getUmpirePoolData } from "../../store/actions/umpireAction/umpirePoolAllocationAction";
 import { getRefBadgeData } from '../../store/actions/appAction';
-
+import { isEqual } from 'lodash';
 const { Header, Content } = Layout;
 const { Option } = Select;
 
@@ -81,7 +81,7 @@ class UmpirePaymentSetting extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             // if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
             if (!this.props.umpireCompetitionState.onLoad) {
                 const competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
@@ -129,7 +129,7 @@ class UmpirePaymentSetting extends Component {
             this.props.getUmpirePoolData({ orgId: organisationId, compId: selectedComp });
         }
 
-        if (this.props.umpirePoolAllocationState.umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
+        if (!isEqual(this.props.umpirePoolAllocationState.umpirePoolData, prevProps.umpirePoolAllocationState.umpirePoolData)) {
             const reqData = {
                 organisationId,
                 competitionId: this.state.selectedComp,
@@ -141,7 +141,7 @@ class UmpirePaymentSetting extends Component {
             this.setState({ allowPayment: this.props.umpirePaymentSettingState?.allowUmpiresPayments });
         }
 
-        if (this.props.umpirePaymentSettingState !== prevProps.umpirePaymentSettingState && !!this.props.umpirePaymentSettingState.paymentSettingsData
+        if (!isEqual(this.props.umpirePaymentSettingState, prevProps.umpirePaymentSettingState) && !!this.props.umpirePaymentSettingState.paymentSettingsData
                 && !this.props.umpirePaymentSettingState.onLoad
             ) {
             this.modifyGetSettingsData();
