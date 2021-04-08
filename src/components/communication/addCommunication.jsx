@@ -914,8 +914,8 @@ class AddCommunication extends Component {
             this.state.video,
         ].filter((media) => media);
 
-        const expiryDate = moment(this.state.newExpiryDate).format("YYYY-MM-DD");
-        const expiryTime = moment(this.state.expire_time).format("HH:mm");
+        const expiryDate = moment(this.state.expiryDate).format("YYYY-MM-DD");
+        const expiryTime = moment(this.state.expiryTime).format("HH:mm");
         const postDate = moment(`${expiryDate} ${expiryTime}`);
 
         const payload = {

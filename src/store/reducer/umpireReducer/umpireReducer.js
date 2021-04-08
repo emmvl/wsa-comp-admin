@@ -258,7 +258,6 @@ function umpireState(state = initialState, action) {
                         ...state.umpireData,
                         teams: selectedTeams,
                         teamId: teamIds,
-                        affiliates,
                     },
                 }
             } else {

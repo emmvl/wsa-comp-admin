@@ -86,6 +86,15 @@ function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     }
 }
 
+function getShopInvoice(shopUniqueKey, invoiceId) {
+    const action = {
+        type: ApiConstants.API_GET_SHOP_INVOICE_LOAD,
+        shopUniqueKey,
+        invoiceId,
+    };
+    return action;
+}
+
 // payment dashboard
 function getPaymentList(
     offset,
@@ -297,18 +306,18 @@ function setDashboardPageNumberAction(pageNum) {
     return action;
 }
 
-function setSummaryPageSizeAction(pageSize) {
+function setParticipantSummaryPageSizeAction(pageSize) {
     const action = {
-        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE,
+        type: ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_SIZE,
         pageSize
     }
 
     return action;
 }
 
-function setSummaryPageNumberAction(pageNum) {
+function setParticipantSummaryPageNumberAction(pageNum) {
     const action = {
-        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
+        type: ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
         pageNum
     }
 
@@ -322,6 +331,13 @@ function partialRefundAmountAction(payload) {
     };
 }
 
+function clearInvoiceDataAction() {
+    const action = {
+        type: ApiConstants.CLEAR_INVOICE_DATA,
+    };
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -330,7 +346,9 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
+    getShopInvoice,
     getInvoice,
+    clearInvoiceDataAction,
     getPaymentList,
     exportPaymentApi,
     getStripeRefundsListAction,
@@ -339,8 +357,8 @@ export {
     exportPayoutTransaction,
     setDashboardPageSizeAction,
     setDashboardPageNumberAction,
-    setSummaryPageSizeAction,
-    setSummaryPageNumberAction,
+    setParticipantSummaryPageSizeAction,
+    setParticipantSummaryPageNumberAction,
     partialRefundAmountAction,
     getParticipantSummaryAction,
     exportParticipantSummaryApiAction,

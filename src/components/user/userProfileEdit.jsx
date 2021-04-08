@@ -252,13 +252,18 @@ class UserProfileEdit extends Component {
                 ...additionalSettings,
                 isSameEmail: data.isInActive
             }
-            let docList = docUrl ? [{
-                uid: '1',
-                name: 'document',
-                status: 'done',
-                url: docUrl,
-                thumbUrl: '',
-            }] : [];
+            let docList = [];
+            if (docUrl) {
+                let filename = unescape(docUrl);
+                filename = filename.slice(filename.indexOf('filename=')+9);
+                docList = [{
+                    uid: '1',
+                    name: filename,
+                    status: 'done',
+                    url: docUrl,
+                    thumbUrl: '',
+                }];
+            }
             setTimeout(() => {
                 this.setState({
                     displaySection: moduleFrom,
@@ -1291,7 +1296,11 @@ class UserProfileEdit extends Component {
             try {
                 let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
                 if (ret.result.data.status === 'done') {
-                    docList[0].url = ret.result.data.url;
+                    let bucket = ret.result.data.url.match(/(?:https:\/\/).*?(?=.s3)/)[0];
+                    bucket = bucket.slice(8);
+                    let filename = unescape(ret.result.data.url);
+                    filename = filename.slice(filename.indexOf('.com')+5);
+                    docList[0].url = `${process.env.REACT_APP_COMMON_API_URL}/file/download?bucket=${bucket}&filename=${filename}`;
                     return data.onSuccess();
                 } else {
                     data.onError();

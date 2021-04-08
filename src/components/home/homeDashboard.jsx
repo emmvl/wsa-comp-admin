@@ -710,9 +710,9 @@ class HomeDashboard extends Component {
                     ]}>
                     <div className="terms-and-conditions-checkbox">
                         <p>Please review the folowing terms and conditions.</p>
-                        <a target="_blank" href={this.props.userState.affiliateOurOrg.termsAndConditions}>Terms and
-                            conditions for NSW Netball</a>
-                        <a target="_blank" href={this.props.userState.affiliateOurOrg.termsAndConditions}>Terms and
+                        <a target="_blank" href={this.props.userState.affiliateOurOrg.stateTermsAndConditionsLink || this.props.userState.affiliateOurOrg.stateTermsAndConditionsFile}>Terms and
+                            conditions for {this.props.userState.affiliateOurOrg.name}</a>
+                        <a target="_blank" href={AppConstants.termsAndConditionsLinkOfWorldSportAction}>Terms and
                             conditions for World Sport Action</a>
                         <Checkbox name="terms-and-conditions" onClick={() => {
                             this.setState({isTermsConditionsAccepted: !this.state.isTermsConditionsAccepted})

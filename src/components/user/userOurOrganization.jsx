@@ -565,6 +565,10 @@ class UserOurOrganization extends Component {
         if (this.state.termsAndCondititionFile == null && affiliate.stateTermsAndConditionsRefId == 2) {
             stateTermsAndConditionsValue = affiliate.stateTermsAndConditionsFile;
         }
+        let pdfStatus = 0;
+        if (filesArray['termsAndCondition']) pdfStatus = 1;
+        if (filesArray['stateTermsAndCondition']) pdfStatus = 2;
+        if (filesArray['termsAndCondition'] && filesArray['stateTermsAndCondition']) pdfStatus = 3;
 
         formData.append("organisationId", getOrganisationData() ? getOrganisationData().organisationUniqueKey : null);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
@@ -573,6 +577,7 @@ class UserOurOrganization extends Component {
         formData.append("stateTermsAndConditions", stateTermsAndConditionsValue || "");
         formData.append("termsAndCondition[]", filesArray['termsAndCondition']);
         formData.append("termsAndCondition[]", filesArray['stateTermsAndCondition']);
+        formData.append("pdfStatus", pdfStatus);
 
 
         this.setState({ loading: true });
@@ -968,7 +973,7 @@ class UserOurOrganization extends Component {
         const affiliate = this.props.userState.affiliateOurOrg;
         return (
             <>
-                <div className="discount-view pt-5">
+                 <div className="discount-view pt-5">
                     <span className="form-heading">{AppConstants.termsAndConditions}</span>
                     <Radio.Group
                         className="reg-competition-radio"
@@ -1018,6 +1023,9 @@ class UserOurOrganization extends Component {
                         )}
                     </Radio.Group>
                 </div>
+            
+                {((getOrganisationData() && getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR")
+                                        || (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && 
                 <div className="discount-view pt-5">
                     <span className="form-heading">{AppConstants.stateTermsAndConditions}</span>
                     <Radio.Group
@@ -1068,7 +1076,7 @@ class UserOurOrganization extends Component {
                             </div>
                         )}
                     </Radio.Group>
-                </div>
+                </div>}
             </>
         )
     }

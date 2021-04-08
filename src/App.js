@@ -67,7 +67,13 @@ function App() {
     return (
         <div className="App">
             <ErrorBoundary>
-                <Offline>
+                <Offline
+                    polling={{
+                        url: 'https://ipv4.icanhazip.com',
+                        interval: 10000,
+                        timeout: 10000
+                    }}
+                >
                     <div className="offlineAlert">
                         <Alert message="You're offline right now. Check your connection." banner/>
                     </div>

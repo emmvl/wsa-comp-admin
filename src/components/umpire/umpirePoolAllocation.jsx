@@ -77,7 +77,7 @@ class UmpirePoolAllocation extends Component {
     componentDidMount() {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.setState({ loading: true });
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
         this.props.getRefBadgeData();
     }
 
@@ -88,23 +88,26 @@ class UmpirePoolAllocation extends Component {
 
         if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
-                let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = competitionList.length > 0 && competitionList[0].id;
+                let competitionList = (this.props.umpireCompetitionState.umpireComptitionList 
+                    && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) 
+                        ? this.props.umpireCompetitionState.umpireComptitionList : [];
+                let firstComp = (competitionList && !!competitionList.length && competitionList[0].id) ? competitionList[0].id : 0;
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
+                    firstComp = compId ? compId : 0
                 } else {
-                    setUmpireCompId(firstComp)
+                    if (firstComp) setUmpireCompId(firstComp)
                 }
 
-                if (JSON.parse(getUmpireCompetitonData())) {
+                if (organisationId && firstComp && JSON.parse(getUmpireCompetitonData())) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp })
                 }
 
-                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+                const compKey = (competitionList && competitionList.length && competitionList[0].competitionUniqueKey) 
+                    ? competitionList[0].competitionUniqueKey : 0;
 
-                const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
+                const competitionListCopy = competitionList ? JSON.parse(JSON.stringify(competitionList)) : [];
 
                 competitionListCopy.forEach(item => {
                     if (item.organisationId === organisationId) {
@@ -114,15 +117,18 @@ class UmpirePoolAllocation extends Component {
                     }
                 });
 
-                const isOrganiser = competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser;
+                const isOrganiser = (competitionListCopy && firstComp) 
+                    ? competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser : false;
 
-                this.setState({ 
-                    competitionList: competitionListCopy,
-                    selectedComp: firstComp,
-                    isOrganiserView: isOrganiser,
-                    loading: false, 
-                    competitionUniqueKey: compKey 
-                })
+                if (competitionListCopy && firstComp) {
+                    this.setState({ 
+                        competitionList: competitionListCopy,
+                        selectedComp: firstComp,
+                        isOrganiserView: isOrganiser,
+                        loading: false, 
+                        competitionUniqueKey: compKey 
+                    })
+                } 
             }
         }
 

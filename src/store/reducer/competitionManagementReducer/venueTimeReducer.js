@@ -9,7 +9,7 @@ import AppConstants from "../../../themes/appConstants";
 
 
 ////Venue Constraints List Object /////////////End
-
+const FIELD_SIZES_COUNT = 4;
 let objData = {
     // competitionUniqueKey: "",
     // yearRefId: "",
@@ -21,11 +21,17 @@ let objData = {
     "homeTeamRotationRefId": 3,
     "courtPreferences": [],
     competitionDivisionsFieldsConfigurations: [],
+    fieldLinkage: [
+        { row: 0, divisions: [], size: 'eighth' },
+        { row: 1, divisions: [], size: 'quarter' },
+        { row: 2, divisions: [], size: 'half' },
+        { row: 3, divisions: [], size: 'full' },
+    ],
     // "courtDivisionPref": [],
     // "courtGradePref": []
 }
 
-var venueDataObj = {
+let venueDataObj = {
     competitionUniqueKey: '',
     yearRefId: 1,
     competitionMembershipProductDivisionId: 1,
@@ -482,6 +488,12 @@ function VenueTimeState(state = initialState, action) {
             // state.selectedVenueId = []
 
             const competitionDivisionsFieldsConfigurations = [];
+            const fieldLinkageConfig = [
+                { row: 0, divisions: [], size: 'eighth' },
+                { row: 1, divisions: [], size: 'quarter' },
+                { row: 2, divisions: [], size: 'half' },
+                { row: 3, divisions: [], size: 'full' },
+            ];
             action.result.competitionDivisions
                 .filter((div) => !div.isDeleted)
                 .forEach((div) => {
@@ -490,12 +502,14 @@ function VenueTimeState(state = initialState, action) {
                             competitionDivisionId: div.id,
                             divisionFieldConfigurationId: div.divisionFieldConfigurationId,
                         });
+                        fieldLinkageConfig[FIELD_SIZES_COUNT-div.divisionFieldConfigurationId].divisions.push(div.id)
                     }
-            })
+                })
 
             if (competitionDivisionsFieldsConfigurations.length) {
                 state.venueConstrainstData.competitionDivisionsFieldsConfigurations = competitionDivisionsFieldsConfigurations
             }
+            state.venueConstrainstData.fieldLinkage = fieldLinkageConfig
 
             state.courtRotation = getCourtRotation(action.commResult.CourtRotation)
 
@@ -1081,21 +1095,39 @@ function VenueTimeState(state = initialState, action) {
                 state.venueConstrainstData[action.contentType][action.index][action.key] = action.data;
             }
             else if (action.contentType === "competitionDivisionsFieldsConfigurations") {
-                const { competitionDivisionId, divisionFieldConfigurationId } = action.data;
-                const config = state.venueConstrainstData[action.contentType] || [];
-                const existFieldConfigIndex = config.findIndex(c => {
-                    return c && c.divisionFieldConfigurationId === divisionFieldConfigurationId
-                })
-                const configField = {
-                    competitionDivisionId,
-                    divisionFieldConfigurationId,
-                }
+                const competitionDivisionIds = [...action.data];
+                const rowIndex = action.index;
 
-                if (existFieldConfigIndex !== -1) {
-                    config[existFieldConfigIndex] = configField
+                const config = state.venueConstrainstData.fieldLinkage;
+                const prevFieldDivisions = config[rowIndex].divisions;
+                const fullFieldDivs = config[FIELD_SIZES_COUNT-1].divisions;
+                if (competitionDivisionIds.length > prevFieldDivisions.length){
+                    // division was added (from full size)
+                    const diffDiv = competitionDivisionIds.filter(divId => !prevFieldDivisions.includes(divId));
+                    config[FIELD_SIZES_COUNT-1].divisions = fullFieldDivs.filter(divId => !diffDiv.includes(divId));
+                    config[rowIndex].divisions = competitionDivisionIds;
                 } else {
-                    config[action.index] = configField
+                    // division was removed from field (to full size)
+                    const diffDiv = prevFieldDivisions.filter(divId => !competitionDivisionIds.includes(divId));
+                    config[FIELD_SIZES_COUNT-1].divisions = [...fullFieldDivs, ...diffDiv];
+                    config[rowIndex].divisions = competitionDivisionIds;
                 }
+                state.venueConstrainstData.fieldLinkage = config;
+                const newCompDivConfig = config.reduce((acc, field) => {
+                    const divisionFieldConfigurationId = FIELD_SIZES_COUNT - field.row;
+                    if (field && !!field.divisions && !!field.divisions.length) {
+                        const fieldConfigs = field.divisions.map(fieldDiv => ({
+                            divisionFieldConfigurationId,
+                            competitionDivisionId: fieldDiv
+                        }));
+                        return [...acc, ...fieldConfigs];
+                    } else {
+                        return acc;
+                    }
+                    
+                }, []);
+                 
+                state.venueConstrainstData.competitionDivisionsFieldsConfigurations = newCompDivConfig;
             }
             else {
                 // let venueConstrainstDetails = state.venueConstrainstData
@@ -1256,7 +1288,7 @@ function VenueTimeState(state = initialState, action) {
             return { ...state }
 
         case ApiConstants.API_CLEARING_VENUE_DATA:
-            var venueDataObj = {
+            venueDataObj = {
                 competitionUniqueKey: '',
                 yearRefId: 1,
                 competitionMembershipProductDivisionId: 1,

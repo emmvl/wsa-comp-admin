@@ -145,11 +145,11 @@ class AddUmpire extends Component {
             if (!this.state.isCompParent) {
                 this.props.updateAddUmpireData([umpireNewAffiliateName], 'partcipateAffiliateId')
             }
-            if (umpireNewAffiliateName) {
-                this.formRef.current.setFieldsValue({
-                    umpireNewAffiliateName,
-                })
-            }
+            // if (umpireNewAffiliateName) {
+            //     this.formRef.current.setFieldsValue({
+            //         umpireNewAffiliateName,
+            //     })
+            // }
         }
     }
 
@@ -419,7 +419,7 @@ class AddUmpire extends Component {
                         >
                             <Select
                                 mode="multiple"
-                                disabled={!this.state.isCompParent}
+                                // disabled={!this.state.isCompParent}
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
                                 className="w-100"
@@ -593,7 +593,7 @@ class AddUmpire extends Component {
 
             if (umpireListData.length === 0) {
                 this.setState({ isUserNotFound: true })
-            } else if (!existingUmpireCheckBox && existingUmpireCoach_CheckBox) {
+            } else if (!existingUmpireCheckBox && !existingUmpireCoach_CheckBox) {
                 message.config({ maxCount: 1, duration: 0.9 })
                 message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
             } else {
