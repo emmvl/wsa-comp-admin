@@ -289,6 +289,10 @@ let AxiosApi = {
         let url = `/common/references`;
         return Method.dataPost(url, token, body)
     },
+    getRelationshipList() {
+        const url = `/common/reference/contactRelationship`;
+        return Method.dataGet(url, token);
+    },
 };
 const Method = {
     async dataPost(newurl, authorization, body) {

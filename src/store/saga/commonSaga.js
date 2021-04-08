@@ -860,6 +860,23 @@ export function* getDocumentType(){
   }
 }
 
+export function* getRelationshipListSaga(){
+  try {
+      const result = yield call(CommonAxiosApi.getRelationshipList, AppConstants.accreditationCoach);
+      if (result.status === 1) {
+          yield put({
+              type: ApiConstants.API_RELATIONSHIP_LIST_SUCCESS,
+              result: result.result.data,
+              status: result.status,
+          });
+      } else {
+          yield call(failSaga, result)
+      }
+  } catch (error) {
+      yield call(errorSaga, error)
+  }
+}
+
 export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_TIME_SLOT_INIT_LOAD, getTimeSlotInitSaga);
   yield takeEvery(ApiConstants.API_GET_COMMON_REF_DATA_LOAD, getCommonDataSaga);
@@ -898,4 +915,5 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD, accreditationUmpireReferenceSaga);
   yield takeEvery(ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD, accreditationUmpireCoachReferenceSaga);
   yield takeEvery(ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD, netSetGoTshirtSizeSaga);
+  yield takeEvery(ApiConstants.API_RELATIONSHIP_LIST_LOAD, getRelationshipListSaga);
 }

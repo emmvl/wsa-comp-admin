@@ -2049,6 +2049,7 @@ const AppConstants = {
     invoicePaid: "Invoice Paid",
     invoice: "Invoice",
     regPaidModalMsg: "Do you want to mark the invoice as paid?",
+    yourRelationship: "What is your Relationship?",
 };
 
 export default AppConstants;
