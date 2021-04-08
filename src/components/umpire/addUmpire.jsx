@@ -419,7 +419,7 @@ class AddUmpire extends Component {
                         >
                             <Select
                                 mode="multiple"
-                                disabled={!this.state.isCompParent}
+                                // disabled={!this.state.isCompParent}
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
                                 className="w-100"

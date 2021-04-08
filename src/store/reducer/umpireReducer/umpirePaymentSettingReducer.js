@@ -40,7 +40,6 @@ function umpirePaymentSetting(state = initialState, action) {
         case ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
         case ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
             const { noPaymentThroughPlatform, ...settings } = action.result;
-            console.log('Settings')
             return {
                 ...state,
                 paymentSettingsData: settings,
