@@ -108,7 +108,7 @@ class RegistrationInvoice extends Component {
     /// top header view
     topView = () => {
         const { invoiceData, getAffiliteDetailData } = this.props.stripeState;
-        const userDetail = invoiceData != null ? invoiceData.billTo : null;
+        const userDetail = invoiceData != null ? invoiceData.yourInfo : null;
         const organisationLogo = invoiceData != null ? invoiceData.organisationLogo : null;
         const isSchoolRegistrationApplied = invoiceData != null ? invoiceData.isSchoolRegistrationApplied : 0;
         const msg = isSchoolRegistrationApplied === 1 ? `(${AppConstants.toBeInvoicedViaSchool})` : ""
