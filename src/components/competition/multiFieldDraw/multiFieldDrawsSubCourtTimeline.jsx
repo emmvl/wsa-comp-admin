@@ -156,8 +156,9 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
 
         const diffTimeTarget = targetObject.minuteDuration;
         const newEndTimeTarget = moment(sourceObject.matchDate).add(diffTimeTarget, 'minutes').format('HH:mm');
+        let isGroupSwap=!drawData[sourceXIndex].isExpanded && !drawData[sourceXIndex].isExpanded;
 
-        if (sourceObject.drawsId !== null && targetObject.drawsId !== null) {
+        if ((sourceObject.drawsId !== null && targetObject.drawsId !== null) || isGroupSwap) {
             this.updateCompetitionDraws(
                 sourceObject,
                 targetObject,
@@ -185,33 +186,35 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
         const sourceYIndex = sourceIndexArray[1];
         const targetXIndex = targetIndexArray[0];
         const targetYIndex = targetIndexArray[1];
-        let postData = {
-            drawsId: targetObject.drawsId,
-            venueCourtId: sourceObject.venueCourtId,
-            matchDate: sourceObject.matchDate,
-            startTime: sourceObject.startTime,
-            endTime: newEndTimeTarget,//sourceObejct.endTime,
-        };
-        if (drawData[sourceXIndex].isExpanded) {
-            postData.subCourt = sourceObject.subCourt;
+        if(targetObject.drawsId){
+            let postData = {
+                drawsId: targetObject.drawsId,
+                venueCourtId: sourceObject.venueCourtId,
+                matchDate: sourceObject.matchDate,
+                startTime: sourceObject.startTime,
+                endTime: newEndTimeTarget,//sourceObejct.endTime,
+            };
+            if (drawData[sourceXIndex].isExpanded) {
+                postData.subCourt = sourceObject.subCourt;
+            }
+            this.updateEditDrawArray(postData);
         }
-        this.updateEditDrawArray(postData);
-        postData = {
-            drawsId: sourceObject.drawsId,
-            venueCourtId: targetObject.venueCourtId,
-            matchDate: targetObject.matchDate,
-            startTime: targetObject.startTime,
-            endTime: newEndTimeSource,//targetObject.endTime,
-        };
-        if (drawData[sourceXIndex].isExpanded) {
-            postData.subCourt = targetObject.subCourt;
+        if(sourceObject.drawsId){
+            let postData = {
+                drawsId: sourceObject.drawsId,
+                venueCourtId: targetObject.venueCourtId,
+                matchDate: targetObject.matchDate,
+                startTime: targetObject.startTime,
+                endTime: newEndTimeSource,//targetObject.endTime,
+            };
+            if (drawData[sourceXIndex].isExpanded) {
+                postData.subCourt = targetObject.subCourt;
+            }
+            this.updateEditDrawArray(postData);
         }
-        this.updateEditDrawArray(postData);
-
-
         const newSourceObj = JSON.parse(JSON.stringify(targetObject));
         const newTargetObj = JSON.parse(JSON.stringify(sourceObject));
-        let switchDrawTimeFieldKeys = Object.keys(this.props.switchDrawTimeFields);
+        let switchDrawTimeFieldKeys = Object.keys(DrawConstant.switchDrawTimeFields);
         switchDrawTimeFieldKeys.forEach(key => newSourceObj[key] = sourceObject[key]);
         switchDrawTimeFieldKeys.forEach(key => newTargetObj[key] = targetObject[key]);
 
@@ -299,71 +302,6 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
         }
     }
 
-    checkColor(slot) {
-        let checkDivisionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        let checkCompetitionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        return slot.colorCode
-                    }
-                }
-            }
-        }
-        return "#999999"
-    }
-
-    checkAllDivisionData = () => {
-        let uncheckedDivisionArr = []
-        let { drawDivisions } = this.props.drawsState
-        if (drawDivisions.length > 0) {
-            for (let i in drawDivisions) {
-                let divisionsArr = drawDivisions[i].legendArray
-                for (let j in divisionsArr) {
-                    if (divisionsArr[j].checked == false) {
-                        uncheckedDivisionArr.push(divisionsArr[j].competitionDivisionGradeId)
-                    }
-                }
-            }
-        }
-        return uncheckedDivisionArr
-    }
-
-    checkAllCompetitionData = (checkedArray, key) => {
-        let uncheckedArr = []
-        if (checkedArray.length > 0) {
-            for (let i in checkedArray) {
-                if (checkedArray[i].checked == false) {
-                    uncheckedArr.push(checkedArray[i][key])
-                }
-            }
-        }
-        return uncheckedArr
-    }
-
-    checkSwap(slot) {
-        const checkDivisionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        const checkCompetitionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        const checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        const checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        const disabledStatus = this.props.competitionStatus == 1
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        if (!disabledStatus) {
-                            return true
-                        }
-                    }
-                }
-            }
-        }
-        return false
-    }
-
     handleDragEnd = (e) => {
         if (e.dataTransfer.dropEffect === "copy" && this.props.isDragging === false) {
             //should have been handled by onSwap
@@ -403,7 +341,7 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
                 return;
             }
 
-            if (draggableEventObject.matchDate === newTimeWithDateFormatted && targetCourtId.toString() === stateVenueId) {
+            if (draggableEventObject.matchDate === newTimeWithDateFormatted && targetCourtId.toString() === stateVenueId && !draggableEventObject.subCourt) {
                 message.error(AppConstants.notAllowed);
                 return;
             }
@@ -509,9 +447,11 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
         let sourceVenueCourt = drawData.find(d => d.venueCourtId == targetCourtId);
         let destinationVenueCourt = drawData.find(d => d.venueCourtId == postData.venueCourtId);
         const allSubCourts = Object.keys(DrawConstant.subCourtHeightUnit);
-        let switchDrawTimeFieldKeys = Object.keys(this.props.switchDrawTimeFields);
+        let switchDrawTimeFieldKeys = Object.keys(DrawConstant.switchDrawTimeFields);
         if (sourceVenueCourt.isExpanded) {
+            let sourceCopy= JSON.parse(JSON.stringify(sourceObject));
             let remainingSubCourt = [];
+            let sourceSubCourt=sourceObject.subCourt;
             if (sourceObject.subCourt) {
                 // update subCourt         
                 let sourceDate = moment(postData.matchDate);
@@ -550,6 +490,15 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
                     postData.subCourt = remainingSubCourt[0];
                     sourceObject.subCourt = postData.subCourt;
                 }
+                let emptySlot= destinationVenueCourt.slotsArray.find(slot=>{
+                    if(!slot.drawsId && slot.subCourt===postData.subCourt){
+                        return true;
+                    }
+                    return false;
+                });
+                if(emptySlot){
+                    emptySlot.subCourt=sourceSubCourt;
+                }
             }
             sourceObject.matchDate = postData.matchDate;
             sourceObject.startTime = postData.startTime;
@@ -566,23 +515,19 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
                 }
 
                 if (destinationVenueCourt) {
-                    Object.keys(this.props.emptySlotVenueFieldUpdate).forEach(key => sourceObject[key] = destinationVenueCourt[key]);
+                    Object.keys(DrawConstant.emptySlotVenueFieldUpdate).forEach(key => sourceObject[key] = destinationVenueCourt[key]);
+                    let emptySlotIndex= destinationVenueCourt.slotsArray.findIndex(slot=> !slot.drawsId && slot.subCourt===postData.subCourt);
+                    if(emptySlotIndex>-1){
+                        let emptySlot=destinationVenueCourt.slotsArray[emptySlotIndex];
+                        destinationVenueCourt.slotsArray.splice(emptySlotIndex,1);  
+                        Object.keys(DrawConstant.emptySlotFieldUpdate).forEach(key => emptySlot[key] = sourceCopy[key]);
+                        emptySlot.subCourt=sourceCopy.subCourt;
+                        sourceVenueCourt.slotsArray.push(emptySlot);
+                        sortSlot(sourceVenueCourt.slotsArray);
+                    }
                     destinationVenueCourt.slotsArray.push(sourceObject);
                     sortSlot(destinationVenueCourt.slotsArray);
-                    // let drawindex=-1;
-                    // for(let i=0; i<drawsData.dateNewArray.length;i++){
-                    //     if(new Date(sourceObejct.matchDate)>= new Date(drawsData.dateNewArray[i].date)){
-                    //         drawindex=i;
-                    //     }
-                    // }                        
-                    // if(drawindex>-1){                        
-                    //     let targetDraw=destinationVenueCourt.slotsArray[drawindex];
-                    //     if(targetDraw.drawsId && targetDraw.drawsId != sourceObejct.drawsId){
-                    //         //something wrong, 
-                    //         console.log("no enough slot");                         
-                    //         //message.warning('Please save draws');
-                    //     }                    
-                    // }                    
+                                     
                 }
             } else {
                 //slot time updated
@@ -595,7 +540,7 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
             sourceObject.matchDate = postData.matchDate;
             sourceObject.startTime = postData.startTime;
             sourceObject.endTime = postData.endTime;
-            Object.keys(this.props.emptySlotVenueFieldUpdate).forEach(key => sourceObject[key] = destinationVenueCourt[key]);
+            Object.keys(DrawConstant.emptySlotVenueFieldUpdate).forEach(key => sourceObject[key] = destinationVenueCourt[key]);
             if (sourceObject.childSlots) {
                 for (let childSlot of sourceObject.childSlots) {
                     switchDrawTimeFieldKeys.forEach(key => childSlot[key] = sourceObject[key]);
@@ -641,11 +586,6 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
         }
     }
 
-    //unlockDraws
-    unlockDraws(id, round_Id, venueCourtId) {
-        let key = this.props.firstTimeCompId == "-1" || this.props.filterDates ? 'all' : "singleCompetition"
-        this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
-    }
     toggleCourt(courtData) {
         courtData.isExpanded = !courtData.isExpanded;
         this.setState({ redraw: true });
@@ -777,7 +717,8 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
                                         continue;
                                     }
                                 }
-                                if (slotObject.drawsId) {
+                                if (slotObject.drawsId || slotObject.subCourt) {
+                                    slotObject.childSlots=[]; //clear if exist
                                     slotObject.childSlots = [{ ...slotObject }];
                                     groupSlots.push(slotObject);
                                 }

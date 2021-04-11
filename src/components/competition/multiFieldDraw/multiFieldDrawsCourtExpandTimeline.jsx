@@ -29,87 +29,6 @@ class MultiFieldDrawsCourtExpandTimeline extends Component {
 
     }
 
-
-
-
-
-
-
-    checkColor(slot) {
-        let checkDivisionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        let checkCompetitionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        return slot.colorCode
-                    }
-                }
-            }
-        }
-        return "#999999"
-    }
-
-    checkAllDivisionData = () => {
-        let uncheckedDivisionArr = []
-        let { drawDivisions } = this.props.drawsState
-        if (drawDivisions.length > 0) {
-            for (let i in drawDivisions) {
-                let divisionsArr = drawDivisions[i].legendArray
-                for (let j in divisionsArr) {
-                    if (divisionsArr[j].checked == false) {
-                        uncheckedDivisionArr.push(divisionsArr[j].competitionDivisionGradeId)
-                    }
-                }
-            }
-        }
-        return uncheckedDivisionArr
-    }
-
-    checkAllCompetitionData = (checkedArray, key) => {
-        let uncheckedArr = []
-        if (checkedArray.length > 0) {
-            for (let i in checkedArray) {
-                if (checkedArray[i].checked == false) {
-                    uncheckedArr.push(checkedArray[i][key])
-                }
-            }
-        }
-        return uncheckedArr
-    }
-
-    checkSwap(slot) {
-        const checkDivisionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        const checkCompetitionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        const checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        const checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        const disabledStatus = this.props.competitionStatus == 1
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        if (!disabledStatus) {
-                            return true
-                        }
-                    }
-                }
-            }
-        }
-        return false
-    }
-
-
-
-
-    //unlockDraws
-    unlockDraws(id, round_Id, venueCourtId) {
-        let key = this.props.firstTimeCompId == "-1" || this.props.filterDates ? 'all' : "singleCompetition"
-        this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
-    }
-
-
     render(){
         let dateItem = this.props.dateItem;
         let index = this.props.index;
@@ -201,7 +120,7 @@ class MultiFieldDrawsCourtExpandTimeline extends Component {
                             onMouseLeave={this.props.slotObjectMouseLeave}
                             className={'box-draws purple-bg'}
                             style={{
-                                backgroundColor: this.checkColor(slotObject),
+                                backgroundColor: this.props.checkColor(slotObject),
                                 overflow: 'hidden',
                                 whiteSpace: 'nowrap',
                                 cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
@@ -230,7 +149,7 @@ class MultiFieldDrawsCourtExpandTimeline extends Component {
                                     content={1}
                                     swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
                                         ? false
-                                        : this.checkSwap(slotObject)
+                                        : this.props.checkSwap(slotObject)
                                     }
                                     onSwap={(source, target) =>
                                         this.props.onSwap(
@@ -275,7 +194,7 @@ class MultiFieldDrawsCourtExpandTimeline extends Component {
                                     content={1}
                                     swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
                                         ? false
-                                        : this.checkSwap(slotObject)
+                                        : this.props.checkSwap(slotObject)
                                     }
                                     onSwap={(source, target) =>
                                         this.props.onSwap(
@@ -375,12 +294,12 @@ class MultiFieldDrawsCourtExpandTimeline extends Component {
                                             <Menu.Item
                                                 key="1"
                                                 onClick={() => this.props.firstTimeCompId == "-1" || this.props.filterDates
-                                                    ? this.unlockDraws(
+                                                    ? this.props.unlockDraws(
                                                         slotObject.drawsId,
                                                         "1",
                                                         courtData.venueCourtId
                                                     )
-                                                    : this.unlockDraws(
+                                                    : this.props.unlockDraws(
                                                         slotObject.drawsId,
                                                         dateItem.roundId,
                                                         courtData.venueCourtId

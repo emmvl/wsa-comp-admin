@@ -9,7 +9,7 @@ import DrawConstant from 'themes/drawConstant';
 //import '../draws.scss';
 const ONE_MIN_WIDTH = 2;
 const ONE_HOUR_IN_MIN = 60;
-const { SubMenu } = Menu;
+
 class MultiFieldDrawsCourtGroupTimeline extends Component {
     constructor(props) {
         super(props);
@@ -23,82 +23,6 @@ class MultiFieldDrawsCourtGroupTimeline extends Component {
 
     componentDidMount() {
     }
-
-    checkColor(slot) {
-        let checkDivisionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        let checkCompetitionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        return slot.colorCode
-                    }
-                }
-            }
-        }
-        return "#999999"
-    }
-
-    checkAllDivisionData = () => {
-        let uncheckedDivisionArr = []
-        let { drawDivisions } = this.props.drawsState
-        if (drawDivisions.length > 0) {
-            for (let i in drawDivisions) {
-                let divisionsArr = drawDivisions[i].legendArray
-                for (let j in divisionsArr) {
-                    if (divisionsArr[j].checked == false) {
-                        uncheckedDivisionArr.push(divisionsArr[j].competitionDivisionGradeId)
-                    }
-                }
-            }
-        }
-        return uncheckedDivisionArr
-    }
-
-    checkAllCompetitionData = (checkedArray, key) => {
-        let uncheckedArr = []
-        if (checkedArray.length > 0) {
-            for (let i in checkedArray) {
-                if (checkedArray[i].checked == false) {
-                    uncheckedArr.push(checkedArray[i][key])
-                }
-            }
-        }
-        return uncheckedArr
-    }
-
-    checkSwap(slot) {
-        const checkDivisionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        const checkCompetitionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        const checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        const checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        const disabledStatus = this.props.competitionStatus == 1
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        if (!disabledStatus) {
-                            return true
-                        }
-                    }
-                }
-            }
-        }
-        return false
-    }
-
-
-
-
-    //unlockDraws
-    unlockDraws(id, round_Id, venueCourtId) {
-        let key = this.props.firstTimeCompId == "-1" || this.props.filterDates ? 'all' : "singleCompetition"
-        this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
-    }
-
-
 
 
     render() {
@@ -131,7 +55,7 @@ class MultiFieldDrawsCourtGroupTimeline extends Component {
 
         return (
             groupSlots.map((slotObject, groupIndex) => {
-                if (getDate(slotObject.matchDate) === fieldItemDate && slotObject.drawsId) {
+                if (getDate(slotObject.matchDate) === fieldItemDate && (slotObject.drawsId ||slotObject.subCourt)) {
                     // for left margin the event start inside the day
                     const startWorkingDayTime = moment(fieldItemDate + startDayTime);
                     const startTimeEvent = moment(slotObject.matchDate);
@@ -191,7 +115,7 @@ class MultiFieldDrawsCourtGroupTimeline extends Component {
                                 onMouseLeave={this.props.slotObjectMouseLeave}
                                 className={'box-draws purple-bg'}
                                 style={{
-                                    backgroundColor: this.checkColor(slotObject),
+                                    backgroundColor: this.props.checkColor(slotObject),
                                     overflow: 'hidden',
                                     whiteSpace: 'nowrap',
                                     cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
@@ -220,7 +144,7 @@ class MultiFieldDrawsCourtGroupTimeline extends Component {
                                         content={1}
                                         swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
                                             ? false
-                                            : this.checkSwap(slotObject)
+                                            : this.props.checkSwap(slotObject)
                                         }
                                         onSwap={(source, target) =>
                                             this.props.onSwap(
@@ -287,7 +211,7 @@ class MultiFieldDrawsCourtGroupTimeline extends Component {
                                         content={1}
                                         swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
                                             ? false
-                                            : this.checkSwap(slotObject)
+                                            : this.props.checkSwap(slotObject)
                                         }
                                         onSwap={(source, target) =>
                                             this.props.onSwap(

@@ -4,13 +4,13 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
-import { NavLink } from 'react-router-dom';
+
 import DrawsPublishModel from '../../customComponents/drawsPublishModel'
 // import _ from "lodash";
 import loadjs from 'loadjs';
 import moment from 'moment';
 import AppImages from "../../themes/appImages";
-import Swappable from '../../customComponents/SwappableComponent';
+
 import { isArrayNotEmpty } from '../../util/helpers';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -68,10 +68,11 @@ import './draws.scss';
 import getColor from "../../util/coloredCheckbox";
 import {getDate,checkDate} from "../../util/drawUtil";
 import MultiFieldDrawsSubCourt from "./multiFieldDraw/multiFieldDrawsSubCourt";
+import MultiFieldDrawsFullCourt from "./multiFieldDraw/multiFieldDrawsFullCourt";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Footer, Content } = Layout;
-const { SubMenu } = Menu;
+
 const { confirm } = Modal;
 // const venueStaticData = [
 //     { name: "Venue 1", checked: true },
@@ -157,8 +158,8 @@ class MultifieldDrawsNew extends Component {
                 draws:[],
                 apiData:null
             },
-            switchDrawNameFields:DrawConstant.switchDrawNameFields,
-            switchDrawTimeFields:DrawConstant.switchDrawTimeFields,
+            
+            
         };
         this.props.clearMultiDraws();
     }
@@ -505,141 +506,8 @@ class MultifieldDrawsNew extends Component {
             this.setState({ singleCompDivisionCheked: value })
         }
     }
-    checkCurrentSwapObjects=(source, target, drawData)=> {
-        let sourceIndexArray = source.split(':');
-        let targetIndexArray = target.split(':');
-        let sourceXIndex = sourceIndexArray[0];
-        let sourceYIndex = sourceIndexArray[1];
-        let targetXIndex = targetIndexArray[0];
-        let targetYIndex = targetIndexArray[1];
-        if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
-            return false;
-        }
-        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
-        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
-        if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
-            return false;
-        }
-        return true;
-    }
-    onSwap(source, target, drawData, round_Id) {
-        let sourceIndexArray = source.split(':');
-        let targetIndexArray = target.split(':');
-        let sourceXIndex = sourceIndexArray[0];
-        let sourceYIndex = sourceIndexArray[1];
-        let targetXIndex = targetIndexArray[0];
-        let targetYIndex = targetIndexArray[1];
-        if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
-            return;
-        }
-        // let drawData = this.props.drawsState.getStaticDrawsData;
-        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
-        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
-        if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
-            this.updateCompetitionDraws(
-                sourceObejct,
-                targetObject,
-                sourceIndexArray,
-                targetIndexArray,
-                drawData,
-                round_Id,
-                sourceObejct.duplicate, targetObject.duplicate
-            );
-        } else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
-        } else {
-            this.updateCompetitionNullDraws(
-                sourceObejct,
-                targetObject,
-                sourceIndexArray,
-                targetIndexArray,
-                drawData,
-                round_Id
-            );
-        }
-    }
 
-    getColumnData = (indexArray, drawData) => {
-        let xIndex=indexArray[0];
-        let yIndex = indexArray[1];
-        let object = null;
 
-        for (let i in drawData) {
-            let slot = drawData[i].slotsArray[yIndex];
-            if (slot.drawsId !== null) {
-                object = slot;
-                break;
-            }
-        }
-        if(!object){            
-            //empty slot has incorrect start time
-            object=drawData[xIndex].slotsArray[yIndex];
-            this.correctWrongDate(object,yIndex);
-
-        }
-        return object;
-    };
-    correctWrongDate=(slot,slotIndex)=>{
-        const slotDate = moment(slot.matchDate);
-        const slotEnd = moment(getDate(slot.matchDate) + slot.endTime);
-        const isCorrectStart = slotEnd.isAfter(slotDate);
-        if(!isCorrectStart){
-            if(this.props.drawsState.getRoundsDrawsdata.length>0){
-                const dateAxis=this.props.drawsState.getRoundsDrawsdata[0].dateNewArray[slotIndex];
-                slot.matchDate=dateAxis.date;
-                slot.startTime=moment(slot.matchDate).format('HH:mm');
-                slot.endTime=dateAxis.endTime;
-            }           
-        }
-    }
-
-    ///////update the competition draws on  swapping and hitting update Apis if both has value
-    updateCompetitionDraws = (
-        sourceObejct,
-        targetObject,
-        sourceIndexArray,
-        targetIndexArray,
-        drawData,
-        round_Id, sourceDuplicate, targetDuplicate
-    ) => {
-        
-        let customSourceObject = {
-            // drawsId: sourceObejct.drawsId,
-            drawsId: targetObject.drawsId,
-            homeTeamId: sourceObejct.homeTeamId,
-            awayTeamId: sourceObejct.awayTeamId,
-            competitionDivisionGradeId: sourceObejct.competitionDivisionGradeId,
-            isLocked: 1,
-        };
-        let customTargetObject = {
-            // drawsId: targetObject.drawsId,
-            drawsId: sourceObejct.drawsId,
-            homeTeamId: targetObject.homeTeamId,
-            awayTeamId: targetObject.awayTeamId,
-            // homeTeamId: 268,
-            // awayTeamId: 262,
-            competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
-            isLocked: 1,
-        };
-       
-        this.updateEditDrawArray(customSourceObject);
-        this.updateEditDrawArray(customTargetObject);
-
-        const sourceXIndex = sourceIndexArray[0];
-        const sourceYIndex = sourceIndexArray[1];
-        const targetXIndex = targetIndexArray[0];
-        const targetYIndex = targetIndexArray[1];
-             
-        let newSourceObj={...sourceObejct, ...customTargetObject};
-        Object.keys(this.state.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
-        
-        let newTargetObj={...targetObject, ...customSourceObject};
-        Object.keys(this.state.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
-
-        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
-        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
-        this.props.updateCompetitionDrawsSwapLoadAction();       
-        
-    };
     updateEditDrawArray(draw){
         const editdraw= this.state.editedDraw;        
         const drawExistsIndex=editdraw.draws.findIndex(d=>d.drawsId==draw.drawsId);
@@ -649,53 +517,7 @@ class MultifieldDrawsNew extends Component {
             editdraw.draws.push(draw);
         }
     }
-    ///////update the competition draws on  swapping and hitting update Apis if one has N/A(null)
-    updateCompetitionNullDraws = (
-        sourceObejct,
-        targetObject,
-        sourceIndexArray,
-        targetIndexArray,
-        drawData,
-        round_Id
-    ) => {
-        let updatedKey = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
-        let postData = null;
-        if (sourceObejct.drawsId == null) {
-            let columnObject = this.getColumnData(sourceIndexArray, drawData);
-            postData = {
-                drawsId: targetObject.drawsId,
-                venueCourtId: sourceObejct.venueCourtId,
-                matchDate: moment(columnObject.matchDate).format('YYYY-MM-DD HH:mm'),
-                startTime: columnObject.startTime,
-                endTime: columnObject.endTime,
-            };
-        } else {
-            let columnObject = this.getColumnData(targetIndexArray, drawData);
-            postData = {
-                drawsId: sourceObejct.drawsId,
-                venueCourtId: targetObject.venueCourtId,
-                matchDate: moment(columnObject.matchDate).format('YYYY-MM-DD HH:mm'),
-                startTime: columnObject.startTime,
-                endTime: columnObject.endTime,
-            };
-        }
 
-        this.updateEditDrawArray(postData);
-
-        const sourceXIndex = sourceIndexArray[0];
-        const sourceYIndex = sourceIndexArray[1];
-        const targetXIndex = targetIndexArray[0];
-        const targetYIndex = targetIndexArray[1];
-        const newSourceObj = JSON.parse(JSON.stringify(targetObject));
-        const newTargetObj = JSON.parse(JSON.stringify(sourceObejct));
-        
-        Object.keys(this.state.switchDrawTimeFields).forEach(key => newSourceObj[key] = sourceObejct[key]);
-        Object.keys(this.state.switchDrawTimeFields).forEach(key => newTargetObj[key] = targetObject[key]); 
-
-        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
-        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
-        this.props.updateCompetitionDrawsSwapLoadAction();  
-    };
 
     saveEditDraws = () => {
         let key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
@@ -711,26 +533,26 @@ class MultifieldDrawsNew extends Component {
         const sourceIndexArray=[];
         const targetIndexArray=[];
         const postObject = {
-            draws: this.state.editedDraw.draws,
+            draws: JSON.parse(JSON.stringify(this.state.editedDraw.draws)),
         };
-        //re-use the timeline action, can be moved to updateCompetitionDraws action if necessary
-        console.log(this.state.editedDraw.draws);
-        // this.props.updateCompetitionDrawsTimeline(
-        //     postObject,
-        //     sourceIndexArray,
-        //     targetIndexArray,
-        //     key,
-        //     parseInt(apiData.roundId),
-        //     apiData.yearRefId,
-        //     apiData.competitionId,
-        //     apiData.venueId,
-        //     this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : apiData.roundId,
-        //     null,
-        //     null,
-        //     null,
-        //     this.state.filterDates
-        // );
-        
+       
+        //console.log(this.state.editedDraw.draws);
+        this.props.updateCompetitionDrawsTimeline(
+            postObject,
+            sourceIndexArray,
+            targetIndexArray,
+            key,
+            parseInt(apiData.roundId),
+            apiData.yearRefId,
+            apiData.competitionId,
+            apiData.venueId,
+            this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : apiData.roundId,
+            null,
+            null,
+            null,
+            this.state.filterDates
+        );
+        this.state.editedDraw.draws.length=0;        
 
     }
     // on Competition change
@@ -819,7 +641,7 @@ class MultifieldDrawsNew extends Component {
         this.props.matchesListDrawsAction(this.state.firstTimeCompId);
     };
 
-    checkColor(slot) {
+    checkColor=(slot)=> {
         let checkDivisionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         let checkCompetitionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -864,7 +686,7 @@ class MultifieldDrawsNew extends Component {
         return uncheckedArr
     }
 
-    checkSwap(slot) {
+    checkSwap=(slot)=> {
         let checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -1346,7 +1168,7 @@ class MultifieldDrawsNew extends Component {
     }
 
     //unlockDraws
-    unlockDraws(id, round_Id, venueCourtId) {
+    unlockDraws=(id, round_Id, venueCourtId)=> {
         let key = this.state.firstTimeCompId == "-1" || this.state.filterDates ? 'all' : "singleCompetition"
         this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
     }
@@ -1490,290 +1312,12 @@ class MultifieldDrawsNew extends Component {
 
 
     draggableView = (dateItem) => {
-        let disabledStatus = this.state.competitionStatus == 1
-        var dateMargin = 25;
-        var dayMargin = 25;
-        let topMargin = 0;
-        // let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : [];
-        return (
-            <>
-                <div className="scroll-bar pb-4" style={{ width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140, minWidth: 1080 }}>
-                    <div className="table-head-wrap">
-                        {/* Day name list */}
-                        <div className="tablehead-row">
-                            <div className="sr-no empty-bx" />
-                            {dateItem.dateNewArray.map((item, index) => {
-                                if (index !== 0) {
-                                    dateMargin += 110;
-                                }
-                                if (index == 0) {
-                                    dateMargin = 70;
-                                }
-                                return (
-                                    <span key={"day" + index} style={{ left: dateMargin }}>
-                                        {item.notInDraw == false ? checkDate(item.date, index, dateItem.dateNewArray) : ''}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                        {/* Times list */}
-                        <div className="tablehead-row">
-                            <div className="sr-no empty-bx" />
-
-                            {dateItem.dateNewArray.map((item, index) => {
-                                if (index !== 0) {
-                                    dayMargin += 110;
-                                }
-                                if (index == 0) {
-                                    dayMargin = 70;
-                                }
-                                return (
-                                    <span
-                                        key={"time" + index}
-                                        style={{
-                                            left: dayMargin,
-                                            fontSize: item.notInDraw !== false && 11,
-                                        }}
-                                    >
-                                        {item.notInDraw == false ? getTime(item.date) : 'Not in draw'}
-                                    </span>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </div>
-                <div className="main-canvas Draws">
-                    {dateItem.draws.map((courtData, index) => {
-                        let leftMargin = 25;
-                        if (index !== 0) {
-                            topMargin += 70;
-                        }
-                        return (
-                            <>
-                                <div key={"court" + index} className="sr-no" style={{ height: 62 }}>
-                                    <div className="venueCourt-tex-div">
-                                        <span className="venueCourt-text">
-                                            {courtData.venueShortName + '-' + courtData.venueCourtNumber}
-                                        </span>
-                                    </div>
-                                </div>
-                                {courtData.slotsArray.map((slotObject, slotIndex) => {
-                                    if (slotIndex !== 0) {
-                                        leftMargin += 110;
-                                    }
-                                    if (slotIndex == 0) {
-                                        leftMargin = 70;
-                                    }
-                                    return (
-                                        <div key={"slot" + slotIndex} >
-                                            <span
-                                                style={{ left: leftMargin, top: topMargin }}
-                                                className={slotObject.duplicate ? 'borderDuplicate' : 'border'}
-                                            />
-                                            <div
-                                                className={slotObject.duplicate ? slotObject.colorCode == "#EA0628" ? 'box purple-bg boxPink' : 'box purple-bg boxDuplicate' : 'box purple-bg'}
-                                                style={{
-                                                    backgroundColor: this.checkColor(slotObject),
-                                                    left: leftMargin,
-                                                    top: topMargin,
-                                                    overflow: 'hidden',
-                                                    whiteSpace: 'nowrap',
-                                                    cursor: disabledStatus && "no-drop",
-                                                }}
-                                            >
-                                                {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
-                                                    <Swappable
-                                                        // duplicateDropzoneId={slotObject.duplicate && "duplicateDropzoneId"}
-                                                        // duplicateDragableId={slotObject.duplicate && "duplicateDragableId"}
-                                                        // duplicateDropzoneId={"boxDuplicate"}
-                                                        id={
-                                                            index.toString() +
-                                                            ':' +
-                                                            slotIndex.toString()
-                                                            +
-                                                            ':' +
-                                                            "1"
-                                                        }
-                                                        content={1}
-                                                        swappable={this.checkSwap(slotObject)}
-                                                        onSwap={(source, target) =>
-                                                            this.onSwap(
-                                                                source,
-                                                                target,
-                                                                dateItem.draws,
-                                                                "1"
-                                                            )
-                                                        }
-                                                        isCurrentSwappable={(source, target) =>                                 
-                                                            this.checkCurrentSwapObjects(
-                                                            source,
-                                                            target,
-                                                            dateItem.draws,
-                                                            )
-                                                        }
-                                                    >
-                                                        {slotObject.drawsId != null ? (
-                                                            <span>
-                                                                {slotObject.homeTeamName} <br />
-                                                                {slotObject.awayTeamName}
-                                                            </span>
-                                                        ) : (
-                                                                <span>Free</span>
-                                                            )}
-                                                    </Swappable>
-                                                ) : (
-                                                        <Swappable
-                                                            duplicateDropzoneId={slotObject.duplicate && "duplicateDropzoneId"}
-                                                            duplicateDragableId={slotObject.duplicate && "duplicateDragableId"}
-                                                            id={
-                                                                index.toString() +
-                                                                ':' +
-                                                                slotIndex.toString()
-                                                                +
-                                                                ':' +
-                                                                dateItem.roundId.toString()
-                                                            }
-                                                            content={1}
-                                                            swappable={this.checkSwap(slotObject)}
-                                                            onSwap={(source, target) =>
-                                                                this.onSwap(
-                                                                    source,
-                                                                    target,
-                                                                    dateItem.draws,
-                                                                    dateItem.roundId
-                                                                )
-                                                            }
-                                                            isCurrentSwappable={(source, target) =>                                 
-                                                                this.checkCurrentSwapObjects(
-                                                                source,
-                                                                target,
-                                                                dateItem.draws,
-                                                                )
-                                                            }
-                                                        >
-                                                            {slotObject.drawsId != null ? (
-                                                                <span>
-                                                                    {slotObject.homeTeamName} <br />
-                                                                    {slotObject.awayTeamName}
-                                                                </span>
-                                                            ) : (
-                                                                    <span>Free</span>
-                                                                )}
-                                                        </Swappable>
-                                                    )}
-                                            </div>
-
-                                            {slotObject.drawsId !== null && (
-                                                <div
-                                                    className="box-exception"
-                                                    style={{
-                                                        left: leftMargin,
-                                                        top: topMargin + 50,
-                                                        overflow: 'hidden',
-                                                        whiteSpace: 'nowrap',
-                                                        marginLeft: slotObject.isLocked == 1 && -10
-                                                    }}
-                                                >
-                                                    <Menu
-                                                        className="action-triple-dot-draws"
-                                                        theme="light"
-                                                        mode="horizontal"
-                                                        style={{
-                                                            lineHeight: '16px',
-                                                            borderBottom: 0,
-                                                            cursor: disabledStatus && "no-drop",
-                                                            display: slotObject.isLocked !== 1 && "flex",
-                                                            justifyContent: slotObject.isLocked !== 1 && "center"
-                                                        }}
-                                                    >
-                                                        <SubMenu
-                                                            disabled={disabledStatus}
-                                                            // style={{ borderBottomStyle: "solid", borderBottom: 2 }}
-                                                            key="sub1"
-                                                            title={
-                                                                slotObject.isLocked == 1 ? (
-                                                                    <div className="d-flex justify-content-between" style={{ width: 80, maxWidth: 80 }}>
-                                                                        <img
-                                                                            className="dot-image"
-                                                                            src={AppImages.drawsLock}
-                                                                            alt=""
-                                                                            width="16"
-                                                                            height="10"
-                                                                        />
-                                                                        <img
-                                                                            className="dot-image"
-                                                                            src={AppImages.moreTripleDot}
-                                                                            alt=""
-                                                                            width="16"
-                                                                            height="10"
-                                                                        />
-                                                                    </div>
-                                                                ) : (
-                                                                        <div>
-                                                                            <img
-                                                                                className="dot-image"
-                                                                                src={AppImages.moreTripleDot}
-                                                                                alt=""
-                                                                                width="16"
-                                                                                height="10"
-                                                                            />
-                                                                        </div>
-                                                                    )
-                                                            }
-                                                        >
-                                                            {slotObject.isLocked == 1 && (
-                                                                <Menu.Item
-                                                                    key="1"
-                                                                    onClick={() => this.state.firstTimeCompId == "-1" || this.state.filterDates
-                                                                        ? this.unlockDraws(
-                                                                            slotObject.drawsId,
-                                                                            "1",
-                                                                            courtData.venueCourtId
-                                                                        )
-                                                                        : this.unlockDraws(
-                                                                            slotObject.drawsId,
-                                                                            dateItem.roundId,
-                                                                            courtData.venueCourtId
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    <div className="d-flex">
-                                                                        <span>Unlock</span>
-                                                                    </div>
-                                                                </Menu.Item>
-                                                            )}
-                                                            <Menu.Item key="2">
-                                                                <NavLink
-                                                                    to={{
-                                                                        pathname: `/competitionException`,
-                                                                        state: {
-                                                                            drawsObj: slotObject,
-                                                                            yearRefId: this.state.yearRefId,
-                                                                            competitionId: this.state.firstTimeCompId,
-                                                                            organisationId: this.state.organisationId,
-                                                                        },
-                                                                    }}
-                                                                >
-                                                                    <span>Exception</span>
-                                                                </NavLink>
-                                                            </Menu.Item>
-                                                        </SubMenu>
-                                                    </Menu>
-                                                </div>
-                                            )}
-                                        </div>
-                                    );
-                                })}
-                            </>
-                        );
-                    })}
-                </div>
-            </>
-        );
+        let allprops = {...this.props, ...this.state,dateItem:dateItem, checkColor:this.checkColor, checkSwap: this.checkSwap,unlockDraws:this.unlockDraws};
+        return <MultiFieldDrawsFullCourt {...allprops} ></MultiFieldDrawsFullCourt>;
     };
 
     draggableSubCourtView = (dateItem) => {
-        let allprops = {...this.props, ...this.state,dateItem:dateItem};
+        let allprops = {...this.props, ...this.state,dateItem:dateItem, checkColor:this.checkColor, checkSwap: this.checkSwap,unlockDraws:this.unlockDraws};
         return <MultiFieldDrawsSubCourt {...allprops} ></MultiFieldDrawsSubCourt>;
 
     }

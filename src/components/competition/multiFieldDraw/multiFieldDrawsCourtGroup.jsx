@@ -19,81 +19,6 @@ class MultiFieldDrawsCourtGroup extends Component {
     componentDidMount() {
     }
 
-    checkColor(slot) {
-        let checkDivisionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        let checkCompetitionFalse = this.props.firstTimeCompId == "-1" || this.props.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        return slot.colorCode
-                    }
-                }
-            }
-        }
-        return "#999999"
-    }
-
-    checkAllDivisionData = () => {
-        let uncheckedDivisionArr = []
-        let { drawDivisions } = this.props.drawsState
-        if (drawDivisions.length > 0) {
-            for (let i in drawDivisions) {
-                let divisionsArr = drawDivisions[i].legendArray
-                for (let j in divisionsArr) {
-                    if (divisionsArr[j].checked == false) {
-                        uncheckedDivisionArr.push(divisionsArr[j].competitionDivisionGradeId)
-                    }
-                }
-            }
-        }
-        return uncheckedDivisionArr
-    }
-
-    checkAllCompetitionData = (checkedArray, key) => {
-        let uncheckedArr = []
-        if (checkedArray.length > 0) {
-            for (let i in checkedArray) {
-                if (checkedArray[i].checked == false) {
-                    uncheckedArr.push(checkedArray[i][key])
-                }
-            }
-        }
-        return uncheckedArr
-    }
-
-    checkSwap(slot) {
-        let checkDivisionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        let checkCompetitionFalse = this.props.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
-        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
-        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        let disabledStatus = this.props.competitionStatus == 1
-        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
-            if (!checkCompetitionFalse.includes(slot.competitionName)) {
-                if (!checkVenueFalse.includes(slot.venueId)) {
-                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
-                        if (!disabledStatus) {
-                            return true
-                        } else {
-                            return false
-                        }
-                    } else {
-                        return false
-                    }
-                } else {
-                    return false
-                }
-            } else {
-                return false
-            }
-        } else {
-            return false
-        }
-    }
-
-
     render() {
         let dateItem = this.props.dateItem;
         let index = this.props.index;
@@ -132,7 +57,7 @@ class MultiFieldDrawsCourtGroup extends Component {
                 <div
                     className={slotObject.duplicate ? slotObject.colorCode == "#EA0628" ? 'box purple-bg boxPink' : 'box purple-bg boxDuplicate' : 'box purple-bg'}
                     style={{
-                        backgroundColor: this.checkColor(slotObject),
+                        backgroundColor: this.props.checkColor(slotObject),
                         left: leftMargin,
                         top: topMargin,
                         overflow: 'hidden',
@@ -155,7 +80,7 @@ class MultiFieldDrawsCourtGroup extends Component {
                                 "1"
                             }
                             content={1}
-                            swappable={this.checkSwap(slotObject)}
+                            swappable={this.props.checkSwap(slotObject)}
                             onSwap={(source, target) =>
                                 this.props.onSwap(
                                     source,
@@ -172,7 +97,7 @@ class MultiFieldDrawsCourtGroup extends Component {
                                 )
                             }
                         >
-                            {slotObject.drawsId != null ? (
+                            {(slotObject.drawsId != null || slotObject.subCourt) ? (
                                 <Popover content={slotObject.childSlots.map((childSlot, cindex) => {
                                     if (childSlot.homeTeamId) {
                                         return <span key={childSlot.homeTeamId + "" + cindex}> {childSlot.homeTeamName} V {childSlot.awayTeamName}<br /> </span>
@@ -224,7 +149,7 @@ class MultiFieldDrawsCourtGroup extends Component {
                                 dateItem.roundId.toString()
                             }
                             content={1}
-                            swappable={this.checkSwap(slotObject)}
+                            swappable={this.props.checkSwap(slotObject)}
                             onSwap={(source, target) =>
                                 this.props.onSwap(
                                     source,
@@ -242,7 +167,7 @@ class MultiFieldDrawsCourtGroup extends Component {
                             }
 
                         >
-                            {slotObject.drawsId != null ? (
+                            {(slotObject.drawsId != null ||slotObject.subCourt) ? (
                                 <Popover content={slotObject.childSlots.map((childSlot, cindex) => {
                                     if (childSlot.homeTeamId) {
                                         return <span key={childSlot.homeTeamId + "" + cindex}> {childSlot.homeTeamName} V {childSlot.awayTeamName}<br /> </span>
