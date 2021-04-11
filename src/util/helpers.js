@@ -131,6 +131,11 @@ const  isNullOrUndefined = (e) => {
     return (e === null || e === undefined) ? false : e;
   }
 
+const arrayMove=(arr, fromIndex, toIndex) =>{
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
 module.exports = {
     isArrayNotEmpty,
     isNotNullOrEmptyString,
@@ -149,4 +154,5 @@ module.exports = {
     feeIsNull,
     isNullOrUndefined,
     removeFirstSpace,
+    arrayMove,
 };
