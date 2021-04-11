@@ -113,12 +113,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 this.setState({
                     // yearRefId: JSON.parse(yearId),
                     competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
-                        ? this.props.appState.own_CompetitionArr[0].id : this.state.firstTimeCompId ? this.state.firstTimeCompId : null
+                        ? this.props.appState.own_CompetitionArr[0].competitionId : this.state.firstTimeCompId ? this.state.firstTimeCompId : null
                 })
             } else {
                 await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
                 this.setState({ competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
-                    ? this.props.appState.own_CompetitionArr[0].id : this.state.firstTimeCompId ? this.state.firstTimeCompId : null })
+                    ? this.props.appState.own_CompetitionArr[0].competitionId : this.state.firstTimeCompId ? this.state.firstTimeCompId : null })
             }
         }
         this.syncDivisionsFieldsConfigurationsFormData()
@@ -157,7 +157,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     this.setState({
                         getDataLoading: true,
                         loading: false,
-                        competitionId: competitionList[0].id,
+                        competitionId,
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId,
                         isQuickCompetition: quickComp != undefined,
@@ -290,7 +290,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         setOwn_CompetitionFinalRefId(undefined)
         this.setState({ yearRefId: yearId, firstTimeCompId: null, competitionStatus: 0, finalTypeRefId: null, })
         await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition",)
-        this.setState({ competitionId: this.props.appState.own_CompetitionArr[0].id })
+        this.setState({ competitionId: this.props.appState.own_CompetitionArr[0].competitionId })
     }
 
     onCompetitionClick(competitionId) {
@@ -298,7 +298,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let statusIndex = (own_CompetitionArr && own_CompetitionArr.length) ? own_CompetitionArr.findIndex((x) => x.competitionId == competitionId) : -1;
         let statusRefId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex]?.statusRefId : null;
         let finalTypeRefId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex]?.finalTypeRefId : null;
-        const competitionNumberId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex].id : null;
+        const competitionNumberId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex].competitionId : null;
 
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
