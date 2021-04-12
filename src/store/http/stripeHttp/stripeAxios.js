@@ -242,8 +242,11 @@ let AxiosApi = {
     },
 
     async exportCustomerTransactionApi(customerId) {
+        const orgItem = await getOrganisationData();
+        const organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        //We are not using customerId but we can keep body here for future to add filters in body
         const body = { customerId };
-        let url = `/api/payments/customerTransaction/export`;
+        let url = `/api/payments/customerTransaction/export?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataPostDownload(url, token, 'customerTransaction', body);
     },
 
