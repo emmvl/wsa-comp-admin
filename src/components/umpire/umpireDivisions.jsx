@@ -22,8 +22,9 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import Loader from '../../customComponents/loader';
 
 import AppConstants from "../../themes/appConstants";
-
+import { isEqual } from 'lodash';
 import './umpire.css';
+import { fastRGLPropsEqual } from "react-grid-layout/build/utils";
 
 const { Header } = Layout
 const { Option } = Select
@@ -53,30 +54,34 @@ class UmpireDivisions extends Component {
     componentDidUpdate(prevProps) {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
-        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
-                let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = !!competitionList.length && competitionList[0].id;
+                let competitionList = (this.props.umpireCompetitionState.umpireComptitionList 
+                    && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) ? this.props.umpireCompetitionState.umpireComptitionList : []
+                let firstComp = (competitionList && !!competitionList.length) ? competitionList[0].id : 0;
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
                     firstComp = compId
                 } else {
-                    setUmpireCompId(firstComp)
+                    if (firstComp) setUmpireCompId(firstComp)
                 }
 
-                if (JSON.parse(getUmpireCompetitonData())) {
+                const umpireCompetitionData = getUmpireCompetitonData() ? JSON.parse(getUmpireCompetitonData()) : {};
+                if (umpireCompetitionData && organisationId && firstComp) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
                     this.props.liveScoreGetDivision(firstComp);
                     this.props.liveScoreGetRounds(firstComp);
                 }
 
-                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+                const compKey = (competitionList && competitionList.length && competitionList[0].competitionUniqueKey)
+                 ? competitionList[0]?.competitionUniqueKey : 0;
 
-                const selectedComp = competitionList.find(item => item.id === firstComp);  
-                const isOrganiser = selectedComp.organisationId === organisationId;
+                const selectedComp = competitionList ? competitionList.find(item => item.id === firstComp) : {};  
+                const isOrganiser = (selectedComp && selectedComp.organisationId && organisationId) 
+                    ? selectedComp.organisationId === organisationId : false;
 
-                this.setState({
+                if (selectedComp && compKey) this.setState({
                     selectedComp: firstComp, 
                     loading: false, 
                     competitionUniqueKey: compKey,
@@ -87,7 +92,7 @@ class UmpireDivisions extends Component {
 
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
-        if (umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
+        if (!isEqual(umpirePoolData, prevProps.umpirePoolAllocationState.umpirePoolData)) {
             const selectedDivisions = [];
             umpirePoolData.forEach(poolItem => {
                 if (poolItem && poolItem.divisions && Array.isArray(poolItem.divisions)) {

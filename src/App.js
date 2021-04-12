@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Offline } from "react-detect-offline";
 import {
     // MemoryRouter,
     Router,
@@ -17,7 +18,7 @@ import ForgotPassword from './components/ForgotPassword';
 import lazyLoad from './components/lazyLoad';
 import ErrorBoundary from './components/emptyComponent/errorBoundary';
 import {getOrganisationData, getRoleId, getSignDate, removeSignDate} from 'util/sessionStorage'
-
+import { Alert } from 'antd';
 import './customStyles/customStyles.css';
 import './customStyles/antdStyles.css';
 
@@ -66,6 +67,17 @@ function App() {
     return (
         <div className="App">
             <ErrorBoundary>
+                <Offline
+                    polling={{
+                        url: 'https://ipv4.icanhazip.com',
+                        interval: 10000,
+                        timeout: 10000
+                    }}
+                >
+                    <div className="offlineAlert">
+                        <Alert message="You're offline right now. Check your connection." banner/>
+                    </div>
+                </Offline>
                 {/* <FullStory org={ORG_ID} /> */}
                 {/* <MemoryRouter> */}
                 <Router history={history}>

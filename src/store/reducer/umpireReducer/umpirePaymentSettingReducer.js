@@ -8,7 +8,7 @@ const initialState = {
     umpireComptitionList: [],
     paidByCompOrgDivisionAffiliate: [],
     poolViewArray: [],
-
+    allowUmpiresPayments: true,
     paymentSettingsData: null,
 };
 
@@ -38,23 +38,12 @@ function umpirePaymentSetting(state = initialState, action) {
             };
             
         case ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
-            return {
-                ...state,
-                paymentSettingsData: action.result,
-                onLoad: false,
-            };
-
-        // save umpire payment settings
-        case ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD:
-            return {
-                ...state,
-                onLoad: true,
-            };
-            
         case ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_SUCCESS:
+            const { noPaymentThroughPlatform, ...settings } = action.result;
             return {
                 ...state,
-                paymentSettingsData: action.result,
+                paymentSettingsData: settings,
+                allowUmpiresPayments: !noPaymentThroughPlatform,
                 onLoad: false,
             };
 

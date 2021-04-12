@@ -127,20 +127,6 @@ export function getAffiliatesDataFromRoleEntities(linkedEntities = []) {
     })), 'id')
 }
 
-export function getAffiliatesByIds(selectedAffiliateIds, affiliateArr) {
-    const affiliatesList = [];
-    for (const i in affiliateArr) {
-        for (const j in selectedAffiliateIds) {
-            if (selectedAffiliateIds[j] === affiliateArr[i].id) {
-                affiliatesList.push({
-                    name: affiliateArr[i].name,
-                    id: affiliateArr[i].id,
-                });
-                break;
-            }
-        }
-    }
-}
 function getTeamsData(selectedTeamId, teamsArray) {
     return selectedTeamId.map((teamId) => {
         const team = teamsArray.find((curTeam) => curTeam.id === teamId)
@@ -248,32 +234,41 @@ function umpireState(state = initialState, action) {
             }
         case ApiConstants.GET_UMPIRE_TEAMS_SUCCESS:
             const umpire = action.data
-            const affiliates = umpire.selectedOrganisations.map(
-                ({ id, name }) => {
-                    const org = state.affilateList?.find(affiliate => affiliate.organisationId === id)
-                    const newId = org ? org.id : id;
-                    return { name, id: newId }
-                },
-            );
-            const selectedTeams = umpire.selectedTeams.map(({ id, name }) => ({ id, name }))
-            const affiliateIds = affiliates.map(affiliate => affiliate.id);
-            const teamIds = selectedTeams.map(({ id }) => id)
-
-            return {
-                ...state,
-                onLoad: false,
-                umpireOwnTeam: umpire.umpireOwnTeam,
-                teamsList: umpire.teams,
-                umpireCheckbox: umpire.isUmpire,
-                umpireCoachCheckBox: umpire.isUmpireCoach,
-                affiliateId: affiliateIds,
-                umpireData: {
-                    ...state.umpireData,
-                    teams: selectedTeams,
-                    teamId: teamIds,
-                    affiliates,
-                },
+            if (umpire.email) {
+                const affiliates = umpire.selectedOrganisations.map(
+                    ({ id, name }) => {
+                        const org = state.affilateList?.find(affiliate => affiliate.organisationId === id)
+                        const newId = org ? org.id : id;
+                        return { name, id: newId }
+                    },
+                );
+                const selectedTeams = umpire.selectedTeams.map(({ id, name }) => ({ id, name }))
+                const affiliateIds = affiliates.map(affiliate => affiliate.id);
+                const teamIds = selectedTeams.map(({ id }) => id)
+    
+                return {
+                    ...state,
+                    onLoad: false,
+                    umpireOwnTeam: umpire.umpireOwnTeam,
+                    teamsList: umpire.teams,
+                    umpireCheckbox: umpire.isUmpire,
+                    umpireCoachCheckBox: umpire.isUmpireCoach,
+                    affiliateId: affiliateIds,
+                    umpireData: {
+                        ...state.umpireData,
+                        teams: selectedTeams,
+                        teamId: teamIds,
+                    },
+                }
+            } else {
+                return {
+                    ...state,
+                    onLoad: false,
+                    umpireOwnTeam: umpire.umpireOwnTeam,
+                    teamsList: umpire.teams,
+                }
             }
+            
         //// Update Add Umpire Data
         case ApiConstants.UPDATE_ADD_UMPIRE_DATA:
             const { key } = action
@@ -285,9 +280,9 @@ function umpireState(state = initialState, action) {
                 state.umpireData.teamId = data
                 state.umpireData.teams = getTeamsData(data, state.teamsList)
             } else if (key === 'affiliates') {
-                const selectedAffiliates = getAffiliatesByIds(action.data, state.teamResult);
-
-                state.umpireData.affiliates = selectedAffiliates
+                state.affiliateId = data
+                let affiliateObj = getAffiliateData(data, state.affilateList)
+                state.umpireData['affiliates'] = affiliateObj
             } else if (key === 'umnpireSearch') {
                 state.exsitingUmpireId = data
                 state.selectedAffiliateId = getumpireAffiliate(data, state.umpireListResult)

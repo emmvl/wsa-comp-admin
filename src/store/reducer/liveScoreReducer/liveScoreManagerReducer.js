@@ -30,29 +30,18 @@ const initialState = {
     managerListActionObject: null,
 };
 
-// function getManagerListObject(managerListArray, key) {
-//     let obj = null;
-//     let index = managerListArray.findIndex(x => x.id === key);
-//     // let index = managerListArray.findIndex(x => x.firstName + " " + x.lastName === key);
-//     if (index > -1) {
-//         obj = managerListArray[index];
-//     }
-//     return obj;
-// }
-
-function generateTeamId(teamIdArr) {
-    let teamId = [];
-    for (let i in teamIdArr) {
-        teamId.push(teamIdArr[i].entityId);
-    }
-    return teamId;
+function getTeamsDataFromLinkedEntities(linkedEntities = []) {
+    return linkedEntities.map(linkedEntity => ({
+        id: linkedEntity.entityId,
+        name: linkedEntity.name,
+    }))
 }
 
-function getTeamObj(teamSelectId, teamArr) {
+function getTeamsByIds(selectedTeamIds, teamArr) {
     let teamObj = [];
     for (let i in teamArr) {
-        for (let j in teamSelectId) {
-            if (teamSelectId[j] === teamArr[i].id) {
+        for (let j in selectedTeamIds) {
+            if (selectedTeamIds[j] === teamArr[i].id) {
                 teamObj.push({
                     name: teamArr[i].name,
                     id: teamArr[i].id,
@@ -146,32 +135,27 @@ function liveScoreManagerState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_MANAGER_DATA:
-            if (action.key === "teamId") {
-                state.managerData["teams"] = getTeamObj(action.data, state.teamResult);
-                state.teamId = action.data;
+            if (action.key === "teams") {
+                const selectedTeams = getTeamsByIds(action.data, state.teamResult);
+
+                state.managerData[action.key] = selectedTeams;
             } else if (action.key === "managerRadioBtn") {
                 state[action.key] = action.data;
                 state.exsitingManagerId = null;
             } else if (action.key === "managerSearch") {
                 state.exsitingManagerId = action.data;
                 state.selectedTeam = getSelectedTeam(action.data, state.managerListResult);
-                // state.teamId = generateSelectedTeamId( state.selectedTeam, state.teamResult);
-                // let managerTeamObj = getTeamObj(state.teamId, state.teamResult);
-                // let managerTeamObj = getSelectedTeamObj(state.getSelectedTeam);
-                // state.managerData["teams"] = managerTeamObj;
             } else if (action.key === "isEditManager") {
                 state.managerData.id = action.data.id;
                 state.managerData.firstName = action.data.firstName;
                 state.managerData.lastName = action.data.lastName;
                 state.managerData.mobileNumber = action.data.mobileNumber;
                 state.managerData.email = action.data.email;
-                state.teamId = generateTeamId(action.data.linkedEntity);
-                state.managerData["teams"] = getTeamObj(state.teamId, state.teamResult);
+                state.managerData.teams = getTeamsDataFromLinkedEntities(action.data.linkedEntity);
                 state.managerRadioBtn = "new";
             } else if (action.key === "isAddManager") {
                 state.managerData = managerObj;
                 state.managerData.id = null;
-                state.teamId = [];
                 state.managerRadioBtn = "new";
             } else {
                 state.managerData[action.key] = action.data;

@@ -1035,3 +1035,16 @@
     position: relative;
     margin: 0 30px;
 }
+
+.flex-col {
+    flex-basis: 0;
+    flex-grow: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+.bg-grey{
+   background-color: #444;
+}
+.f-13{
+    font-size: 13px;
+}

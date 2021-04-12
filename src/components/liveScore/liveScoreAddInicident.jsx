@@ -629,20 +629,22 @@ class LiveScoreAddIncident extends Component {
                 body,
                 playerIds: incidentData.playerIds,
                 isEdit: this.state.isEdit,
-                mediaArry: mediaArry,
+                mediaArry,
                 key: 'media',
                 incidentMediaIds,
-                umpireKey: this.state.umpireKey
+                umpireKey: this.state.umpireKey,
+                incidentId
             });
         } else {
             this.props.liveScoreAddEditIncident({
                 body,
                 playerIds: incidentData.playerIds,
                 isEdit: this.state.isEdit,
-                mediaArry: mediaArry,
+                mediaArry,
                 key: 'media',
                 incidentMediaIds,
-                umpireKey: this.state.umpireKey
+                umpireKey: this.state.umpireKey,
+                incidentId
             });
         }
     };

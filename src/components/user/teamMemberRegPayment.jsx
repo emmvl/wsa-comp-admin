@@ -662,31 +662,7 @@ async function registrationCapValidate(token, props, selectedOption, setClientKe
     }
 }
 
-async function confirmDebitPayment(confirmDebitPaymentInput) {
-    try {
-        const result = await confirmDebitPaymentInput.stripe.confirmAuBecsDebitPayment(confirmDebitPaymentInput.clientSecret, {
-            payment_method: {
-                au_becs_debit: confirmDebitPaymentInput.auBankAccount,
-                billing_details: {
-                    name: "Club Test 1", // accountholderName.value,
-                    email: "testclub@wsa.com"  // email.value,
-                },
-            }
-        });
-        if (result.error) {
-            let message = result.error.message
-            confirmDebitPaymentInput.setBankError(message)
-            confirmDebitPaymentInput.props.onLoad(false)
-        } else {
-            confirmDebitPaymentInput.setBankError(null)
-            stripeTokenHandler(result.token, confirmDebitPaymentInput.props, confirmDebitPaymentInput.selectedOption, null, null, confirmDebitPaymentInput.payload, confirmDebitPaymentInput.teamMemberRegId,confirmDebitPaymentInput.registrationId, 2, confirmDebitPaymentInput.auBankAccount, confirmDebitPaymentInput.setBankError, confirmDebitPaymentInput.stripe, confirmDebitPaymentInput.card, confirmDebitPaymentInput.setError);
 
-        }
-    } catch (ex) {
-        confirmDebitPaymentInput.props.onLoad(false)
-        console.log("Error in confirmDebitPayment::" + ex)
-    }
-}
 
 // POST the token ID to your backend.
 async function stripeTokenHandler(token, props, selectedOption, setClientKey, setRegId, payload, teamMemberRegId,registrationId, urlFlag, auBankAccount, setBankError, stripe, card, setError) {
@@ -803,7 +779,7 @@ async function stripeTokenHandler(token, props, selectedOption, setClientKey, se
                                     card: card,
                                     setError: setError
                                 }
-                                confirmDebitPayment(confirmDebitPaymentInput);
+                                // confirmDebitPayment(confirmDebitPaymentInput);
                                 // props.onLoad(false)
                             }
                         }

@@ -102,14 +102,15 @@ const refundPartialAmountColumns = [
         title: AppConstants.refundAmount,
         dataIndex: 'amount',
         key: 'Refund Amount',
-        render: (amount, record, index) => {
+        render: (amount, record) => {
             const { reviewSaveData } = this_Obj.props.registrationChangeState;
+            let index = (reviewSaveData.invoices || []).findIndex(x => x.transactionId == record.transactionId)
             return (
                 <div>
                     <Input
                         value={reviewSaveData.invoices[index].refundAmount}
                         style={{ height: "25px", width: "100px", fontSize: "10px" }} type="number" min= "0"
-                        onChange={(e) => this_Obj.updateInvoices(parseInt(e.target.value) >= 0 ? e.target.value : null , index)}
+                        onChange={(e) => this_Obj.updateInvoices(parseInt(e.target.value) >= 0 ? e.target.value : null , record.transactionId)}
                     />
                 </div>
             );
@@ -160,11 +161,12 @@ class RegistrationChangeReview extends Component {
             this.setState({ acceptVisible: true });
         } else if (key === "ok") {
             const { reviewSaveData } = this.props.registrationChangeState;
+            let invoicesTemp = (reviewSaveData.invoices || []).filter(x => x.amount > 0)
             let err = false;
             let msg = "";
             if (reviewSaveData.refundTypeRefId == 2) {
-                if (isArrayNotEmpty(reviewSaveData.invoices)) {
-                    for (let item of reviewSaveData.invoices) {
+                if (isArrayNotEmpty(invoicesTemp)) {
+                    for (let item of invoicesTemp) {
                         if (!isNotNullOrEmptyString(item.refundAmount)) {
                             err = true;
                             msg = ValidationConstants.refundAmtRequired;
@@ -234,8 +236,9 @@ class RegistrationChangeReview extends Component {
         }
     }
 
-    updateInvoices = (refundAmount, index) => {
+    updateInvoices = (refundAmount, transactionId) => {
         const { reviewSaveData } = this.props.registrationChangeState;
+        let index = (reviewSaveData.invoices || []).findIndex(x => x.transactionId == transactionId)
         reviewSaveData.invoices[index].refundAmount = refundAmount;
         this.updateRegistrationReview(reviewSaveData.invoices, "invoices")
     }
@@ -276,7 +279,7 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["membershipMappingId"] = regChangeReviewData.membershipMappingId;
         reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
         reviewSaveData["userId"] = regChangeReviewData.userId;
-        reviewSaveData["invoices"] = invoices;
+        reviewSaveData["invoices"] = invoices == null ? regChangeReviewData.invoices : invoices;
         // let obj = {
         //     stateApproved: this.state.deRegData.stateApproved,
         //     compOrganiserApproved: this.state.deRegData.compOrganiserApproved,
@@ -549,45 +552,48 @@ class RegistrationChangeReview extends Component {
         );
     }
 
-    deRegisterApprove = (reviewSaveData, regChangeReviewData) => (
-        <div>
-            {isArrayNotEmpty(regChangeReviewData.invoices) ?
-                <Radio.Group
-                    className="reg-competition-radio"
-                    value={reviewSaveData.refundTypeRefId}
-                    onChange={(e) => this.updateRegistrationReview(e.target.value, "refundTypeRefId")}
-                >
-                    <Radio value={1}>Refund full amount</Radio>
-                    {reviewSaveData.refundTypeRefId == 1 && (
-                        <Table
-                            className="refund-table"
-                            columns={refundFullAmountColumns}
-                            dataSource={regChangeReviewData.invoices}
-                            pagination={false}
-                        />
-                    )}
-                    <Radio value={2}>Refund partial payment</Radio>
-                    {reviewSaveData.refundTypeRefId == 2 && (
-                        <Table
-                            className="refund-table"
-                            columns={refundPartialAmountColumns}
-                            dataSource={regChangeReviewData.invoices}
-                            pagination={false}
-                        />
-                    )}
-                    {/* {reviewSaveData.refundTypeRefId == 2 && (
-                        <InputWithHead
-                            placeholder={AppConstants.refundAmount}
-                            value={reviewSaveData.refundAmount}
-                            onChange={(e) => this.updateRegistrationReview(e.target.value, "refundAmount")}
-                        />
-                    )} */}
-                </Radio.Group>
-            :
-                <div className="dereg-modal-content">{AppConstants.wouldYouLikeToApprove}</div>
-            }
-        </div>
-    );
+    deRegisterApprove = (reviewSaveData, regChangeReviewData) => {
+        let invoicesTemp = (regChangeReviewData.invoices || []).filter(x => x.amount > 0)
+        return(
+            <div>
+                {isArrayNotEmpty(invoicesTemp) ?
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        value={reviewSaveData.refundTypeRefId}
+                        onChange={(e) => this.updateRegistrationReview(e.target.value, "refundTypeRefId")}
+                    >
+                        <Radio value={1}>Refund full amount</Radio>
+                        {reviewSaveData.refundTypeRefId == 1 && (
+                            <Table
+                                className="refund-table"
+                                columns={refundFullAmountColumns}
+                                dataSource={invoicesTemp}
+                                pagination={false}
+                            />
+                        )}
+                        <Radio value={2}>Refund partial payment</Radio>
+                        {reviewSaveData.refundTypeRefId == 2 && (
+                            <Table
+                                className="refund-table"
+                                columns={refundPartialAmountColumns}
+                                dataSource={invoicesTemp}
+                                pagination={false}
+                            />
+                        )}
+                        {/* {reviewSaveData.refundTypeRefId == 2 && (
+                            <InputWithHead
+                                placeholder={AppConstants.refundAmount}
+                                value={reviewSaveData.refundAmount}
+                                onChange={(e) => this.updateRegistrationReview(e.target.value, "refundAmount")}
+                            />
+                        )} */}
+                    </Radio.Group>
+                :
+                    <div className="dereg-modal-content">{AppConstants.wouldYouLikeToApprove}</div>
+                }
+            </div>
+        )
+    }
 
     transferApprove = () => (
         <div>

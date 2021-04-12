@@ -18,6 +18,7 @@ import {
     message,
     Tooltip,
     InputNumber,
+    Popover,
 } from "antd";
 import moment from "moment";
 
@@ -125,13 +126,17 @@ class RegistrationCompetitionForm extends Component {
                                 name={`divisionName${record.parentIndex}${index}`}
                                 rules={[{ required: true, message: ValidationConstants.divisionName }]}
                             >
-                                <Input
-                                    className="input-inside-table-fees"
-                                    required="required-field pt-0 pb-0"
-                                    value={divisionName}
-                                    onChange={e => this.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
-                                    disabled={this.state.permissionState.divisionsDisable}
-                                />
+                                <Popover content={divisionName}>
+                                    <div>
+                                        <Input
+                                            className="input-inside-table-fees"
+                                            required="required-field pt-0 pb-0"
+                                            value={divisionName}
+                                            onChange={e => this.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
+                                            disabled={this.state.permissionState.divisionsDisable}
+                                        />
+                                    </div>
+                                </Popover>
                             </Form.Item>
                         )
                     },

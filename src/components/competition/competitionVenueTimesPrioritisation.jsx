@@ -50,9 +50,11 @@ import Loader from '../../customComponents/loader'
 import AppUniqueId from "../../themes/appUniqueId";
 import { getDivisionFieldConfigAction } from '../../store/actions/commonAction/commonAction'
 import { saveCompetitionDivisionsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction'
+import { isEqual } from 'lodash';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
+const FIELD_SIZES_COUNT = 4;
 
 class CompetitionVenueTimesPrioritisation extends Component {
     constructor(props) {
@@ -63,7 +65,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             getDataLoading: false,
             saveContraintLoad: false,
             yearRefId: null,
-            firstTimeCompId: "",
+            firstTimeCompId: null,
             evenRotationFlag: false,
             homeTeamRotationFlag: false,
             deleteModalVisible: false,
@@ -74,13 +76,14 @@ class CompetitionVenueTimesPrioritisation extends Component {
             isQuickCompetition: false,
             onNextClicked: false,
             addOrRemoveVenues: false,
-            finalTypeRefId: null
+            finalTypeRefId: null,
+            competitionId: null,
         };
 
         this.formRef = React.createRef();
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.getDivisionFieldConfigAction();
         this.props.updateVenueConstraintsData(null, null, 'clearData', this.props.location.state)
         this.props.getVenuesTypeAction('all');
@@ -89,26 +92,33 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let storedCompetitionStatus = getOwn_competitionStatus()
         let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
+        // const compId = storedCompetitionId || this.props.appState.own_CompetitionArr[0].id;
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (yearId && storedCompetitionId && propsData && compData) {
             let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == storedCompetitionId && x.isQuickCompetition == 1);
+           
             this.setState({
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
                 getDataLoading: true,
                 isQuickCompetition: quickComp != undefined,
-                finalTypeRefId: storedfinalTypeRefId
+                finalTypeRefId: storedfinalTypeRefId,
+                competitionId: storedCompetitionId || null 
             })
             this.props.venueConstraintListAction(yearId, storedCompetitionId, 1)
         } else {
             if (yearId !== undefined) {
-                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
+                await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
                 this.setState({
-                    yearRefId: JSON.parse(yearId),
+                    // yearRefId: JSON.parse(yearId),
+                    competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
+                        ? this.props.appState.own_CompetitionArr[0].competitionId : this.state.firstTimeCompId ? this.state.firstTimeCompId : null
                 })
             } else {
-                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
+                await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
+                this.setState({ competitionId: (!!this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
+                    ? this.props.appState.own_CompetitionArr[0].competitionId : this.state.firstTimeCompId ? this.state.firstTimeCompId : null })
             }
         }
         this.syncDivisionsFieldsConfigurationsFormData()
@@ -120,33 +130,34 @@ class CompetitionVenueTimesPrioritisation extends Component {
             venueConstrainstData,
         } = this.props.venueTimeState;
 
-        if (prevProps.commonReducerState !== this.props.commonReducerState) {
+        if (!isEqual(prevProps.commonReducerState, this.props.commonReducerState)) {
             this.setState({ filterDrop: this.props.commonReducerState.venueList })
         }
-        if (prevProps.appState !== this.props.appState) {
+        if (!isEqual(prevProps.appState, this.props.appState)) {
             // let year_id = ""
             // if (yearList.length > 0) {
             //     year_id = storedYearID ? storedYearID : yearList[0].id
             // }
             let competitionList = this.props.appState.own_CompetitionArr
-            if (prevProps.appState.own_CompetitionArr !== competitionList) {
-                if (competitionList.length > 0) {
+            if (!isEqual(prevProps.appState.own_CompetitionArr, competitionList)) {
+                if (competitionList && competitionList.length > 0) {
                     // let competitionId = null
 
-                    let competitionId = competitionList[0].competitionId
+                    let competitionId = competitionList[0]?.competitionId
 
-                    let statusRefId = competitionList[0].statusRefId
-                    let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let statusRefId = competitionList[0]?.statusRefId
+                    let finalTypeRefId = competitionList[0]?.finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getGlobalYear()
-                    let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
-                    this.props.venueConstraintListAction(yearId, competitionId, 1)
+                    let quickComp = (this.props.appState.own_CompetitionArr && this.props.appState.own_CompetitionArr.length)
+                        ? this.props.appState.own_CompetitionArr.find(x => x?.competitionId == competitionId && x?.isQuickCompetition == 1): null;
+                   if (competitionId && yearId) this.props.venueConstraintListAction(yearId, competitionId, 1)
                     this.setState({
                         getDataLoading: true,
                         loading: false,
-                        competitionId: competitionList[0].id,
+                        competitionId,
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId,
                         isQuickCompetition: quickComp != undefined,
@@ -157,34 +168,24 @@ class CompetitionVenueTimesPrioritisation extends Component {
             }
         }
 
-        if (this.state.loading && this.props.appState.onLoad == false) {
-            this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1)
+        if (this.state.loading && this.props.appState.onLoad === false) {
+            if (this.state.yearRefId && this.state.firstTimeCompId)
+                this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1)
             this.setState({ loading: false, getDataLoading: true })
         }
 
-        if (prevProps.venueConstrainstData != venueConstrainstData) {
+        if (!isEqual(prevProps.venueConstrainstData, venueConstrainstData)) {
             if (this.state.getDataLoading && this.props.venueTimeState.onVenueSuccess == false) {
                 this.setDetailsFieldValue()
                 this.setState({ getDataLoading: false })
             }
         }
 
-        if (prevProps.venueTimeState != this.props.venueTimeState) {
-            // if (venueConstrainstData.isMPDeleteHappened != undefined &&
-            //     venueConstrainstData.isMPDeleteHappened) {
-            //     this.onChangeSetMPValue(false, 'isMPDeleteHappened', 0);
-            //     this.setFormFieldsMatchPreference();
-            // }
-
-            // if (venueConstrainstData.isLDDeleteHappened != undefined &&
-            //     venueConstrainstData.isLDDeleteHappened) {
-            //     this.onChangeSetLDValue(false, 'isLDDeleteHappened', 0);
-            //     // this.setFormFieldsLockedDraws();
-            // }
+        if (!isEqual(prevProps.venueTimeState, this.props.venueTimeState)) {
 
             if (this.props.venueTimeState.onLoad == false && this.state.saveContraintLoad) {
                 this.setState({ saveContraintLoad: false });
-                this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1);
+                if (this.state.firstTimeCompId && this.state.yearRefId) this.props.venueConstraintListAction(this.state.yearRefId, this.state.firstTimeCompId, 1);
                 this.setState({ loading: false, getDataLoading: true })
             }
         }
@@ -224,22 +225,15 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     syncDivisionsFieldsConfigurationsFormData = () => {
-        const { venueTimeState } = this.props;
-        const {
-            competitionDivisionsFieldsConfigurations = [],
-        } = venueTimeState.venueConstrainstData;
+        const { venueTimeState: { venueConstrainstData: { fieldLinkage }} } = this.props;
 
-        competitionDivisionsFieldsConfigurations.forEach((field) => {
-            if (field && field.divisionFieldConfigurationId) {
-                const key = `divisionsFieldsConfigurations_${field.divisionFieldConfigurationId}`;
-                if (field.competitionDivisionId) {
-                    this.formRef.current.setFieldsValue({
-                        [key]: field.competitionDivisionId,
-                    })
-                } else {
-                    this.formRef.current.resetFields([key])
-                }
-            }
+        fieldLinkage.forEach((field) => {
+            const key = `divisionsFieldsConfigurations_${FIELD_SIZES_COUNT-field.row}`;
+            
+            if (this.formRef && this.formRef.current) 
+            this.formRef.current.setFieldsValue({
+                [key]: field.divisions
+            })
         })
     }
 
@@ -273,43 +267,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             })
         }
 
-        // this.setFormFieldsMatchPreference();
-        // this.setFormFieldsLockedDraws();
     }
-
-    // setFormFieldsMatchPreference = () => {
-    //     let allData = this.props.venueTimeState.venueConstrainstData
-    //     (allData.matchPreference || []).map((mp, index) => {
-    //         this.onChangeSetMPValue(null, 'mpinitial', index);
-    //         this.formRef.current.setFieldsValue({
-    //             [`mpDivisionId${index}`]: mp.competitionMembershipProductDivisionId,
-    //             [`mpGradeId${index}`]: mp.competitionDivisionGradeId,
-    //             [`mpTeamAId${index}`]: mp.team1Id,
-    //             [`mpTeamBId${index}`]: mp.team2Id,
-    //             [`mpVenueId${index}`]: mp.venueId,
-    //             [`mpCourtId${index}`]: mp.courtId,
-    //             [`mpMatchDate${index}`]: mp.matchDate != null ? moment(mp.matchDate, "YYYY-MM-DD") : null,
-    //             [`mpStartTime${index}`]: moment(mp.startTime, "HH:mm")
-    //         })
-    //     });
-    // }
-
-    // setFormFieldsLockedDraws = () => {
-    //     let allData = this.props.venueTimeState.venueConstrainstData
-    //     (allData.lockedDraws || []).map((ld, index) => {
-    //         this.onChangeSetLDValue(null, 'ldinitial', index);
-    //         this.formRef.current.setFieldsValue({
-    //             [`ldDivisionId${index}`]: ld.competitionMembershipProductDivisionId,
-    //             [`ldGradeId${index}`]: ld.competitionDivisionGradeId,
-    //             [`ldTeamAId${index}`]: ld.team1Id,
-    //             [`ldTeamBId${index}`]: ld.team2Id,
-    //             [`ldVenueId${index}`]: ld.venueId,
-    //             [`ldCourtId${index}`]: ld.courtId,
-    //             [`ldMatchDate${index}`]: ld.matchDate != null ? moment(ld.matchDate, "YYYY-MM-DD") : null,
-    //             [`ldStartTime${index}`]: moment(ld.startTime, "HH:mm")
-    //         })
-    //     });
-    // }
 
     headerView = () => (
         <Header className="comp-venue-courts-header-view">
@@ -325,21 +283,22 @@ class CompetitionVenueTimesPrioritisation extends Component {
         </Header>
     );
 
-    onYearClick(yearId) {
+    async onYearClick(yearId) {
         setGlobalYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
         this.setState({ yearRefId: yearId, firstTimeCompId: null, competitionStatus: 0, finalTypeRefId: null, })
-        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition",)
+        await this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition",)
+        this.setState({ competitionId: this.props.appState.own_CompetitionArr[0].competitionId })
     }
 
     onCompetitionClick(competitionId) {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
-        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
-        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
-        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
-        const competitionNumberId = own_CompetitionArr[statusIndex].id;
+        let statusIndex = (own_CompetitionArr && own_CompetitionArr.length) ? own_CompetitionArr.findIndex((x) => x.competitionId == competitionId) : -1;
+        let statusRefId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex]?.statusRefId : null;
+        let finalTypeRefId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex]?.finalTypeRefId : null;
+        const competitionNumberId = (statusIndex >= 0 && own_CompetitionArr && own_CompetitionArr.length > statusIndex) ? own_CompetitionArr[statusIndex].competitionId : null;
 
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
@@ -703,25 +662,23 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
-    isDivisionFieldSelected = (divisionId) => {
-        const { venueConstrainstData } = this.props.venueTimeState;
+    isDivisionFieldSelected = (divisionId, row) => {
+        const { venueConstrainstData: { fieldLinkage} } = this.props.venueTimeState;
 
-        return !!venueConstrainstData.competitionDivisionsFieldsConfigurations
-            .filter((div) => !!div)
-            .find(selectedConfig => {
-                return selectedConfig.competitionDivisionId === divisionId && !!selectedConfig.divisionFieldConfigurationId
-            })
+        const notDisabled = [
+            ...fieldLinkage[FIELD_SIZES_COUNT-1].divisions,
+            ...fieldLinkage[row].divisions
+        ]
+        return !notDisabled.includes(divisionId);
     }
 
     divisionFieldRow = (field, rowIndex) => {
         const { venueTimeState } = this.props;
         const {
             divisionGrades = [],
-            competitionDivisionsFieldsConfigurations = [],
+            fieldLinkage
         } = venueTimeState.venueConstrainstData;
-        const currentFieldConfig = competitionDivisionsFieldsConfigurations
-            .filter((div) => !!div)
-            .find((div) => div.divisionFieldConfigurationId === field.id);
+        const fieldValues = fieldLinkage[rowIndex].divisions || [];
 
         return (
             <div
@@ -738,17 +695,16 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         name={`divisionsFieldsConfigurations_${field.id}`}
                     >
                         <Select
-                            allowClear
-                            className="w-100"
-                            style={{ paddingRight: 1, minWidth: 182 }}
-                            // value={currentFieldConfig?.competitionDivisionId}
-                            onChange={(val) => this.setDivisionsFieldsConfigurations(rowIndex, val, field.id)}
+                            mode="multiple"
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                            value={fieldValues}
+                            onChange={(divisions) => this.setDivisionsFieldsConfigurations(rowIndex, divisions)}
                         >
-                            {divisionGrades.map((div) => (
+                            {(divisionGrades || []).map((div) => (
                                 <Option
                                     key={'compMemProdDiv_' + div.competitionMembershipProductDivisionId}
                                     value={div.competitionMembershipProductDivisionId}
-                                    disabled={this.isDivisionFieldSelected(div.competitionMembershipProductDivisionId)}
+                                    disabled={this.isDivisionFieldSelected(div.competitionMembershipProductDivisionId, rowIndex)}
                                 >
                                     {div.divisionName}
                                 </Option>
@@ -757,6 +713,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     </Form.Item>
                 </div>
             </div>
+            
         )
     }
 
@@ -765,7 +722,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
         const sortedDivisionFieldConfigList = [...divisionFieldConfigList].sort((a, b) => {
             return b.sortOrder - a.sortOrder
         });
-
         return (
             <div className="formView">
                 <div className="content-view">
@@ -875,7 +831,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         return (
             <div>
                 <span className="applicable-to-heading required-field">
-                    {AppConstants.anyGradePreference2}
+                    {AppConstants.anyGradePreference}
                 </span>
 
                 <Radio.Group
@@ -1044,11 +1000,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
         this.props.updateVenueConstraintsData(val, index, key, 'matchPreference')
     }
 
-    setDivisionsFieldsConfigurations = (rowIndex, competitionDivisionId = null, divisionFieldConfigurationId) => {
-        this.props.updateVenueConstraintsData({
-            competitionDivisionId,
-            divisionFieldConfigurationId,
-        }, rowIndex, null, 'competitionDivisionsFieldsConfigurations')
+    setDivisionsFieldsConfigurations = (rowIndex, competitionDivisionIds = []) => {
+        this.props.updateVenueConstraintsData(competitionDivisionIds, rowIndex, null, 'competitionDivisionsFieldsConfigurations')
     }
 
     onChangeSetLDValue = (val, key, index) => {
@@ -1491,7 +1444,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     </div>
                 </div>
 
-                { process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === true && this.divisionOfFieldLinkageView() }
+                { process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === 'true' && this.divisionOfFieldLinkageView() }
 
                 <Modal
                     title={AppConstants.removeFixture}
@@ -1633,7 +1586,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 venueConstrainstData.competitionDivisionsFieldsConfigurations,
             )
 
-            this.props.saveCompetitionDivisionsAction(
+            if (competitionId && organisationId) this.props.saveCompetitionDivisionsAction(
                 competitionId,
                 organisationId,
                 {
@@ -1682,8 +1635,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         noValidate="noValidate"
                     >
                         <Content>
-                            {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
-
+                            {/* {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()} */}
+                            { this.contentView() }
                             {/* {venueConstrainstData.competitionTypeRefId == 1 && (
                                 <div>
                                     <div className="formView" style={{ marginTop: 20 }}>

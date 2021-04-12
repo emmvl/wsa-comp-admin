@@ -10,7 +10,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
     accountBalanceAction, saveStripeAccountAction,
-    getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi
+    getStripeLoginLinkAction, getStripeTransferListAction, exportPaymentApi,
+    exportCustomerTransactionApi
 } from "../../store/actions/stripeAction/stripeAction";
 import { getOrganisationData, getImpersonation } from "../../util/sessionStorage";
 import { currencyFormat } from "../../util/currencyFormat";
@@ -153,14 +154,29 @@ class RegistrationPayments extends Component {
 
     //on export button click
     onExport() {
+        const stripeConnected = this.stripeConnected()
+        const isBecsSetupDone = this.isBecsSetupDone();
         const { dateFrom, dateTo, year } = this.state;
         const start = dateFrom ? moment(dateFrom).startOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
         const end = dateTo ? moment(dateTo).endOf('day').format('YYYY-MM-DD HH:mm:ss') : null;
+        let type  = stripeConnected ? "transfer" : "";
+        type = isBecsSetupDone ? "payout" : "";
         this.props.exportPaymentApi(
-            "transfer",
+            type,
             year,
             start,
             end,
+        );
+    }
+
+    //on customer transaction export button click
+    onCustomerTransactionExport() {
+        const { stripeCustomerAccountId } = JSON.parse(
+            localStorage.getItem("setOrganisationData"),
+        );
+        const customerId = stripeCustomerAccountId;
+        this.props.exportCustomerTransactionApi(
+            customerId
         );
     }
 
@@ -203,7 +219,7 @@ class RegistrationPayments extends Component {
                                                 </Button>
                                             ) : ('')}
                                             {isBecsSetupDone ? (
-                                                <Button type="primary">
+                                                <Button type="primary" onClick={() => this.onCustomerTransactionExport()}>
                                                     <img
                                                         src={AppImages.export}
                                                         alt=""
@@ -647,7 +663,8 @@ function mapDispatchToProps(dispatch) {
         saveStripeAccountAction,
         getStripeLoginLinkAction,
         getStripeTransferListAction,
-        exportPaymentApi
+        exportPaymentApi,
+        exportCustomerTransactionApi
     }, dispatch)
 }
 

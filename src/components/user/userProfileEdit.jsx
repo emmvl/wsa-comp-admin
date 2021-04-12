@@ -43,6 +43,7 @@ import { regexNumberExpression } from '../../util/helpers';
 import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 import UserAxiosApi from "../../store/http/userHttp/userAxiosApi";
 import { getUserParentDataAction } from '../../store/actions/userAction/userAction';
+import RelationshipSelect from './relationshipSelect';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -117,6 +118,7 @@ class UserProfileEdit extends Component {
                 emergencyFirstName: "",
                 emergencyLastName: "",
                 emergencyContactNumber: "",
+                emergencyContactRelationshipId: null,
                 existingMedicalCondition: "",
                 regularMedication: "",
                 disabilityCareNumber: '',
@@ -252,13 +254,18 @@ class UserProfileEdit extends Component {
                 ...additionalSettings,
                 isSameEmail: data.isInActive
             }
-            let docList = docUrl ? [{
-                uid: '1',
-                name: 'document',
-                status: 'done',
-                url: docUrl,
-                thumbUrl: '',
-            }] : [];
+            let docList = [];
+            if (docUrl) {
+                let filename = unescape(docUrl);
+                filename = filename.slice(filename.indexOf('filename=')+9);
+                docList = [{
+                    uid: '1',
+                    name: filename,
+                    status: 'done',
+                    url: docUrl,
+                    thumbUrl: '',
+                }];
+            }
             setTimeout(() => {
                 this.setState({
                     displaySection: moduleFrom,
@@ -358,6 +365,7 @@ class UserProfileEdit extends Component {
             emergencyFirstName: userData.emergencyFirstName,
             emergencyLastName: userData.emergencyLastName,
             emergencyContactNumber: userData.emergencyContactNumber,
+            emergencyContactRelationshipId: userData.emergencyContactRelationshipId,
         });
     }
 
@@ -1084,6 +1092,13 @@ class UserProfileEdit extends Component {
                             />
                         </Form.Item>
                     </div>
+                    <div className="col-sm-12 col-md-6">
+                        <RelationshipSelect
+                            value={userData.emergencyContactRelationshipId}
+                            form={this.formRef}
+                            onFormChange={this.onChangeSetValue}
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -1288,11 +1303,19 @@ class UserProfileEdit extends Component {
         }
         const onCustomUpload = async (data) => {
             console.log(data);
-            let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
-            if (ret.result.data.status === 'done') {
-                docList[0].url = ret.result.data.url;
-                return data.onSuccess();
-            } else {
+            try {
+                let ret = await UserAxiosApi.getUserModuleUploadDocument({file: data.file});
+                if (ret.result.data.status === 'done') {
+                    let bucket = ret.result.data.url.match(/(?:https:\/\/).*?(?=.s3)/)[0];
+                    bucket = bucket.slice(8);
+                    let filename = unescape(ret.result.data.url);
+                    filename = filename.slice(filename.indexOf('.com')+5);
+                    docList[0].url = `${process.env.REACT_APP_COMMON_API_URL}/file/download?bucket=${bucket}&filename=${filename}`;
+                    return data.onSuccess();
+                } else {
+                    data.onError();
+                }
+            } catch (e) {
                 data.onError();
             }
             this.setState({docList: []});

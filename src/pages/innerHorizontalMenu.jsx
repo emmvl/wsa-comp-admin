@@ -923,11 +923,6 @@ class InnerHorizontalMenu extends React.Component {
                                 <span>Refunds</span>
                             </NavLink>
                         </Menu.Item> */}
-                        <Menu.Item key="5">
-                            <NavLink to="/paymentSummary">
-                                <span>{AppConstants.paymentSummary}</span>
-                            </NavLink>
-                        </Menu.Item>
                     </Menu>
                 )}
 

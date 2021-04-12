@@ -14,6 +14,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 // import { refRoleTypes } from '../../util/refRoles'
 import { getUmpireCompetiton, getUmpireCompetitonData, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
 import moment from "moment";
+import { isEqual } from 'lodash';
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
@@ -218,10 +219,14 @@ class UmpireRoster extends Component {
         let { organisationId, } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
 
-        let { competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
-        this.setState({
-            compOrgId: competitionOrganisation.id
-        })
+        const umpireCompetitionData = getUmpireCompetitonData();
+        const parsedData = umpireCompetitionData ? JSON.parse(umpireCompetitionData) : {};
+        let competitionOrganisation = parsedData ? parsedData.competitionOrganisation : {};
+        if (competitionOrganisation && competitionOrganisation.id) {
+            this.setState({
+                compOrgId: competitionOrganisation.id
+            })
+        }
         checkLivScoreCompIsParent().then((value) => {
             this.setState({
                 compIsParent: value
@@ -233,7 +238,7 @@ class UmpireRoster extends Component {
 
     componentDidUpdate(nextProps) {
         let { sortBy, sortOrder } = this.state
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(nextProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
@@ -260,8 +265,7 @@ class UmpireRoster extends Component {
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
-                    let { pageSize } = this.props.umpireRosterState
-                    pageSize = pageSize ? pageSize : 10;
+                    const { pageSize = 10 } = this.props.umpireRosterState;
                     const body = {
                         paging: {
                             limit: pageSize,
@@ -293,10 +297,9 @@ class UmpireRoster extends Component {
             }
         }
 
-        if (nextProps.umpireRosterState !== this.props.umpireRosterState) {
+        if (!isEqual(nextProps.umpireRosterState, this.props.umpireRosterState)) {
             if (this.props.umpireRosterState.rosterLoading !== this.state.rosterLoad) {
-                let { pageSize } = this.props.umpireRosterState
-                pageSize = pageSize ? pageSize : 10;
+                const { pageSize = 10 } = this.props.umpireRosterState;
                 const body = {
                     paging: {
                         limit: pageSize,

@@ -238,7 +238,7 @@ const columns = [
         key: "isUsed",
         render: (isUsed, record, index) => (
            (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
-           (record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+           (record.deRegistered != 1 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
            record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee" ||
            record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer")))
                 ? (
@@ -267,7 +267,7 @@ const columns = [
                                 </NavLink>
                             </Menu.Item> */}
                             {
-                                record.actionView == 1
+                                record.actionViews.find(x => x == 'cash')
                             && (
                                 <Menu.Item key="2" onClick={() => this_Obj.setCashPayment(record)}>
                                     <span>Receive Cash Payment</span>
@@ -276,7 +276,7 @@ const columns = [
 
                             }
                             {
-                                record.actionView == 2
+                                record.actionViews.find(x => x == 'refund')
                             && (
                                 <Menu.Item key="2">
                                     <span>Refund</span>
@@ -284,7 +284,7 @@ const columns = [
                             )
                             }
                             {
-                                (record.actionView == 3 && (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration"))
+                                (record.actionViews.find(x => x == 'governmentVoucher') && (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration"))
                             && (
                                 <Menu.Item key="3" onClick={() => this_Obj.setVoucherPayment(record)}>
                                     <span>Voucher Payment Received</span>
@@ -292,15 +292,20 @@ const columns = [
                             )
                             }
                             {
-                                record.actionView == 4
+                                record.actionViews.find(x => x == 'schoolInvoice')
                                 && (
-                                    <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
-                                        <span>{AppConstants.markAsFailedReg}</span>
-                                    </Menu.Item>
+                                    <Menu>
+                                        <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
+                                            <span>{AppConstants.markAsFailedReg}</span>
+                                        </Menu.Item>
+                                        <Menu.Item key="9" onClick={() => this_Obj.setSchoolInvoicePaid(record)}>
+                                            <span>{AppConstants.markAsPaidReg}</span>
+                                        </Menu.Item>
+                                    </Menu>
                                 )
                             }
                             {
-                                record.actionView == 5
+                                record.actionViews.find(x => x == 'installmentAndFailedTransactions')
                                 && (
                                     <Menu.Item key="5" onClick={() => this_Obj.setFailedInstalmentRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
@@ -308,7 +313,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 6
+                                record.actionViews.find(x => x == 'paymentFailed')
                                 && (
                                     <Menu.Item key="6" onClick={() => this_Obj.setFailedRegistrationRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
@@ -316,7 +321,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 0 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
+                                record.deRegistered != 1 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
                                 record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee") && (
                                     <Menu.Item key="7"
                                     onClick={() =>
@@ -332,7 +337,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 0 && (record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer") && (
+                                record.deRegistered != 1 && (record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer") && (
                                     <Menu.Item key="8"
                                     onClick={() => this_Obj.cancelDeRegistrtaion(record.deRegisterId)}
                                     >
@@ -383,7 +388,8 @@ class Registration extends Component {
             modalTitle: null,
             modalMessage: null,
             actionView: 0,
-            cancelDeRegistrationLoad: false
+            cancelDeRegistrationLoad: false,
+            isInvoiceFailed: 0
         };
 
         this_Obj = this;
@@ -656,7 +662,15 @@ class Registration extends Component {
         this.setState({
             selectedRow: record, otherModalVisible: true,
             actionView: 4, modalMessage : AppConstants.regFailedModalMsg,
-            modalTitle: AppConstants.invoiceFail
+            modalTitle: AppConstants.invoiceFail, isInvoiceFailed: 1
+        });
+    }
+
+    setSchoolInvoicePaid = (record) =>{
+        this.setState({
+            selectedRow: record, otherModalVisible: true,
+            actionView: 4, modalMessage : AppConstants.regPaidModalMsg,
+            modalTitle: AppConstants.invoicePaid, isInvoiceFailed: 0
         });
     }
 
@@ -677,15 +691,29 @@ class Registration extends Component {
 
 
     handleOtherModal = (key) =>{
-        const {selectedRow, actionView} = this.state;
+        const {selectedRow, actionView, isInvoiceFailed} = this.state;
         let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers) ? selectedRow.paidByUsers[0].paidByUserId : null
         if(actionView == 4){
             if(key == "ok"){
-                let payload = {
-                    registrationId: selectedRow.registrationUniqueKey
+                if(isInvoiceFailed == 1){
+                    let payload = {
+                        registrationId: selectedRow.registrationUniqueKey
+                    }
+                    this.props.registrationFailedStatusUpdate(payload);
+                    this.setState({loading: true})
                 }
-                this.props.registrationFailedStatusUpdate(payload);
-                this.setState({loading: true})
+                else {
+                    let payload = {
+                        processTypeName: selectedRow.processType,
+                        registrationUniqueKey: selectedRow.registrationUniqueKey,
+                        userId: selectedRow.paidByUsers[0].paidByUserId,
+                        divisionId: selectedRow.divisionId,
+                        competitionId: selectedRow.competitionUniqueKey
+                    }
+                    this.props.liveScorePlayersToCashReceivedAction(payload);
+                    this.setState({ loading: true });
+                }
+
             }
         }
         else if(actionView == 5){
@@ -1323,7 +1351,11 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
-                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || this.props.registrationDashboardState.onRegRetryPaymentLoad || this.props.liveScoreDashboardState.onRetryPaymentLoad} />
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad || 
+                            this.props.registrationDashboardState.onRegRetryPaymentLoad || 
+                            this.props.liveScoreDashboardState.onRetryPaymentLoad || 
+                            this.props.registrationDashboardState.onRegStatusUpdateLoad
+                            } />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}

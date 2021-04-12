@@ -13,8 +13,6 @@ const AppConstants = {
     RegTo: "Reg. To",
     RegFrom: "Reg. From",
     venueAndCourts: "Venues & Courts",
-    graphicalDashboard: "Graphical Display",
-    textualDashboard: "Textual Display",
     userProfile: "User Profile",
     myProfile: "My Profile",
     affiliates: "Affiliates",
@@ -40,7 +38,6 @@ const AppConstants = {
     cancel: "Cancel",
     save: "Save",
     association: "Association",
-    addAffiliates: "Add Affiliates",
     updateAffiliates: "Update",
     add: "Add",
     postCode: "Postcode",
@@ -116,6 +113,7 @@ const AppConstants = {
     agreeTerm: "I have read and agree to the  ",
     termsAndConditions: "Terms and Conditions",
     stateTermsAndConditions: "Admin Terms and Conditions",
+    termsAndConditionsLinkOfWorldSportAction: 'https://storage.googleapis.com/download/storage/v1/b/world-sport-action-dev-c1019.appspot.com/o/%2Forganisation%2FtermsAndCondition_org_18238b32-1d44-40a3-b72a-0c106315bf9f_1617390905373.pdf?generation=1617390915516798&alt=media',
     reviewOrder: "Review Order",
     checkOptions: "Checkout Options",
     voucherLink: "Voucher link",
@@ -299,6 +297,7 @@ const AppConstants = {
     previews: "Previews",
     print: "Print",
     printAll: "Print All",
+    printProcessing: 'Processing Downloads, Please click refresh after a short while',
 
     /** ** competition Open Reg form */
     competitionDetails: "Competition Details",
@@ -971,8 +970,8 @@ const AppConstants = {
     turnOff_30Second: "30 second warning",
     payouts: "Payouts",
 
-    coachExport: "/users/byRole/export?roleId=17&entityTypeId=6&entityId=",
-    managerExport: "/users/byRole/export?roleId=3&entityTypeId=6&entityId=",
+    coachExport: "/users/byRole/export",
+    managerExport: "/users/byRole/export",
     scorerExport: "/roster/exportScorer?entityTypeId=",
     positionExport: "/stats/positionTracking/export?",
     teamExport: "/teams/export?competitionId=",
@@ -1267,6 +1266,7 @@ const AppConstants = {
     deleteProduct: "Delete Product",
     deleteProductDescription: "Please confirm you want to delete this product?",
     umpireDashboardExport: "/matchUmpire/dashboard/export?",
+    umpirePayoutsExport: "/matchUmpire/payouts/export?",
     updateAction: "Update Action",
     actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
     backToUmpire: "Back to all Umpires",
@@ -1330,6 +1330,7 @@ const AppConstants = {
     bulkScoreUpload: "Bulk Scores Upload",
     umpireRoster: "Umpire Roster",
     registrationDivisions: "Registration Divisions",
+    membershipProductRestrictions: "Membership Product Restrictions",
     activeUmpireReserves: "Activate Umpire reserves",
     simultaneousMatchAllocations: "Simultaneous match allocations",
     poolName: "Pool Name",
@@ -1797,6 +1798,8 @@ const AppConstants = {
     byBadge: "By Badge",
     byPool: "By Pool",
     noPoolMsg: "There are no pools in this competition",
+    noUmpirePayments: "No umpire payment through the platform",
+    yesUmpirePayments: "Umpire payments through the platform",
 
     thankYouRegistering: "Thank you for registering!",
     emailConfirmNewUserMessage:
@@ -1833,8 +1836,6 @@ const AppConstants = {
 
     yourOrder: "Your Order",
 
-    paymentSummary: "Payment Summary",
-    salesSummary: "Sales Summary",
     summaryByParticipant: "Summary by participant",
     nominationFeesPaid: "Nomination Fees Paid",
     nominationFeesDeclined: "Nomination Fees Declined",
@@ -1862,8 +1863,8 @@ const AppConstants = {
 
     // Communication
     communicationDetails: 'Communication Details',
-    communicationtitle: 'Communication Title',
-    enterCommunicationtitle: 'Enter Communication Title',
+    communicationTitle: 'Communication Title',
+    enterCommunicationTitle: 'Enter Communication Title',
     communicationBody: 'Communication Body',
     communicationImage: 'Communication Image',
     communicationVideo: 'Communication Video',
@@ -1872,7 +1873,6 @@ const AppConstants = {
     editCommunication: 'Edit Communication',
     cancelDeRegistrtaion: "Cancel De-registration",
     cancelTransferReg: "Cancel Transfer registration",
-    fee: "Fee",
     feeStatus: "Fee Status",
     regFailedModalMsg: "Do you want to mark the invoice as failed?",
     regRetryInstalmentModalMsg: "Do you want to retry the failed instalment?",
@@ -1906,6 +1906,7 @@ const AppConstants = {
     proceedConfirm: "You have teams ‘Not in Draw’. Would you still like to proceed?",
     makePaymentsConfirm: "Are you sure you want to make payments?",
     affiliateDeleteConfirm: "Are you sure you want to delete this affiliate?",
+    timelineToggleConfirm:"There are unsaved changes. Would you still like to proceed?",
 
     affiliateName: "Affiliate Name",
     rank: "Rank",
@@ -2003,6 +2004,7 @@ const AppConstants = {
     historicalGrade: "Historical Grade",
     historicalResult: "Historical Result",
     errorMessage: "Error Message",
+    onlyEvenNumbersError: "Only even numbers are allowed",
     line: "Line #",
     playingUp: "Playing Up %",
     primary: "primary",
@@ -2031,14 +2033,20 @@ const AppConstants = {
     transfer: "Transfer",
     registrationCap: "Registration Cap",
     registeredBy: "Registered By",
-    toggleTimeline: "Toggle timeline",
     timeline: "Timeline",
-    competition_name: "Competition name",
     instalmentPortion: "Instalment Portion",
     redeemed: "Redeemed",
-    partialRefund: "Partial Refund",
-    governmentVoucherNumber: "Government Voucher Number",
-    incorrectProductDetails: "You have entered incorrect product details."
+    incorrectProductDetails: "You have entered incorrect product details.",
+    voucherOrDiscountCode: "Voucher/Discount Code",
+    cash: "Cash",
+    nominationFeesRefunded: "Nomination Fees Refunded",
+    competitionFeesRefunded: "Competition Fees Refunded",
+    refunded: "Refunded",
+    markAsPaidReg: "Mark as Paid Registration",
+    invoicePaid: "Invoice Paid",
+    invoice: "Invoice",
+    regPaidModalMsg: "Do you want to mark the invoice as paid?",
+    yourRelationship: "What is your Relationship?",
 };
 
 export default AppConstants;

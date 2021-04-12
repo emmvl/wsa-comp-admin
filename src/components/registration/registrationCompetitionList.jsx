@@ -177,7 +177,7 @@ const columns = [
         onHeaderCell: () => listeners('totalSeasonalFee'),
     },
     {
-        titie: AppConstants.totalFeeSingleGameIncGst,
+        title: AppConstants.totalFeeSingleGameIncGst,
         dataIndex: 'casualFees',
         key: 'casualFees',
         render: (casualFees, record) => totalCasualFees(casualFees, record),

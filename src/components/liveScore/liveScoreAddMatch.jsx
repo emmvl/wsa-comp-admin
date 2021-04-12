@@ -526,6 +526,14 @@ class LiveScoreAddMatch extends Component {
         this.props.liveScoreUpdateMatchAction(scorer, key);
     }
 
+    onlyEvenNumbersValidator = (rule, value, callback) => {
+        if (value && +value % 2 !== 0) {
+            callback(AppConstants.onlyEvenNumbersError)
+        } else {
+            callback();
+        }
+    };
+
     /// Duration & Break View
     duration_break = () => {
         const { addEditMatch } = this.props.liveScoreMatchState;
@@ -540,7 +548,10 @@ class LiveScoreAddMatch extends Component {
                         </Tooltip>
                     </div>
 
-                    <Form.Item name="matchDuration" rules={[{ required: true, message: ValidationConstants.durationField }]}>
+                    <Form.Item name="matchDuration" rules={[
+                        { required: true, message: ValidationConstants.durationField },
+                        { validator: this.onlyEvenNumbersValidator }
+                    ]}>
                         <InputNumber
                             // value={addEditMatch.matchDuration}
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -1150,7 +1161,7 @@ class LiveScoreAddMatch extends Component {
 
                             <div className="col-sm">
                                 <InputWithHead heading={AppConstants.extraTimeDuration} />
-
+123
                                 <InputNumber
                                     formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={(value) => value.replace(/\$\s?|(,*)/g, '')}

@@ -39,6 +39,7 @@ import { getRefBadgeData } from '../../store/actions/appAction';
 import { getUmpireCompetitonData, getUmpireCompId, setUmpireCompId, setUmpireCompitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from 'util/history';
+import { isEqual } from 'lodash';
 
 const { 
     // Header, 
@@ -77,7 +78,7 @@ class UmpirePoolAllocation extends Component {
     componentDidMount() {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         this.setState({ loading: true });
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+        if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
         this.props.getRefBadgeData();
     }
 
@@ -86,25 +87,28 @@ class UmpirePoolAllocation extends Component {
 
         const { deletedUmpirePoolId, newUmpirePool } = this.props.umpirePoolAllocationState;
 
-        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
-                let competitionList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = competitionList.length > 0 && competitionList[0].id;
+                let competitionList = (this.props.umpireCompetitionState.umpireComptitionList 
+                    && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) 
+                        ? this.props.umpireCompetitionState.umpireComptitionList : [];
+                let firstComp = (competitionList && !!competitionList.length && competitionList[0].id) ? competitionList[0].id : 0;
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
+                    firstComp = compId ? compId : 0
                 } else {
-                    setUmpireCompId(firstComp)
+                    if (firstComp) setUmpireCompId(firstComp)
                 }
 
-                if (JSON.parse(getUmpireCompetitonData())) {
+                if (organisationId && firstComp) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp })
                 }
 
-                const compKey = competitionList.length > 0 && competitionList[0].competitionUniqueKey;
+                const compKey = (competitionList && competitionList.length && competitionList[0].competitionUniqueKey) 
+                    ? competitionList[0].competitionUniqueKey : 0;
 
-                const competitionListCopy = JSON.parse(JSON.stringify(competitionList));
+                const competitionListCopy = competitionList ? JSON.parse(JSON.stringify(competitionList)) : [];
 
                 competitionListCopy.forEach(item => {
                     if (item.organisationId === organisationId) {
@@ -114,22 +118,25 @@ class UmpirePoolAllocation extends Component {
                     }
                 });
 
-                const isOrganiser = competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser;
+                const isOrganiser = (competitionListCopy && firstComp) 
+                    ? competitionListCopy.find(competition => competition.id === firstComp)?.isOrganiser : false;
 
-                this.setState({ 
-                    competitionList: competitionListCopy,
-                    selectedComp: firstComp,
-                    isOrganiserView: isOrganiser,
-                    loading: false, 
-                    competitionUniqueKey: compKey 
-                })
+                if (competitionListCopy && firstComp) {
+                    this.setState({ 
+                        competitionList: competitionListCopy,
+                        selectedComp: firstComp,
+                        isOrganiserView: isOrganiser,
+                        loading: false, 
+                        competitionUniqueKey: compKey 
+                    })
+                } 
             }
         }
 
         const { unassignedData, selectedComp } = this.state;
         const { umpireListDataNew } = this.props.umpireState;
 
-        if (!!this.state.selectedComp && prevState.selectedComp !== this.state.selectedComp) {
+        if (!!this.state.selectedComp && !isEqual(prevState.selectedComp, this.state.selectedComp)) {
             this.props.getUmpireList({ 
                 organisationId, 
                 competitionId: this.state.selectedComp, 
@@ -146,7 +153,7 @@ class UmpirePoolAllocation extends Component {
 
         // handle state after pool add
 
-        else if (!!newUmpirePool && newUmpirePool !== prevProps.umpirePoolAllocationState.newUmpirePool) {
+        else if (!!newUmpirePool && !isEqual(newUmpirePool, prevProps.umpirePoolAllocationState.newUmpirePool)) {
             this.handleUpdatePoolAfterAdd();
         }
 
@@ -157,7 +164,7 @@ class UmpirePoolAllocation extends Component {
             this.handleSetPoolDataAfterUpdate();
 
             // handle state after load more
-            if ((umpireListDataNew !== prevProps.umpireState.umpireListDataNew || !unassignedData.length) 
+            if (!isEqual(umpireListDataNew, prevProps.umpireState.umpireListDataNew) 
                 && selectedComp === prevState.selectedComp 
             ) {
                 this.handleUpdateUnassignedAfterLoadMore();
@@ -507,7 +514,7 @@ class UmpirePoolAllocation extends Component {
     }
     
     handleOkRemoveUmpireFromPool = (e) => {
-        const { assignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
+        const { assignedData, unassignedData, umpirePoolIdToUpdate, umpireForAction } = this.state;
 
         const assignedDataCopy = JSON.parse(JSON.stringify(assignedData));
 
@@ -518,11 +525,17 @@ class UmpirePoolAllocation extends Component {
             }
         });
 
+        const assignedUmpires = assignedDataCopy.reduce((acc, pool) => [...acc, ...pool.umpires.map(umpire => umpire.id)], []);
+        const updatedUnassigned = !assignedUmpires.includes(umpireForAction.id) ? [...unassignedData, umpireForAction] : unassignedData;
+        const totalUnassigned = updatedUnassigned.length
+
         this.setState({
             removeUmpireFromPoolModalVisible: false,
             umpireForAction: null,
             umpirePoolIdToUpdate: '',
+            unassignedData: updatedUnassigned,
             assignedData: assignedDataCopy,
+            totalUnassigned,
         });
     }
     
@@ -588,7 +601,7 @@ class UmpirePoolAllocation extends Component {
 
         const body = assignedData.map(dataItem => ({
             id: dataItem.id,
-            umpires: dataItem.umpires.map(umpire => umpire.id)
+            umpires: dataItem.umpires.map((umpire, poolRank) => ({ id: umpire.id, rank: poolRank+1 }))
         }))
 
         this.props.updateUmpirePoolManyData({
@@ -914,7 +927,7 @@ class UmpirePoolAllocation extends Component {
                                     <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-4 flex-shrink-0">
-                                            {totalUnassigned > 1 ? totalUnassigned + " Umpires" : totalUnassigned + " Umpire"}
+                                            {unassignedData.length !== 1 ? `${unassignedData.length} Umpires` : "1 Umpire"}
                                         </span>
                                     </div>
                                     { isOrganiserView &&

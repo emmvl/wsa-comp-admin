@@ -40,10 +40,6 @@ const initialState = {
     transactionId: null,
     getAffiliteDetailData: [],
     invoiceData: null,
-    paymentSummaryList: [],
-    paymentSummaryListTotalCount: 1,
-    paymentSummaryListPage: 1,
-    paymentSummaryListPageSize: 10,
     participantSummaryList: [],
     participantCompetitionList: [],
     participantSummaryListTotalCount: 1,
@@ -323,6 +319,7 @@ function stripe(state = initialState, action) {
         //         onLoad: false,
         //     }
         ///get invoice
+        case ApiConstants.API_GET_SHOP_INVOICE_LOAD:
         case ApiConstants.API_GET_INVOICE_LOAD:
             return {
                 ...state,
@@ -330,6 +327,14 @@ function stripe(state = initialState, action) {
                 error: null,
 
             }
+
+        case ApiConstants.API_GET_SHOP_INVOICE_SUCCESS: {
+            state.invoiceData = action.result
+            return {
+                ...state,
+                onLoad: false,
+            }
+        }
 
         case ApiConstants.API_GET_INVOICE_SUCCESS:
             state.invoiceData = action.result
@@ -404,30 +409,6 @@ function stripe(state = initialState, action) {
                 ...state,
                 onExportLoad: false,
             }
-        
-        case ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD:
-            return { ...state, onLoad: true, paymentDashboardListAction: action }
-
-        case ApiConstants.API_PAYMENT_SUMMARY_LIST_SUCCESS:
-            let paymentSummary = action.result;
-            return {
-                ...state, onLoad: false,
-                paymentSummaryList: paymentSummary.paymentSummary,
-                paymentCompetitionList: paymentSummary.competitionList,
-                paymentSummaryListTotalCount: paymentSummary.page.totalCount,
-                paymentSummaryListPage: paymentSummary.page
-                    ? paymentSummary.page.currentPage
-                    : 1,
-            }
-
-        case ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD:
-            return { ...state, onExportLoad: true }
-
-        case ApiConstants.API_EXPORT_PAYMENT_SUMMARY_SUCCESS:
-            return {
-                ...state,
-                onExportLoad: false,
-            }
 
         case ApiConstants.SET_PAYMENT_DASHBOARD_LIST_PAGE_SIZE:
             return {
@@ -441,18 +422,6 @@ function stripe(state = initialState, action) {
                 paymentListPage: action.pageNum,
             }
 
-        case ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE:
-            return {
-                ...state,
-                paymentSummaryListPageSize: action.pageSize,
-            }
-
-        case ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER:
-            return {
-                ...state,
-                paymentSummaryListPage: action.pageNum,
-            }
-    
         case ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD:
             return { ...state, refundAmountLoad: true }
 
@@ -472,9 +441,26 @@ function stripe(state = initialState, action) {
             return {
                 ...state, onLoad: false,
                 participantSummaryList: participantSummary.participantSummary,
+                participantCompetitionList: participantSummary.competitionList,
                 participantSummaryListTotalCount: participantSummary.page.totalCount,
                 participantSummaryListPage: participantSummary.page ? participantSummary.page.currentPage : 1,
             }
+
+        case ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_SIZE:
+            return {
+                ...state,
+                participantSummaryListPageSize: action.pageSize,
+            }
+
+        case ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_CURRENT_NUMBER:
+            return {
+                ...state,
+                participantSummaryListPage: action.pageNum,
+            }
+
+        case ApiConstants.CLEAR_INVOICE_DATA: {
+            return { ...initialState }
+        }
 
         default:
             return state;

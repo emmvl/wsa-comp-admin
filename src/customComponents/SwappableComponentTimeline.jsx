@@ -34,7 +34,7 @@ class Swappable extends Component {
             return
         }
         ev.preventDefault();
-
+        ev.stopPropagation();
         let src = document.getElementById(ev.dataTransfer.getData('src'));
         if (src == null) {
             return
@@ -52,11 +52,11 @@ class Swappable extends Component {
         let sourceIndexArray = src.id.split(':');
         let targetIndexArray = target.id.split(':');
 
-        const isCurrentSwappable = this.props.isCurrentSwappable(target.id, src.id);
+        const isCurrentSwappable = this.props.isCurrentSwappable(src.id,target.id);
 
         if (sourceIndexArray[2] === targetIndexArray[2] && isCurrentSwappable) {
-            target.replaceWith(src);
-            srcParent.appendChild(target);
+            //target.replaceWith(src);
+            //srcParent.appendChild(target);
             this.props.onSwap(src.id, target.id);
         }
     }

@@ -336,6 +336,13 @@ function getDocumentType() {
     return action;
 }
 
+function getRelationshipListAction(){
+    const action = {
+        type: ApiConstants.API_RELATIONSHIP_LIST_LOAD,
+    };
+    return action;
+}
+
 export {
     timeSlotInit,
     getCommonRefData,
@@ -376,5 +383,6 @@ export {
     setVenuesTableListPageSizeAction,
     setVenuesTableListPageNumberAction,
     getDivisionFieldConfigAction,
-    getDocumentType
+    getDocumentType,
+    getRelationshipListAction,
 }

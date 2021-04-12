@@ -197,6 +197,23 @@ function* getTransactionPayoutListSaga(action) {
   }
 }
 
+export function* getShopInvoiceSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getShopInvoice, action.shopUniqueKey, action.invoiceId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_SHOP_INVOICE_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Get invoice saga
 function* getInvoiceSaga(action) {
   try {
@@ -277,6 +294,27 @@ function* exportPaymentSaga(action) {
   }
 }
 
+// Export Customer Transaction saga
+function* exportCustomerTransactionSaga(action) {
+  try {
+    const {
+      customerId
+    } = action;
+    const result = yield call(AxiosApi.exportCustomerTransactionApi, customerId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_CUSTOMER_TRANSACTION_EXPORT_SUCCESS,
+        result: result.result.data,
+        status: result.result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 // Export transaction saga
 function* exportPayoutsTransactionSaga(action) {
     try {
@@ -343,79 +381,6 @@ function* exportPaymentDashboardSaga(action) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS,
-        result: result.result.data,
-        status: result.result.status,
-      });
-    } else {
-      yield call(failSaga, result);
-    }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
-}
-
-function* getPaymentSummarySaga(action) {
-  try {
-    const result = yield call(
-      AxiosApi.getPaymentSummary,
-      action.offset,
-      action.limit,
-      action.sortBy,
-      action.sortOrder,
-      action.userId,
-      action.registrationId,
-      action.yearId,
-      action.competitionKey,
-      action.paymentFor,
-      action.dateFrom,
-      action.dateTo,
-      action.searchValue,
-      action.feeType,
-      action.paymentType,
-      action.paymentMethod,
-      action.membershipType,
-      action.paymentStatus
-    );
-
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_PAYMENT_SUMMARY_LIST_SUCCESS,
-        result: result.result.data,
-        status: result.result.status,
-      });
-    } else {
-      yield call(failSaga, result);
-    }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
-}
-
-function* exportPaymentSummarySaga(action) {
-  try {
-    const result = yield call(
-      AxiosApi.exportPaymentSummaryApi,
-      action.offset,
-      action.sortBy,
-      action.sortOrder,
-      action.userId,
-      action.registrationId,
-      action.yearId,
-      action.competitionKey,
-      action.paymentFor,
-      action.dateFrom,
-      action.dateTo,
-      action.searchValue,
-      action.feeType,
-      action.paymentType,
-      action.paymentMethod,
-      action.membershipType,
-      action.paymentStatus
-    );
-
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_SUCCESS,
         result: result.result.data,
         status: result.result.status,
       });
@@ -532,14 +497,14 @@ export default function* rootStripeSaga() {
   yield takeEvery(ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_LOAD, getStripePayoutListSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_REFUND_LIST_API_LOAD, getStripeRefundListSaga);
   yield takeEvery(ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_LOAD, getTransactionPayoutListSaga);
+  yield takeEvery(ApiConstants.API_GET_SHOP_INVOICE_LOAD, getShopInvoiceSaga);
   yield takeEvery(ApiConstants.API_GET_INVOICE_LOAD, getInvoiceSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_TYPE_LIST_LOAD, getPaymentListSaga);
   yield takeEvery(ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_LOAD, exportPaymentSaga);
+  yield takeEvery(ApiConstants.API_CUSTOMER_TRANSACTION_EXPORT_LOAD, exportCustomerTransactionSaga);
   yield takeEvery(ApiConstants.API_GET_INVOICE_STATUS_LOAD, getInvoiceStatusSaga);
   yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_DASHBOARD_LOAD, exportPaymentDashboardSaga);
   yield takeEvery(ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD, exportPayoutsTransactionSaga);
-  yield takeEvery(ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD, getPaymentSummarySaga);
-  yield takeEvery(ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD, exportPaymentSummarySaga);
   yield takeEvery(ApiConstants.API_PARTIAL_REFUND_AMOUNT_LOAD, partialRefundAmountSaga);
   yield takeEvery(ApiConstants.API_PARTICIPANT_SUMMARY_LIST_LOAD, getParticipantSummarySaga);
   yield takeEvery(ApiConstants.API_EXPORT_PARTICIPANT_SUMMARY_LOAD, exportParticipantSummarySaga);

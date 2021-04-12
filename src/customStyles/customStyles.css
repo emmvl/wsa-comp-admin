@@ -316,6 +316,13 @@
   background: var(--app-f1c2a2) !important;
 }
 
+.offlineAlert { 
+  width: 100%;
+  position: sticky;
+  z-index: 100;  
+  top: 0;
+}
+
 .confirmation-modal {
     text-align: center;
 }

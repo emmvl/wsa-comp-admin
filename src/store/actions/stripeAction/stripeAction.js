@@ -86,6 +86,15 @@ function getInvoice(registrationid, userRegId, invoiceId, teamMemberRegId) {
     }
 }
 
+function getShopInvoice(shopUniqueKey, invoiceId) {
+    const action = {
+        type: ApiConstants.API_GET_SHOP_INVOICE_LOAD,
+        shopUniqueKey,
+        invoiceId,
+    };
+    return action;
+}
+
 // payment dashboard
 function getPaymentList(
     offset,
@@ -138,6 +147,14 @@ function exportPaymentApi(key, year, dateFrom, dateTo) {
         year,
         dateFrom,
         dateTo,
+    };
+}
+
+// export customer transaction data
+function exportCustomerTransactionApi(customerId) {
+    return {
+        type: ApiConstants.API_CUSTOMER_TRANSACTION_EXPORT_LOAD,
+        customerId,
     };
 }
 
@@ -197,86 +214,6 @@ function exportPayoutTransaction(payoutId) {
         type: ApiConstants.API_STRIPE_TRANSACTION_PAYOUT_LIST_EXPORT_LOAD,
         payoutId,
     };
-}
-
-function getPaymentSummary(
-    offset,
-    limit,
-    sortBy,
-    sortOrder,
-    userId,
-    registrationId,
-    yearId,
-    competitionKey,
-    paymentFor,
-    dateFrom,
-    dateTo,
-    searchValue,
-    feeType,
-    paymentType,
-    paymentMethod,
-    membershipType,
-    paymentStatus,
-) {
-    return {
-        type: ApiConstants.API_PAYMENT_SUMMARY_LIST_LOAD,
-        offset,
-        limit,
-        sortBy,
-        sortOrder,
-        userId,
-        registrationId,
-        yearId,
-        competitionKey,
-        paymentFor,
-        dateFrom,
-        dateTo,
-        searchValue,
-        feeType,
-        paymentType,
-        paymentMethod,
-        membershipType,
-        paymentStatus,
-    }
-}
-
-function exportPaymentSummaryApi(
-    offset,
-    sortBy,
-    sortOrder,
-    userId,
-    registrationId,
-    yearId,
-    competitionKey,
-    paymentFor,
-    dateFrom,
-    dateTo,
-    searchValue,
-    feeType,
-    paymentType,
-    paymentMethod,
-    membershipType,
-    paymentStatus,
-) {
-    return {
-        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
-        offset,
-        sortBy,
-        sortOrder,
-        userId,
-        registrationId,
-        yearId,
-        competitionKey,
-        paymentFor,
-        dateFrom,
-        dateTo,
-        searchValue,
-        feeType,
-        paymentType,
-        paymentMethod,
-        membershipType,
-        paymentStatus,
-    }
 }
 
 function getParticipantSummaryAction(
@@ -339,7 +276,7 @@ function exportParticipantSummaryApiAction(
     paymentStatus,
 ) {
     return {
-        type: ApiConstants.API_EXPORT_PAYMENT_SUMMARY_LOAD,
+        type: ApiConstants.API_EXPORT_PARTICIPANT_SUMMARY_LOAD,
         offset,
         sortBy,
         sortOrder,
@@ -377,18 +314,18 @@ function setDashboardPageNumberAction(pageNum) {
     return action;
 }
 
-function setSummaryPageSizeAction(pageSize) {
+function setParticipantSummaryPageSizeAction(pageSize) {
     const action = {
-        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_SIZE,
+        type: ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_SIZE,
         pageSize
     }
 
     return action;
 }
 
-function setSummaryPageNumberAction(pageNum) {
+function setParticipantSummaryPageNumberAction(pageNum) {
     const action = {
-        type: ApiConstants.SET_PAYMENT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
+        type: ApiConstants.SET_PARTICIPANT_SUMMARY_LIST_PAGE_CURRENT_NUMBER,
         pageNum
     }
 
@@ -402,6 +339,13 @@ function partialRefundAmountAction(payload) {
     };
 }
 
+function clearInvoiceDataAction() {
+    const action = {
+        type: ApiConstants.CLEAR_INVOICE_DATA,
+    };
+    return action;
+}
+
 export {
     accountBalanceAction,
     chargingPaymentAction,
@@ -410,20 +354,21 @@ export {
     getStripeTransferListAction,
     getStripePayoutListAction,
     getTransactionPayoutListAction,
+    getShopInvoice,
     getInvoice,
+    clearInvoiceDataAction,
     getPaymentList,
     exportPaymentApi,
     getStripeRefundsListAction,
     getInvoiceStatusAction,
     exportPaymentDashboardApi,
     exportPayoutTransaction,
-    getPaymentSummary,
-    exportPaymentSummaryApi,
     setDashboardPageSizeAction,
     setDashboardPageNumberAction,
-    setSummaryPageSizeAction,
-    setSummaryPageNumberAction,
+    setParticipantSummaryPageSizeAction,
+    setParticipantSummaryPageNumberAction,
     partialRefundAmountAction,
     getParticipantSummaryAction,
     exportParticipantSummaryApiAction,
+    exportCustomerTransactionApi,
 };
