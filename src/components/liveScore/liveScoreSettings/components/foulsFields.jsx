@@ -129,7 +129,7 @@ const FoulsFields = ({ onChange, values = [] }) => {
     useEffect(() => {
         if (currentValues.length) return;
 
-        setCurrentValues(cloneDeep(values))
+        setCurrentValues(cloneDeep(values) || []);
     }, [values])
 
     return renderFieldsTable()

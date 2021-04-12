@@ -34,7 +34,7 @@ import Loader from '../../customComponents/loader';
 import AppImages from "themes/appImages";
 import moment from "moment";
 import { exportFilesAction } from "store/actions/umpireAction/umpirePaymentAction";
-
+import { isEqual } from 'lodash';
 const { Content, Footer } = Layout;
 const { Option } = Select;
 const { confirm } = Modal
@@ -258,7 +258,7 @@ class UmpirePayments extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(nextProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = (this.props.umpireCompetitionState.umpireComptitionList 
                     && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) 

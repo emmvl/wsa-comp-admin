@@ -241,6 +241,12 @@ let AxiosApi = {
         return Method.dataPostDownload(url, token, `${key}-${_now}`, body);
     },
 
+    async exportCustomerTransactionApi(customerId) {
+        const body = { customerId };
+        let url = `/api/payments/customerTransaction/export`;
+        return Method.dataPostDownload(url, token, 'customerTransaction', body);
+    },
+
     async exportPaymentDashboardApi(offset,
         sortBy,
         sortOrder,

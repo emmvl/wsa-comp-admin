@@ -123,6 +123,10 @@ const MatchesDetailView = (props) => {
         { key: "street2", title: AppConstants.street2 },
         { key: "suburb", title: AppConstants.suburb },
         { key: "stripeCustomerAccountId", title: AppConstants.stripeCustomerAccountId },
+        { key: "emergencyFirstName", title: AppConstants.emergencyFirstName },
+        { key: "emergencyContactName", title: AppConstants.emergencyContactName },
+        { key: "emergencyContactNumber", title: AppConstants.emergencyContactMobile },
+        { key: "emergencyLastName", title: AppConstants.emergencyLastName },
     ];
 
     const getNewValuesByKey = (userKey) => {
@@ -232,7 +236,6 @@ const MatchesDetailView = (props) => {
         const CompInfoResultPromise = UserAxiosApi.getUserModulePersonalByCompData({
             userId,
             organisationId,
-            getStripeCustomerID: true
         });
 
         const [PersonalInfoResult, CompInfoResult] = await Promise.all([PersonalInfoResultPromise, CompInfoResultPromise])

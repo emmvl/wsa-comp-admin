@@ -20,7 +20,7 @@ import loadjs from "loadjs";
 import moment from "moment";
 
 import getColor from "util/coloredCheckbox";
-import { isArrayNotEmpty } from "util/helpers";
+import { isArrayNotEmpty,randomKeyGen } from "util/helpers";
 import history from "util/history";
 import {
     setGlobalYear,
@@ -70,16 +70,18 @@ import {
 } from "store/actions/competitionModuleAction/competitionMultiDrawsAction";
 import DrawsPublishModel from "customComponents/drawsPublishModel";
 import Loader from "customComponents/loader";
-import Swappable from "customComponents/SwappableComponentTimeline";
+
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
-
+import DrawConstant from '../../themes/drawConstant';
+import {getDate,checkDate,getDiffBetweenStartAndEnd,getNextEventForSwap,checkUnavailableTime} from "util/drawUtil";
 import "./draws.scss";
-
+import MultiFieldDrawsSubCourtTimeline from "./multiFieldDraw/multiFieldDrawsSubCourtTimeline";
+import MultiFieldDrawsFullCourtTimeline from "./multiFieldDraw/multiFieldDrawsFullCourtTimeline";
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Footer, Content } = Layout;
-const { SubMenu } = Menu;
+
 const { confirm } = Modal;
 
 const ONE_MIN_WIDTH = 2;
@@ -164,59 +166,8 @@ class MultifieldDrawsNewTimeline extends Component {
             editedDraw:{
                 draws:[],
                 apiData:null
-            },
-            emptySlot:{
-                colorCode: "#999999",   
-                awayTeamId: null,
-                awayTeamName: null,                
-                competitionDivisionGradeId: null,
-                divisionName: null,
-                drawsId: null,             
-                gradeName: null,
-                homeTeamId: null,
-                homeTeamName: null,
-                isLocked: 0,  
-                venueId: undefined,
-                teamArray:[
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                    {
-                        teamName: null,
-                        teamId: null,
-                    },
-                ],
-            },
-            emptySlotFieldUpdate:{
-                endTime: "",
-                matchDate: "",
-                startTime: "",
-                venueCourtId: 0,
-                venueCourtName: "",
-                venueCourtNumber: 0,
-                venueShortName: ""
-            },
-            emptySlotVenueFieldUpdate:{                             
-                venueCourtId: 0,
-                venueCourtName: "",
-                venueCourtNumber: 0,
-                venueShortName: ""
-            },
-            switchDrawNameFields:{
-                awayTeamName:"",
-                awayTeamOrganisationId:"",
-                homeTeamName:"",
-                divisionName:"",
-                gradeName:"",
-                colorCode:"",
-                duplicate:false,
-                homeTeamOrganisationId:"",
-                isPastMatchAvailable:0,
-                outOfCompetitionDate:0,
-                outOfRoundDate:0,
-                teamArray:[]
-            }
+            },         
+            
         };
         this.props.clearMultiDraws();
         this.dragTimeRef = React.createRef();
@@ -543,104 +494,6 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
-    getDiffBetweenStartAndEnd = eventObj => {
-        const startTime = moment(eventObj.matchDate);
-        const endTime = moment(this.getDate(eventObj.matchDate) + eventObj.endTime);
-        const diffTime = endTime.diff(startTime, 'minutes');
-
-        return diffTime;
-    }
-
-    onSwap(source, target, drawData, round_Id) {
-        this.setState({
-            isDragging: false,
-            tooltipSwappableTime: null
-        });
-        const sourceIndexArray = source.split(':');
-        const targetIndexArray = target.split(':');
-        const sourceXIndex = sourceIndexArray[0];
-        const sourceYIndex = sourceIndexArray[1];
-        const targetXIndex = targetIndexArray[0];
-        const targetYIndex = targetIndexArray[1];
-        if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
-            return;
-        }
-
-        const sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
-        const targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
-
-        // events end time calculations
-        const diffTimeSource = this.getDiffBetweenStartAndEnd(sourceObejct);
-        const newEndTimeSource = moment(targetObject.matchDate).add(diffTimeSource, 'minutes').format('HH:mm');
-
-        const diffTimeTarget = this.getDiffBetweenStartAndEnd(targetObject);
-        const newEndTimeTarget = moment(sourceObejct.matchDate).add(diffTimeTarget, 'minutes').format('HH:mm');
-
-        if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
-            this.updateCompetitionDraws(
-                sourceObejct,
-                targetObject,
-                sourceIndexArray,
-                targetIndexArray,
-                drawData,
-                round_Id,
-                newEndTimeSource,
-                newEndTimeTarget
-            );
-        }
-    }
-
-    getNextEventForSwap = (data, date, eventIndex) => {
-        const dataFiltered = data.filter(slot => this.getDate(slot.matchDate) === date);
-
-        const nextEvent = data.find((slot, index) => (index > eventIndex && slot.drawsId && dataFiltered.includes(slot)));
-        return nextEvent;
-    }
-
-    checkCurrentSwapObjects(source, target, drawData) {
-        const sourceIndexArray = source.split(':');
-        const targetIndexArray = target.split(':');
-        const sourceXIndex = sourceIndexArray[0];
-        const sourceYIndex = sourceIndexArray[1];
-        const targetXIndex = targetIndexArray[0];
-        const targetYIndex = targetIndexArray[1];
-
-        const sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
-        const targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
-
-        const sourceDraws = drawData[sourceXIndex];
-        const targetDraws = drawData[targetXIndex];
-
-        // for end time calculations
-        const sourceObejctDate = this.getDate(sourceObejct.matchDate);
-        const diffTimeSource = this.getDiffBetweenStartAndEnd(sourceObejct);
-
-        const targetObjectDate = this.getDate(targetObject.matchDate);
-        const diffTimeTarget = this.getDiffBetweenStartAndEnd(targetObject);
-
-        // define next slots with data for the swappable objects days
-        const nextSource = this.getNextEventForSwap(drawData[sourceXIndex].slotsArray, sourceObejctDate, sourceYIndex);
-        const nextTarget = this.getNextEventForSwap(drawData[targetXIndex].slotsArray, targetObjectDate, targetYIndex);
-
-        // define if the swappable event finishes before next event or end of the working day
-        const targetObjectRestrictionEnd = this.getDayTimeRestrictions(targetDraws, targetObjectDate).endTime;
-        const sourceObjectRestrictionEnd = this.getDayTimeRestrictions(sourceDraws, sourceObejctDate).endTime;
-
-        const sourceEndNew = moment(targetObject.matchDate).add(diffTimeSource, 'minutes');
-        const startTimeNextTarget = nextTarget ? moment(nextTarget.matchDate) : targetObjectRestrictionEnd;
-        const isStartNextSourceLater = startTimeNextTarget.isSameOrAfter(sourceEndNew);
-
-        const targetEndNew = moment(sourceObejct.matchDate).add(diffTimeTarget, 'minutes');
-        const startTimeNextSource = nextSource ? moment(nextSource.matchDate) : sourceObjectRestrictionEnd;
-        const isStartNextTargetLater = startTimeNextSource.isSameOrAfter(targetEndNew);
-
-        // for case when next events starts before end of swappable ones
-        if (!isStartNextTargetLater || !isStartNextSourceLater) {
-            return false;
-        }
-        return true;
-    }
-
     getColumnData = (indexArray, drawData) => {
         let xIndex=indexArray[0];
         let yIndex = indexArray[1];
@@ -663,7 +516,7 @@ class MultifieldDrawsNewTimeline extends Component {
     };
     correctWrongDate=(slot,slotIndex)=>{
         const slotDate = moment(slot.matchDate);
-        const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
+        const slotEnd = moment(getDate(slot.matchDate) + slot.endTime);
         const isCorrectStart = slotEnd.isAfter(slotDate);
         if(!isCorrectStart){
             if(this.props.drawsState.getRoundsDrawsdata.length>0){
@@ -720,17 +573,17 @@ class MultifieldDrawsNewTimeline extends Component {
         const targetYIndex = targetIndexArray[1];
              
         let newSourceObj={...sourceObejct, ...customTargetObject};
-        Object.keys(this.state.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
+        Object.keys(DrawConstant.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
         
         let newTargetObj={...targetObject, ...customSourceObject};
-        Object.keys(this.state.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
+        Object.keys(DrawConstant.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
 
         drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
         drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
         this.props.updateCourtTimingsDrawsDragSuccessAction();
        
     };
-    updateEditDrawArray(draw){
+    updateEditDrawArray=(draw)=>{
         const editdraw= this.state.editedDraw;        
         const drawExistsIndex=editdraw.draws.findIndex(d=>d.drawsId==draw.drawsId);
         if(drawExistsIndex>-1){
@@ -822,7 +675,7 @@ class MultifieldDrawsNewTimeline extends Component {
         this.props.matchesListDrawsAction(this.state.firstTimeCompId);
     };
 
-    checkColor(slot) {
+    checkColor=(slot)=> {
         const checkDivisionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         const checkCompetitionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         const checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -867,7 +720,7 @@ class MultifieldDrawsNewTimeline extends Component {
         return uncheckedArr
     }
 
-    checkSwap(slot) {
+    checkSwap=(slot)=> {
         const checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         const checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         const checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -902,10 +755,6 @@ class MultifieldDrawsNewTimeline extends Component {
     allFilterValue = data => {
         const isAllSelected = isArrayNotEmpty(data) && data.map(item => item.checked).every(item => item === true);
         return isAllSelected ? true : false;
-    }
-
-    getDate = date => {
-        return date.slice(0, -5);
     }
 
     getWeeklySchedule = () => {
@@ -991,7 +840,7 @@ class MultifieldDrawsNewTimeline extends Component {
         const pageX = ePageHoverTooltip ? ePageHoverTooltip.pageX : e.pageX;
         const pageY = ePageHoverTooltip ? ePageHoverTooltip.pageY : e.pageY;
 
-        const tooltipX = Math.trunc((pageX - boundsParent.left - draggableElMouseX));
+        const tooltipX = Math.trunc((pageX - boundsParent.left - draggableElMouseX)) + 40;
         const tooltipY = Math.trunc((pageY - boundsParent.top - draggableElMouseY)) - 90;
 
         const tooltip = document.getElementById('draggableTooltip');
@@ -1064,8 +913,8 @@ class MultifieldDrawsNewTimeline extends Component {
             const newTimeWithDateFormatted = startTimeNew.format('YYYY-MM-DD HH:mm');
 
             const startTimeOld = moment(draggableEventObject.matchDate);
-            const endTimeOld = moment(this.getDate(draggableEventObject.matchDate) + draggableEventObject.endTime);
-            const diffTime = endTimeOld.diff(startTimeOld, 'minutes');
+            const endTimeOld = moment(getDate(draggableEventObject.matchDate) + draggableEventObject.endTime);
+            const diffTime = draggableEventObject.minuteDuration || endTimeOld.diff(startTimeOld, 'minutes');
             const endTimeNew = moment(newTimeWithDateFormatted).add(diffTime, 'minutes');
 
             this.dragTimeEndRef.current = endTimeNew;
@@ -1127,14 +976,14 @@ class MultifieldDrawsNewTimeline extends Component {
             const endTimeFormatted = endTimeNew.format('HH:mm');
 
             const notEmptyTargetDayCourtSlots = this.state.courtDataSlotsTarget.filter(slot =>
-                this.getDate(slot.matchDate) === this.getDate(newTimeWithDateFormatted)
+                getDate(slot.matchDate) === getDate(newTimeWithDateFormatted)
                 && slot.drawsId
             );
 
             const isCourtDataSlotBusy = notEmptyTargetDayCourtSlots
                 .some((slot, slotIndex) => {
                     const slotStart = moment(slot.matchDate);
-                    const slotEnd = moment(this.getDate(slot.matchDate) + slot.endTime);
+                    const slotEnd = moment(getDate(slot.matchDate) + slot.endTime);
 
                     const isStartTimeCondition = startTimeNew.isSameOrBefore(slotEnd) && startTimeNew.isSameOrAfter(slotStart);
                     const isEndTimeCondition = endTimeNew.isSameOrAfter(slotStart) && endTimeNew.isSameOrBefore(slotEnd);
@@ -1151,7 +1000,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         const nextEvent = notEmptyTargetDayCourtSlots[slotIndex + 1];
                         const prevEvent = notEmptyTargetDayCourtSlots[slotIndex - 1];
 
-                        const prevEventEnd = prevEvent && moment(this.getDate(slot.matchDate) + prevEvent?.endTime);
+                        const prevEventEnd = prevEvent && moment(getDate(slot.matchDate) + prevEvent?.endTime);
                         const nextEventStart = nextEvent && moment(nextEvent?.matchDate);
 
                         const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isSameOrAfter(startTimeNew);
@@ -1200,12 +1049,12 @@ class MultifieldDrawsNewTimeline extends Component {
             editdraw.apiData=apiData;
             
             //change to action if necessary
-            this.dargSuccess(targetCourtId,postData);
+            this.dragSuccess(targetCourtId,postData);
             this.updateEditDrawArray(postData);
             this.setState({updateLoad: false});
         }
     }
-    dargSuccess(targetCourtId,postData){
+    dragSuccess(targetCourtId,postData){
         for(let drawsData of this.props.drawsState.getRoundsDrawsdata){
             if(targetCourtId==postData.venueCourtId){
                 //move in the same court
@@ -1216,6 +1065,7 @@ class MultifieldDrawsNewTimeline extends Component {
                        draw.matchDate=postData.matchDate;
                        draw.startTime=postData.startTime;
                        draw.endTime=postData.endTime;
+                       break;
                     }
                 }                    
             }else{
@@ -1232,8 +1082,9 @@ class MultifieldDrawsNewTimeline extends Component {
                         moveddraw.startTime=postData.startTime;
                         moveddraw.endTime=postData.endTime;
                         //set original to empty
-                        let emptyDraw={...this.state.emptySlot};
-                        Object.keys(this.state.emptySlotFieldUpdate).forEach(key => emptyDraw[key] = draw[key]);                            
+                        let emptyDraw={...DrawConstant.emptySlot};
+                        emptyDraw.slotId = randomKeyGen(5);
+                        Object.keys(DrawConstant.emptySlotFieldUpdate).forEach(key => emptyDraw[key] = draw[key]);                            
                         sourceVenueCourt.slotsArray[drawindex]=emptyDraw;
                     }
                 }
@@ -1246,7 +1097,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         }
                     }                        
                     if(drawindex>-1){
-                        Object.keys(this.state.emptySlotVenueFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
+                        Object.keys(DrawConstant.emptySlotVenueFieldUpdate).forEach(key => moveddraw[key] = destinationVenueCourt.slotsArray[drawindex][key]);
                         let targetDraw=destinationVenueCourt.slotsArray[drawindex];
                         if(targetDraw.drawsId && targetDraw.drawsId != moveddraw.drawsId){
                             //something wrong, 
@@ -1260,6 +1111,9 @@ class MultifieldDrawsNewTimeline extends Component {
                 }                
             }                
         }
+    }
+    setDraggingState=(state)=>{
+        this.setState(state);
     }
 
     setDraggableElMouse = e => {
@@ -1275,7 +1129,7 @@ class MultifieldDrawsNewTimeline extends Component {
         });
     }
 
-    slotObjectMouseEnter = (e, draggableEventObject) => {
+    slotObjectMouseEnter = (e, draggableEventObject, isGroup) => {
         if (!this.state.isDragging) {
             const ePageHoverTooltip = {
                 pageX: e.pageX,
@@ -1292,12 +1146,20 @@ class MultifieldDrawsNewTimeline extends Component {
         this.setDraggableElMouse(e);
 
         const tooltip = document.getElementById('draggableTooltip');
-
-        tooltip.innerHTML = `
-            <div>${draggableEventObject.homeTeamName} vs ${draggableEventObject.awayTeamName}</div>
-            <div>Starting at ${draggableEventObject.startTime}</div>
-            <div>Court ${draggableEventObject.venueShortName}-${draggableEventObject.venueCourtName}</div>
-        `;
+        let teamHtml=`<div>${draggableEventObject.homeTeamName} vs ${draggableEventObject.awayTeamName}</div>`;
+        if(draggableEventObject.childSlots && isGroup){
+            teamHtml="";
+            for(let childSlot of draggableEventObject.childSlots){
+                if(childSlot.drawsId){                  
+                    teamHtml+=`<div>${childSlot.homeTeamName} vs ${childSlot.awayTeamName}</div>`;
+                }
+            }
+        }
+        teamHtml+=`<div>Starting at ${draggableEventObject.startTime}</div>`;
+        if(!isGroup){
+            teamHtml+=`<div>Ending at ${draggableEventObject.endTime}</div>`;
+        }
+        tooltip.innerHTML = teamHtml+ `<div>Court ${draggableEventObject.venueShortName}-${draggableEventObject.venueCourtName}</div>`;
     }
 
     slotObjectMouseDown = e => {
@@ -1319,24 +1181,6 @@ class MultifieldDrawsNewTimeline extends Component {
             && slotObject !== draggableEventObject
         )
             this.setState({ tooltipSwappableTime: slotObject.matchDate })
-    }
-
-    checkUnavailableTime = (workingSchedule, startDayTime, endDayTime, date) => {
-        const startTime = workingSchedule && workingSchedule.startTime;
-        const endTime = workingSchedule && workingSchedule.endTime;
-
-        const newStartTime = startTime && startTime !== startDayTime
-            ? moment(date + startTime)
-            : moment(date + startDayTime);
-
-        const newEndTime = endTime && endTime !== endDayTime
-            ? moment(date + endTime)
-            : moment(date + endDayTime);
-
-        return {
-            startTime: newStartTime,
-            endTime: newEndTime,
-        };
     }
 
     checkUnavailableTimeWidth = (timeRestrictionsSchedule, startDayDate, endDayDate) => {
@@ -1413,8 +1257,8 @@ class MultifieldDrawsNewTimeline extends Component {
             }
         }
 
-        const venueSchedule = this.checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
-        const courtSchedule = this.checkUnavailableTime(courtDaySchedule, startDayTime, endDayTime, fieldItemDate);
+        const venueSchedule = checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
+        const courtSchedule = checkUnavailableTime(courtDaySchedule, startDayTime, endDayTime, fieldItemDate);
 
         // unavailable time during the whole day
 
@@ -1435,13 +1279,37 @@ class MultifieldDrawsNewTimeline extends Component {
         return dayTimeRestrictions;
     }
 
-    handleToggleTimeline = () => {
-        const { isTimelineMode } = this.props.drawsState;
-        if (isTimelineMode) {
+    handleToggleTimeline = (checked) => {
+        //const { isTimelineMode } = this.props.drawsState;
+        if (checked) {
             history.push('/competitionDraws');
         } else {
             history.push('/competitionDrawsOld');
         }
+    }
+    openConfirmToggleTimeline = async(checked) => {     
+        if(this.state.editedDraw.draws.length>0){   
+            confirm({
+                title: AppConstants.timelineToggleConfirm,
+                okText: AppConstants.yes,
+                okType: AppConstants.primary,
+                cancelText: AppConstants.no,
+                maskClosable: true,
+                mask: true,
+                onOk:async()=> {
+                    await this.confirmToggleTimeline(checked);
+                },
+                onCancel() {
+                    console.log('toggle timeline cancel');
+                },
+            });
+        }else{
+            await this.confirmToggleTimeline(checked);
+        }
+    };
+    confirmToggleTimeline= async(checked)=>{
+        await this.props.setTimelineModeAction(checked);
+        this.handleToggleTimeline(checked);
     }
 
     headerView = () => {
@@ -1835,7 +1703,7 @@ class MultifieldDrawsNewTimeline extends Component {
                     <div className={showAllOrg ? "multi-draw-left-list-view" : ""}>
                         {isArrayNotEmpty(drawOrganisations) && drawOrganisations.map((item, index) => {
                             return (
-                                index < this.checkDisplayCountList(drawOrganisations, showAllOrg) && <div className="column pl-5">
+                                index < this.checkDisplayCountList(drawOrganisations, showAllOrg) && <div key={"org"+index} className="column pl-5">
                                     <Checkbox
                                         className="single-checkbox-radio-style"
                                         style={{ paddingTop: 8 }}
@@ -1862,7 +1730,7 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     //unlockDraws
-    unlockDraws(id, round_Id, venueCourtId) {
+    unlockDraws=(id, round_Id, venueCourtId)=> {
         const key = this.state.firstTimeCompId == "-1" || this.state.filterDates ? 'all' : "singleCompetition"
         this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
     }
@@ -1907,9 +1775,8 @@ class MultifieldDrawsNewTimeline extends Component {
                         <Checkbox
                             className="single-checkbox"
                             checked={this.props.drawsState.isTimelineMode}
-                            onChange={async (e) => {
-                                await this.props.setTimelineModeAction(e.target.checked);
-                                this.handleToggleTimeline();
+                            onChange={(e) => {
+                                this.openConfirmToggleTimeline(e.target.checked);
                             }}
                         >
                             {AppConstants.timeline}
@@ -1949,7 +1816,7 @@ class MultifieldDrawsNewTimeline extends Component {
                             <span className="input-heading-add-another pt-0 pr-5 pl-3">{AppConstants.matchesList}</span>
                         </div>
 
-                        <NavLink
+                        {/* <NavLink
                             to={{
                                 pathname: "/competitionDrawsImport",
                                 state: { competitionId: this.state.firstTimeCompId, organisationId: this.state.organisationId },
@@ -1968,7 +1835,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     </div>
                                 </div>
                             </Button>
-                        </NavLink>
+                        </NavLink> */}
 
                         <Button className="multi-field-draw-edit-button" type="primary" onClick={() => this.navigateToDrawEdit()}>
                             {AppConstants.edit}
@@ -2004,7 +1871,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                         </div>
                                     )}
                                     <div key={"drawData" + dateIndex}>
-                                        {this.draggableView(dateItem)}
+                                    {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED=="true" ? this.draggableSubCourtView(dateItem) : this.draggableView(dateItem)}
+                                        
                                     </div>
                                 </div>
                             ))}
@@ -2022,7 +1890,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                 </span>
                                         </div>
                                     )}                                   
-                                    {this.draggableView(dateItem)}                                    
+                                    {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED=="true" ? this.draggableSubCourtView(dateItem) : this.draggableView(dateItem)}                                   
                                 </div>
                             ))}
                         </div>
@@ -2070,16 +1938,16 @@ class MultifieldDrawsNewTimeline extends Component {
         const { isFilterSchedule } = this.state;
 
         const filteredDateArray = dateNewArray
-            .filter(item => this.getDate(item.date) === itemDate);
+            .filter(item => getDate(item.date) === itemDate);
 
-        const dayDate = this.getDate(filteredDateArray[0].date);
+        const dayDate = getDate(filteredDateArray[0].date);
 
         // for Show only scheduled matches filter
         const sortedByStartTimeDateArray = filteredDateArray.sort((a, b) => moment(a.date) - moment(b.date));
         const firstEventInDayStart = sortedByStartTimeDateArray[0]?.date;
 
         const sortedByEndTimeDateArray = filteredDateArray
-            .sort((a, b) => moment(this.getDate(a.date) + a.endTime) - moment(this.getDate(b.date) + b.endTime));
+            .sort((a, b) => moment(getDate(a.date) + a.endTime) - moment(getDate(b.date) + b.endTime));
         const lastEventInDayEnd = dayDate + sortedByEndTimeDateArray[sortedByEndTimeDateArray.length - 1].endTime;
 
         const firstEventHourStart = moment(firstEventInDayStart).startOf('hour').format('HH:mm');
@@ -2154,7 +2022,10 @@ class MultifieldDrawsNewTimeline extends Component {
 
         return dayBgAvailable;
     }
-
+    toggleCourt(courtData) {
+        courtData.isExpanded = !courtData.isExpanded;
+        this.setState({ redraw: true });
+    }
     dayHeadView = (date, dateNewArray, dayMargin) => {
         const { isAxisInverted } = this.state;
 
@@ -2227,12 +2098,20 @@ class MultifieldDrawsNewTimeline extends Component {
                 }}
             >
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
+                    let width=70;
+                    if(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED=="true"){                        
+                        if(courtData.isExpanded){
+                            width=448;
+                        }
+                    }
+                    
                     return (
                         <div
                             key={"court" + index}
                             className="d-flex justify-content-center"
-                            style={{ width: 70 }}
+                            style={{ width: width }}
                         >
+                            <span className="app-color pointer f-13" onClick={() => this.toggleCourt(courtData)}>{courtData.isExpanded ? "-" : "+"}</span>
                             <span className="draws-x-head-text">
                                 {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                             </span>
@@ -2258,7 +2137,7 @@ class MultifieldDrawsNewTimeline extends Component {
         );
     }
 
-    unavailableDayView = (courtData, fieldItemDateIndex, diffDayScheduleTime, prevDaysWidth) => {
+    unavailableDayView = (courtData, fieldItemDateIndex, diffDayScheduleTime, prevDaysWidth,slotHeight) => {
         const { isAxisInverted } = this.state;
 
         return (
@@ -2275,20 +2154,20 @@ class MultifieldDrawsNewTimeline extends Component {
                     id={courtData.venueCourtId}
                     className="box-draws unavailable-draws align-items-center"
                     style={{
-                        minWidth: 48,
+                        minWidth: slotHeight,
                         cursor: 'not-allowed',
                         background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                         ...(isAxisInverted ? {
                             left: 0,
                             top: prevDaysWidth,
-                            width: 48,
+                            width: slotHeight,
                             height: diffDayScheduleTime,
                             transform: 'translateX(-50%)',
                         } : {
                             left: prevDaysWidth,
                             top: '50%',
                             width: diffDayScheduleTime,
-                            height: 48,
+                            height: slotHeight,
                             transform: 'translateY(-50%)',
                         })
                     }}
@@ -2304,495 +2183,34 @@ class MultifieldDrawsNewTimeline extends Component {
             </div>
         );
     }
-
+    setTooltipSwappableTime=() => {
+        this.setState({ tooltipSwappableTime: null })
+    }
     draggableView = (dateItem) => {
-        let disabledStatus = this.state.competitionStatus == 1;
-        let dayMargin = 25;
-        let topMargin = 2;
-        const date = [];
-
-        const { isFilterSchedule, isAxisInverted } = this.state;
-
-        const { dateNewArray } = dateItem;
-
-        dateNewArray.forEach(item => {
-            const dateNew = this.getDate(item.date);
-
-            if (dateNew !== date[date.length - 1]) {
-                date.push(dateNew);
-            }
-        });
-
-        const dayBgAvailable = this.defineDayBg();
-
-        return (
-            <>
-                <div
-                    className="scroll-bar"
-                    style={{
-                        width: 'fit-content',
-                    }}
-                >
-                    {/* Horizontal head */}
-                    {isAxisInverted ?
-                        this.courtHorizontalHeadView(dateItem)
-                        :
-                        <div className="table-head-wrap">
-                            {this.dayHeadView(date, dateNewArray, dayMargin)}
-                        </div>
-                    }
-
-                </div>
-                <div
-                    className={`main-canvas Draws ${isAxisInverted ? 'd-flex' : ''}`}
-                    id="draws-field"
-                    onDragOver={e => {
-                        if (!disabledStatus) this.drawsFieldMove(e)
-                    }}
-                    onMouseMove={e => this.drawsFieldMove(e)}
-                    onDragLeave={this.addDisplayNoneTooltip}
-                    onMouseLeave={this.addDisplayNoneTooltip}
-                    onMouseUp={this.drawsFieldUp}
-                    onTouchEnd={this.drawsFieldUp}
-                >
-
-                    {isAxisInverted && this.dayHeadView(date, dateNewArray, dayMargin)}
-
-                    <div
-                        id="draggableTooltip"
-                        className="unavailable-draws"
-                        // don't change this inline style, tooltip won't work !!
-                        style={{
-                            display: 'none'
-                        }}
-                    />
-                    {dateItem.draws && dateItem.draws.map((courtData, index) => {
-                        if (index !== 0) {
-                            topMargin += 70;
-                        }
-
-                        let prevDaysWidth = 0;
-                        let diffDayScheduleTime = 0;
-
-                        return (
-                            <div
-                                key={"court" + index}
-                                style={{
-                                    display: 'flex',
-                                    flexShrink: 0,
-                                    alignItems: 'center',
-                                    ...(isAxisInverted ? {
-                                        position: 'relative',
-                                        left: 15,
-                                        width: 70,
-                                    } : {
-                                        height: 70
-                                    })
-                                }}
-                            >
-                                {!isAxisInverted &&
-                                <div
-                                    className="venueCourt-tex-div text-center ml-n20 d-flex justify-content-center align-items-center"
-                                    style={{
-                                        width: 95,
-                                        height: 48,
-                                    }}
-                                >
-                                        <span className="venueCourt-text">
-                                            {courtData.venueShortName + '-' + courtData.venueCourtNumber}
-                                        </span>
-                                </div>
-                                }
-
-                                {date.map((fieldItemDate, fieldItemDateIndex) => {
-                                    // for check the schedule of the day
-                                    const { startDayTime, endDayTime } = this.getStartAndEndDayTime(fieldItemDate, dateNewArray);
-
-                                    const startDayDate = moment(fieldItemDate + startDayTime);
-                                    const endDayDate = moment(fieldItemDate + endDayTime);
-
-                                    const dateNow = moment();
-                                    const isDayInPast = dateNow.isAfter(endDayDate);
-
-                                    if (fieldItemDateIndex !== 0) {
-                                        prevDaysWidth += diffDayScheduleTime;
-                                    }
-                                    if (fieldItemDateIndex === 0) {
-                                        prevDaysWidth = 0;
-                                    }
-
-                                    if (fieldItemDateIndex === date.length - 1) {
-                                        // for the last day in schedule width and right dashed line in the end of the day
-                                        diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH + 1;
-                                    } else if (fieldItemDateIndex === date.length - 1 && isFilterSchedule) {
-                                        diffDayScheduleTime = (endDayDate.diff(startDayDate, 'minutes') - ONE_HOUR_IN_MIN) * ONE_MIN_WIDTH;
-                                    } else {
-                                        diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH;
-                                    }
-
-                                    const timeRestrictionsSchedule = this.getDayTimeRestrictions(courtData, fieldItemDate);
-
-                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate);
-
-                                    // render for the whole unavailable day for court based on venue schedule
-                                    if (!timeRestrictionsSchedule) {
-                                        return this.unavailableDayView(courtData, fieldItemDateIndex, diffDayScheduleTime, prevDaysWidth);
-                                    }
-
-                                    const dayBg = timeRestrictionsSchedule.isUnavailable ? {
-                                        background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
-                                    } : dayBgAvailable;
-
-                                    return (
-                                        <div
-                                            key={"slot" + fieldItemDateIndex}
-                                            className={isAxisInverted ? 'position-absolute' : 'position-relative'}
-                                            style={{
-                                                width: `calc(100%) - ${prevDaysWidth}`,
-                                                height: '100%',
-                                                left: isAxisInverted ? '50%' : 75,
-                                            }}
-                                        >
-                                            <div
-                                                id={courtData.venueCourtId + ':' + fieldItemDateIndex}
-                                                className={`box-draws white-bg-timeline day-box ${isAxisInverted ? 'position-absolute' : ''}`}
-                                                style={{
-                                                    minWidth: 'unset',
-                                                    overflow: 'visible',
-                                                    whiteSpace: 'nowrap',
-                                                    cursor: disabledStatus && "no-drop",
-                                                    borderRadius: '0px',
-                                                    left: 0,
-                                                    ...dayBg,
-                                                    ...(isAxisInverted ?
-                                                        {
-                                                            top: prevDaysWidth,
-                                                            width: 48,
-                                                            height: diffDayScheduleTime,
-                                                            transform: 'translateX(-50%)',
-                                                        } : {
-                                                            top: '50%',
-                                                            width: diffDayScheduleTime,
-                                                            height: 48,
-                                                            transform: 'translateY(-50%)',
-                                                        })
-                                                }}
-                                                onDragOver={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus) {
-                                                        this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
-                                                    }
-                                                }}
-                                                onDragEnd={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus)
-                                                        this.handleDragEnd(e)
-                                                }}
-                                                onTouchMove={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus) {
-                                                        this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)
-                                                    }
-                                                }}
-                                                onTouchEnd={e => {
-                                                    if (!timeRestrictionsSchedule.isUnavailable && !isDayInPast && !disabledStatus)
-                                                        this.handleDragEnd(e)
-                                                }}
-                                            >
-                                                {timeRestrictionsSchedule.isUnavailable && this.unavailableTextView()}
-
-                                                {unavailableWidth.map((width, widthIndex) => {
-                                                    if (width) {
-                                                        return (
-                                                            <div
-                                                                className="box-draws unavailable-draws position-absolute align-items-center"
-                                                                style={{
-                                                                    background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
-                                                                    cursor: 'not-allowed',
-                                                                    ...(isAxisInverted ?
-                                                                        {
-                                                                            bottom: widthIndex ? 0 : 'auto',
-                                                                            top: widthIndex ? 'auto' : 0,
-                                                                            left: 0,
-                                                                            height: width,
-                                                                            minHeight: width,
-                                                                            width: '100%',
-                                                                        } : {
-                                                                            right: widthIndex ? 0 : 'auto',
-                                                                            left: widthIndex ? 'auto' : 0,
-                                                                            top: 0,
-                                                                            width,
-                                                                            minWidth: width,
-                                                                            height: '100%',
-                                                                        })
-                                                                }}
-                                                            >
-                                                                {this.unavailableTextView()}
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
-                                                {courtData.slotsArray.map((slotObject, slotIndex) => {
-                                                    if (this.getDate(slotObject.matchDate) === fieldItemDate && slotObject.drawsId) {
-                                                        // for left margin the event start inside the day
-                                                        const startWorkingDayTime = moment(fieldItemDate + startDayTime);
-                                                        const startTimeEvent = moment(slotObject.matchDate);
-
-                                                        const diffTimeStartEvent = startTimeEvent.diff(startWorkingDayTime, 'minutes') * ONE_MIN_WIDTH;
-                                                        // for width of the event
-                                                        const endTimeEvent = moment(fieldItemDate + slotObject.endTime);
-                                                        const diffTimeEventDuration = endTimeEvent.diff(startTimeEvent, 'minutes') * ONE_MIN_WIDTH;
-                                                        return (
-                                                            <div
-                                                                key={"slot" + slotIndex}
-                                                                style={{
-                                                                    position: 'absolute',
-                                                                    ...(isAxisInverted ? {
-                                                                        left: 0,
-                                                                        top: diffTimeStartEvent,
-                                                                    } : {
-                                                                        left: diffTimeStartEvent,
-                                                                        top: 0,
-                                                                    })
-                                                                }}
-                                                            >
-                                                                <div
-                                                                    id={slotObject.drawsId}
-                                                                    onMouseDown={this.slotObjectMouseDown}
-                                                                    onTouchStart={this.slotObjectMouseDown}
-                                                                    onDragOver={() => this.slotObjectDragOver(slotObject)}
-                                                                    onTouchMove={() => this.slotObjectDragOver(slotObject)}
-                                                                    onDragLeave={() => {
-                                                                        this.setState({ tooltipSwappableTime: null })
-                                                                    }}
-                                                                    onMouseEnter={e => this.slotObjectMouseEnter(e, slotObject)}
-                                                                    onMouseLeave={this.slotObjectMouseLeave}
-                                                                    className={'box-draws purple-bg'}
-                                                                    style={{
-                                                                        backgroundColor: this.checkColor(slotObject),
-                                                                        overflow: 'hidden',
-                                                                        whiteSpace: 'nowrap',
-                                                                        cursor: timeRestrictionsSchedule.isUnavailable || isDayInPast ? 'not-allowed' : disabledStatus && "no-drop",
-                                                                        opacity: isDayInPast ? 0.7 : 1,
-                                                                        ...(isAxisInverted ? {
-                                                                            width: 48,
-                                                                            minWidth: 48,
-                                                                            height: diffTimeEventDuration,
-                                                                        } : {
-                                                                            width: diffTimeEventDuration,
-                                                                            minWidth: diffTimeEventDuration,
-                                                                            height: 48,
-                                                                        })
-                                                                    }}
-                                                                >
-                                                                    {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
-                                                                        <Swappable
-                                                                            id={
-                                                                                index.toString() +
-                                                                                ':' +
-                                                                                slotIndex.toString()
-                                                                                +
-                                                                                ':' +
-                                                                                "1"
-                                                                            }
-                                                                            content={1}
-                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
-                                                                                ? false
-                                                                                : this.checkSwap(slotObject)
-                                                                            }
-                                                                            onSwap={(source, target) =>
-                                                                                this.onSwap(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                    dateItem.roundId,
-                                                                                )
-                                                                            }
-                                                                            isCurrentSwappable={(source, target) =>
-                                                                                isDayInPast || disabledStatus
-                                                                                    ? false
-                                                                                    : this.checkCurrentSwapObjects(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                    )
-                                                                            }
-                                                                        >
-                                                                            {this.state.isDivisionNameShow ? (
-                                                                                <span className="text-overflow">
-                                                                                    {slotObject.divisionName + "-" + slotObject.gradeName}
-                                                                                </span>
-                                                                            ) : (
-                                                                                <span className="text-overflow">
-                                                                                        {slotObject.homeTeamName} <br />
-                                                                                    {slotObject.awayTeamName}
-                                                                                    </span>
-                                                                            )
-                                                                            }
-                                                                        </Swappable>
-                                                                    ) : (
-                                                                        <Swappable
-                                                                            id={
-                                                                                index.toString() +
-                                                                                ':' +
-                                                                                slotIndex.toString()
-                                                                                +
-                                                                                ':' +
-                                                                                dateItem.roundId.toString()
-                                                                            }
-                                                                            content={1}
-                                                                            swappable={timeRestrictionsSchedule.isUnavailable || isDayInPast || disabledStatus
-                                                                                ? false
-                                                                                : this.checkSwap(slotObject)
-                                                                            }
-                                                                            onSwap={(source, target) =>
-                                                                                this.onSwap(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                    dateItem.roundId,
-                                                                                )
-                                                                            }
-                                                                            isCurrentSwappable={(source, target) =>
-                                                                                isDayInPast || disabledStatus
-                                                                                    ? false
-                                                                                    : this.checkCurrentSwapObjects(
-                                                                                    source,
-                                                                                    target,
-                                                                                    dateItem.draws,
-                                                                                    )
-                                                                            }
-                                                                        >
-                                                                            {this.state.isDivisionNameShow ? (
-                                                                                <span className="text-overflow">
-                                                                                        {slotObject.divisionName + "-" + slotObject.gradeName}
-                                                                                    </span>
-                                                                            ) : (
-                                                                                <span className="text-overflow">
-                                                                                            {slotObject.homeTeamName} <br />
-                                                                                    {slotObject.awayTeamName}
-                                                                                        </span>
-                                                                            )
-                                                                            }
-                                                                        </Swappable>
-                                                                    )}
-                                                                </div>
-
-                                                                {slotObject.drawsId !== null && (
-                                                                    <div
-                                                                        // className="box-exception"
-                                                                        className="position-absolute"
-                                                                        style={{
-                                                                            overflow: 'hidden',
-                                                                            whiteSpace: 'nowrap',
-                                                                            minWidth: 16,
-                                                                            ...(isAxisInverted ? {
-                                                                                top: '50%',
-                                                                                left: 48,
-                                                                                transform: 'translateY(-50%)',
-                                                                            } : {
-                                                                                top: 48,
-                                                                                left: '50%',
-                                                                                transform: 'translateX(-50%)',
-                                                                            })
-                                                                        }}
-                                                                    >
-                                                                        {!timeRestrictionsSchedule.isUnavailable && !isDayInPast && <Menu
-                                                                            className="action-triple-dot-draws"
-                                                                            theme="light"
-                                                                            mode="horizontal"
-                                                                            style={{
-                                                                                lineHeight: '16px',
-                                                                                borderBottom: 0,
-                                                                                cursor: disabledStatus && "no-drop",
-                                                                            }}
-                                                                        >
-                                                                            <SubMenu
-                                                                                disabled={disabledStatus}
-                                                                                className="m-0 d-flex justify-content-center"
-                                                                                key="sub1"
-                                                                                title={
-                                                                                    (
-                                                                                        <div>
-                                                                                            {slotObject.isLocked == 1 ? (
-                                                                                                <img
-                                                                                                    className="dot-image"
-                                                                                                    src={AppImages.drawsLock}
-                                                                                                    alt=""
-                                                                                                    width="16"
-                                                                                                    height="10"
-                                                                                                />
-
-                                                                                            ) : (
-                                                                                                <img
-                                                                                                    className="dot-image"
-                                                                                                    src={AppImages.moreTripleDot}
-                                                                                                    alt=""
-                                                                                                    width="16"
-                                                                                                    height="10"
-                                                                                                    style={{
-                                                                                                        transform: isAxisInverted ? 'rotate(-90deg)' : 'none'
-                                                                                                    }}
-                                                                                                />
-                                                                                            )}
-                                                                                        </div>
-                                                                                    )
-                                                                                }
-                                                                            >
-                                                                                {slotObject.isLocked == 1 && (
-                                                                                    <Menu.Item
-                                                                                        key="1"
-                                                                                        onClick={() => this.state.firstTimeCompId == "-1" || this.state.filterDates
-                                                                                            ? this.unlockDraws(
-                                                                                                slotObject.drawsId,
-                                                                                                "1",
-                                                                                                courtData.venueCourtId
-                                                                                            )
-                                                                                            : this.unlockDraws(
-                                                                                                slotObject.drawsId,
-                                                                                                dateItem.roundId,
-                                                                                                courtData.venueCourtId
-                                                                                            )
-                                                                                        }
-                                                                                    >
-                                                                                        <div className="d-flex">
-                                                                                            <span>Unlock</span>
-                                                                                        </div>
-                                                                                    </Menu.Item>
-                                                                                )}
-                                                                                <Menu.Item key="2">
-                                                                                    <NavLink
-                                                                                        to={{
-                                                                                            pathname: `/competitionException`,
-                                                                                            state: {
-                                                                                                drawsObj: slotObject,
-                                                                                                yearRefId: this.state.yearRefId,
-                                                                                                competitionId: this.state.firstTimeCompId,
-                                                                                                organisationId: this.state.organisationId,
-                                                                                            },
-                                                                                        }}
-                                                                                    >
-                                                                                        <span>Exception</span>
-                                                                                    </NavLink>
-                                                                                </Menu.Item>
-                                                                            </SubMenu>
-                                                                        </Menu>
-                                                                        }
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        )
-                                                    }
-                                                })}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        );
-                    })}
-                </div>
-            </>
-        );
+        let allprops = {...this.props, ...this.state,dateItem:dateItem, courtHorizontalHeadView:this.courtHorizontalHeadView,dayHeadView:this.dayHeadView,
+            drawsFieldMove:this.drawsFieldMove,addDisplayNoneTooltip:this.addDisplayNoneTooltip,drawsFieldUp:this.drawsFieldUp,dayLineDragMove:this.dayLineDragMove,
+            defineDayBg:this.defineDayBg,getStartAndEndDayTime:this.getStartAndEndDayTime,getDayTimeRestrictions:this.getDayTimeRestrictions,
+            checkUnavailableTimeWidth:this.checkUnavailableTimeWidth,unavailableDayView:this.unavailableDayView,unavailableTextView:this.unavailableTextView,
+            slotObjectDragOver:this.slotObjectDragOver,slotObjectMouseEnter:this.slotObjectMouseEnter,slotObjectMouseDown:this.slotObjectMouseDown,
+            slotObjectMouseLeave:this.slotObjectMouseLeave,setTooltipSwappableTime:this.setTooltipSwappableTime,handleDragEnd:this.handleDragEnd, 
+            setDraggingState:this.setDraggingState,checkColor:this.checkColor,checkSwap:this.checkSwap,unlockDraws:this.unlockDraws,
+            dragTimeRef:this.dragTimeRef, dragTimeEndRef:this.dragTimeEndRef
+        };
+        return <MultiFieldDrawsFullCourtTimeline {...allprops} ></MultiFieldDrawsFullCourtTimeline>;
     };
+    draggableSubCourtView = (dateItem) => {
+        let allprops = {...this.props, ...this.state,dateItem:dateItem, courtHorizontalHeadView:this.courtHorizontalHeadView,dayHeadView:this.dayHeadView,
+            drawsFieldMove:this.drawsFieldMove,addDisplayNoneTooltip:this.addDisplayNoneTooltip,drawsFieldUp:this.drawsFieldUp,dayLineDragMove:this.dayLineDragMove,
+            defineDayBg:this.defineDayBg,getStartAndEndDayTime:this.getStartAndEndDayTime,getDayTimeRestrictions:this.getDayTimeRestrictions,
+            checkUnavailableTimeWidth:this.checkUnavailableTimeWidth,unavailableDayView:this.unavailableDayView,unavailableTextView:this.unavailableTextView,
+            slotObjectDragOver:this.slotObjectDragOver,slotObjectMouseEnter:this.slotObjectMouseEnter,slotObjectMouseDown:this.slotObjectMouseDown,
+            slotObjectMouseLeave:this.slotObjectMouseLeave,setTooltipSwappableTime:this.setTooltipSwappableTime,
+            setDraggingState:this.setDraggingState,checkColor:this.checkColor,checkSwap:this.checkSwap,unlockDraws:this.unlockDraws,
+            dragTimeRef:this.dragTimeRef, dragTimeEndRef:this.dragTimeEndRef
+        };
+        return <MultiFieldDrawsSubCourtTimeline {...allprops} ></MultiFieldDrawsSubCourtTimeline>;
 
+    }
     contentView = () => {
         return (
             <div className="row">
@@ -2842,8 +2260,9 @@ class MultifieldDrawsNewTimeline extends Component {
         var targetIndexArray=[];
         //const apiData=this.state.editedDraw.apiData;
         const postObject = {
-            draws: this.state.editedDraw.draws,
+            draws: JSON.parse(JSON.stringify(this.state.editedDraw.draws)),
         };
+        //console.log(this.state.editedDraw.draws);
         this.props.updateCompetitionDrawsTimeline(
             postObject,
             sourceIndexArray,
@@ -2859,8 +2278,7 @@ class MultifieldDrawsNewTimeline extends Component {
             null,
             this.state.filterDates
         );
-        //this.setState({ updateLoad: true, });
-        //isOnSwapUpdate: true 
+        this.state.editedDraw.draws.length=0;   
     }
     check = () => {
         if (

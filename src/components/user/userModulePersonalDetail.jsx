@@ -284,14 +284,13 @@ const columns = [
                             </>
                         )
                     }
-                    <Menu.Item key="1">
-                        <span
-                            onClick={() => openInvoicePage({
-                                registrationId: e.registrationId,
-                            })}
-                        >
-                            {AppConstants.invoice}
-                        </span>
+                    <Menu.Item
+                        key="1"
+                        onClick={() => openInvoicePage({
+                            registrationId: e.registrationId,
+                        })}
+                    >
+                        <span>{AppConstants.invoice}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
@@ -396,14 +395,13 @@ const teamRegistrationColumns = [
                                 </Menu.Item>
                             )
                             : null}
-                        <Menu.Item key="2">
-                            <span
-                                onClick={() => openInvoicePage({
-                                    registrationId: record.registrationUniqueKey,
-                                })}
-                            >
-                                {AppConstants.invoice}
-                            </span>
+                        <Menu.Item
+                            key="2"
+                            onClick={() => openInvoicePage({
+                                registrationId: record.registrationUniqueKey,
+                            })}
+                        >
+                            <span>{AppConstants.invoice}</span>
                         </Menu.Item>
                     </SubMenu>
                 </Menu>
@@ -472,14 +470,13 @@ const childOtherRegistrationColumns = [
                                 <span onClick={() => this_Obj.retryPayment(record)}>{AppConstants.retryPayment}</span>
                             </Menu.Item>
                         )}
-                        <Menu.Item key="2">
-                            <span
-                                onClick={() => openInvoicePage({
-                                    registrationId: record.registrationId,
-                                })}
-                            >
-                                {AppConstants.invoice}
-                            </span>
+                        <Menu.Item
+                            key="2"
+                            onClick={() => openInvoicePage({
+                                registrationId: record.registrationId,
+                            })}
+                        >
+                            <span>{AppConstants.invoice}</span>
                         </Menu.Item>
                     </SubMenu>
                 </Menu>
@@ -1080,9 +1077,9 @@ const columnsDocuments = [
         key: "docUrl",
         render: (data, record) => {
             let filename = unescape(data);
-            filename = filename.slice(filename.indexOf('filename=')+9);
+            filename = filename.slice(filename.indexOf('filename=') + 9);
             return <a href={`${data}`}><span>{filename}</span></a>
-        }
+        },
     },
     {
         title: "Action",
@@ -1666,20 +1663,19 @@ const purchaseActivityColumn = [
                         />
                     )}
                 >
-                    <Menu.Item key="1">
-                        <span
-                            onClick={() => openInvoicePage({
-                                invoiceId: record.invoiceId,
-                                shopUniqueKey: record.shopUniqueKey,
-                            })}
-                        >
-                            {AppConstants.invoice}
-                        </span>
+                    <Menu.Item
+                        key="1"
+                        onClick={() => openInvoicePage({
+                            invoiceId: record.invoiceId,
+                            shopUniqueKey: record.shopUniqueKey,
+                        })}
+                    >
+                        <span>{AppConstants.invoice}</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
         ),
-    }
+    },
 ];
 
 class UserModulePersonalDetail extends Component {
@@ -2961,9 +2957,9 @@ class UserModulePersonalDetail extends Component {
                             <div className="desc-text-style side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
                         </div> */}
                     </div>
-                    
+
                 </div>
-                
+
                 {/* Upload Documents */}
                 <div>
                     <div

@@ -22,7 +22,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import Loader from '../../customComponents/loader';
 
 import AppConstants from "../../themes/appConstants";
-
+import { isEqual } from 'lodash';
 import './umpire.css';
 import { fastRGLPropsEqual } from "react-grid-layout/build/utils";
 
@@ -54,7 +54,7 @@ class UmpireDivisions extends Component {
     componentDidUpdate(prevProps) {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
 
-        if (prevProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
+        if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let competitionList = (this.props.umpireCompetitionState.umpireComptitionList 
                     && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) ? this.props.umpireCompetitionState.umpireComptitionList : []
@@ -92,7 +92,7 @@ class UmpireDivisions extends Component {
 
         const { umpirePoolData } = this.props.umpirePoolAllocationState;
 
-        if (umpirePoolData !== prevProps.umpirePoolAllocationState.umpirePoolData) {
+        if (!isEqual(umpirePoolData, prevProps.umpirePoolAllocationState.umpirePoolData)) {
             const selectedDivisions = [];
             umpirePoolData.forEach(poolItem => {
                 if (poolItem && poolItem.divisions && Array.isArray(poolItem.divisions)) {

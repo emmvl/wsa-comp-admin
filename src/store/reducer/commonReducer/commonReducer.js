@@ -67,6 +67,7 @@ const initialState = {
     stateListData: [],
     divisionFieldConfigList: [],
     docTypes: [],
+    relationshipList: [],
 };
 
 function commonReducerState(state = initialState, action) {
@@ -575,7 +576,20 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false
             }
         
-            
+        case ApiConstants.API_RELATIONSHIP_LIST_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+
+        case ApiConstants.API_RELATIONSHIP_LIST_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                relationshipList: action.result || [],
+                onLoad: false,
+                error: null
+            };
 
         default:
             return state;

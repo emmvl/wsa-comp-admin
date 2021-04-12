@@ -170,7 +170,6 @@ const columns = [
     sorter: true,
     width: 200,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    render: (registrationDate) => moment(registrationDate).format("DD/MM/YYYY"),
   },
   {
     title: AppConstants.participant_id,
