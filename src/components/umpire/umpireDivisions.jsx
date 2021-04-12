@@ -33,10 +33,10 @@ class UmpireDivisions extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedComp: null,
+            selectedComp: JSON.parse(getUmpireCompId()) || null,
             loading: false,
             competitionUniqueKey: null,
-            umpirePoolData: null,
+            umpirePoolData: props.umpirePoolAllocationState?.umpirePoolData,
             selectedDivisions: [],
             isOrganiserView: false,
             algorithmModalVisible: false,
@@ -57,31 +57,31 @@ class UmpireDivisions extends Component {
         if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let competitionList = (this.props.umpireCompetitionState.umpireComptitionList 
-                    && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) ? this.props.umpireCompetitionState.umpireComptitionList : []
-                let firstComp = (competitionList && !!competitionList.length) ? competitionList[0].id : 0;
+                    && isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)) ? this.props.umpireCompetitionState.umpireComptitionList : [];
 
-                if (getUmpireCompId()) {
-                    let compId = JSON.parse(getUmpireCompId())
-                    firstComp = compId
-                } else {
-                    if (firstComp) setUmpireCompId(firstComp)
-                }
+                let compId = JSON.parse(getUmpireCompId());
+                let firstComp = compId ? compId : (competitionList && !!competitionList.length) ? competitionList[0].id : null;
+                if (firstComp && firstComp !== compId) setUmpireCompId(firstComp)
 
-                const umpireCompetitionData = getUmpireCompetitonData() ? JSON.parse(getUmpireCompetitonData()) : {};
-                if (umpireCompetitionData && organisationId && firstComp) {
+                const storedUmpireCompetition = getUmpireCompetitonData();
+                const parsedData = JSON.parse(storedUmpireCompetition);
+                const umpireCompetitionData = parsedData ? parsedData : null;
+                if (!!umpireCompetitionData && organisationId && firstComp) {
                     this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
+                }
+                if (firstComp) {
                     this.props.liveScoreGetDivision(firstComp);
                     this.props.liveScoreGetRounds(firstComp);
                 }
 
                 const compKey = (competitionList && competitionList.length && competitionList[0].competitionUniqueKey)
-                 ? competitionList[0]?.competitionUniqueKey : 0;
+                 ? competitionList[0]?.competitionUniqueKey : null;
 
                 const selectedComp = competitionList ? competitionList.find(item => item.id === firstComp) : {};  
                 const isOrganiser = (selectedComp && selectedComp.organisationId && organisationId) 
                     ? selectedComp.organisationId === organisationId : false;
 
-                if (selectedComp && compKey) this.setState({
+                if (firstComp) this.setState({
                     selectedComp: firstComp, 
                     loading: false, 
                     competitionUniqueKey: compKey,
