@@ -322,16 +322,18 @@ function getSlotFromDate(drawsArray, dateObj, gradeArray, key, mainCourtNumber) 
                         teamId: drawsArray[i].awayTeamId,
                     },
                 ];
-                // const checkDuplicate = getDrawsDuplicate(drawsArray, drawsArray[i])
-                // if (checkDuplicate) {
-                //     drawsArray[i].duplicate = false;
-                // } else {
-                //     drawsArray[i].duplicate = false
-                // }
+               
                 drawsArray[i].slotId= randomKeyGen(5);
                 drawsArray[i].minuteDuration=getDiffBetweenStartAndEnd(drawsArray[i]);
                 sameTimeSlotArray.push(drawsArray[i]);    
                 if(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED!="true"){
+                    const checkDuplicate = getDrawsDuplicate(drawsArray, drawsArray[i])
+                    if (checkDuplicate) {
+                        drawsArray[i].duplicate = true;
+                    } else {
+                        drawsArray[i].duplicate = false
+                    }
+
                     break;
                 }        
             }

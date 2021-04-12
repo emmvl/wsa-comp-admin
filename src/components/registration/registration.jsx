@@ -267,7 +267,7 @@ const columns = [
                                 </NavLink>
                             </Menu.Item> */}
                             {
-                                record.actionView == 1
+                                record.actionViews.find(x => x == 'cash')
                             && (
                                 <Menu.Item key="2" onClick={() => this_Obj.setCashPayment(record)}>
                                     <span>Receive Cash Payment</span>
@@ -276,7 +276,7 @@ const columns = [
 
                             }
                             {
-                                record.actionView == 2
+                                record.actionViews.find(x => x == 'refund')
                             && (
                                 <Menu.Item key="2">
                                     <span>Refund</span>
@@ -284,7 +284,7 @@ const columns = [
                             )
                             }
                             {
-                                (record.actionView == 3 && (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration"))
+                                (record.actionViews.find(x => x == 'governmentVoucher') && (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration"))
                             && (
                                 <Menu.Item key="3" onClick={() => this_Obj.setVoucherPayment(record)}>
                                     <span>Voucher Payment Received</span>
@@ -292,7 +292,7 @@ const columns = [
                             )
                             }
                             {
-                                record.actionView == 4
+                                record.actionViews.find(x => x == 'schoolInvoice')
                                 && (
                                     <Menu>
                                         <Menu.Item key="4" onClick={() => this_Obj.setSchoolInvoiceFailed(record)}>
@@ -305,7 +305,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 5
+                                record.actionViews.find(x => x == 'installmentAndFailedTransactions')
                                 && (
                                     <Menu.Item key="5" onClick={() => this_Obj.setFailedInstalmentRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
@@ -313,7 +313,7 @@ const columns = [
                                 )
                             }
                             {
-                                record.actionView == 6
+                                record.actionViews.find(x => x == 'paymentFailed')
                                 && (
                                     <Menu.Item key="6" onClick={() => this_Obj.setFailedRegistrationRetry(record)}>
                                         <span>{AppConstants.retryPayment}</span>
@@ -704,7 +704,7 @@ class Registration extends Component {
                 }
                 else {
                     let payload = {
-                        processTypeName: selectedRow.processType,
+                        processTypeName: "school_invoice",
                         registrationUniqueKey: selectedRow.registrationUniqueKey,
                         userId: selectedRow.paidByUsers[0].paidByUserId,
                         divisionId: selectedRow.divisionId,
@@ -767,7 +767,7 @@ class Registration extends Component {
             this.setState({ isVoucherPaymentVisible: false });
         } else if (key == "ok") {
             let payload = {
-                processTypeName: selectedRow.processType,
+                processTypeName: "government_voucher",
                 registrationUniqueKey: selectedRow.registrationUniqueKey,
                 userId: selectedRow.userId,
                 divisionId: selectedRow.divisionId,
