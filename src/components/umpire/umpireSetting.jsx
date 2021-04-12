@@ -625,16 +625,16 @@ class UmpireSetting extends Component {
     handleSave = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         const { selectedComp, allocationSettingsData } = this.state;
-
+        
         const noUmpiresSettingArray = allocationSettingsData
-            .filter(item => !item.hasUmpires && !!item.divisions.length)
+            .filter(item => !item.hasUmpires)
             .map(item => ({
                 allDivisions: item.allDivisions,
                 divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
             }));
         
         const umpireAllocationSettingsArray = allocationSettingsData
-            .filter(item => !!item.hasUmpires && !!item.divisions.length)
+            .filter(item => !!item.hasUmpires)
             .map(item => ({
                 activateCoaches: item.activateCoaches,
                 activateReserves: item.activateReserves,
