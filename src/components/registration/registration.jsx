@@ -704,7 +704,7 @@ class Registration extends Component {
                 }
                 else {
                     let payload = {
-                        processTypeName: selectedRow.processType,
+                        processTypeName: "school_invoice",
                         registrationUniqueKey: selectedRow.registrationUniqueKey,
                         userId: selectedRow.paidByUsers[0].paidByUserId,
                         divisionId: selectedRow.divisionId,
@@ -767,7 +767,7 @@ class Registration extends Component {
             this.setState({ isVoucherPaymentVisible: false });
         } else if (key == "ok") {
             let payload = {
-                processTypeName: selectedRow.processType,
+                processTypeName: "government_voucher",
                 registrationUniqueKey: selectedRow.registrationUniqueKey,
                 userId: selectedRow.userId,
                 divisionId: selectedRow.divisionId,
