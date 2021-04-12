@@ -66,6 +66,8 @@ const AppConstants = {
     emergencyContacts: "Emergency Contacts",
     emergencyContactName: "Emergency Contact Name",
     emergencyContactMobile: "Emergency Contact Mobile",
+    emergencyFirstName: "Emergency First Name",
+    emergencyLastName: "Emergency Last Name",
     parents_guardians: "Parent/ Guardian Details",
     firstName: "First Name",
     lastName: "Last Name",

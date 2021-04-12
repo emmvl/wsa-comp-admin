@@ -98,6 +98,10 @@ const MatchesDetailView = () => {
             title: AppConstants.checkExpiryDate,
             onValueFormat: getDateTypeValue,
         },
+        { key: "emergencyFirstName", title: AppConstants.emergencyFirstName },
+        { key: "emergencyContactName", title: AppConstants.emergencyContactName },
+        { key: "emergencyContactNumber", title: AppConstants.emergencyContactMobile },
+        { key: "emergencyLastName", title: AppConstants.emergencyLastName },
     ];
 
     const getNewValuesByKey = (userKey) => {
