@@ -1396,9 +1396,9 @@ class CompetitionVenueAndTimesEdit extends Component {
                         onClick={() => {
                             this.props.updateVenuAndTimeDataAction(
                                 key+1,
-                                !!this.state.isModalTableIndex ? this.state.elementIndex : this.state.fieldConfigurationRefIdIndex,
+                                (this.state.isModalTableIndex>0 ||this.state.isModalTableIndex===0) ? this.state.elementIndex : this.state.fieldConfigurationRefIdIndex,
                                 'fieldConfigurationRefId',
-                                !!this.state.isModalTableIndex ? 'addTimeSlotField' : 'courtData',
+                                (this.state.isModalTableIndex>0 ||this.state.isModalTableIndex===0) ? 'addTimeSlotField' : 'courtData',
                                 this.state.isModalTableIndex,
                             )
                             this.setState({isModalTableIndex: null, elementIndex: null, fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
