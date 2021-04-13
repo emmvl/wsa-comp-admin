@@ -57,10 +57,10 @@ class AddUmpire extends Component {
     }
 
     async componentDidMount() {
-        let compId = null
+        let compId = getUmpireCompetiton() ? JSON.parse(getUmpireCompetiton()) : null;
 
-        if (getUmpireCompetiton()) {
-            compId = JSON.parse(getUmpireCompetiton())
+        if (compId) {
+            this.setState({ competition_Id: compId})
             let compData = JSON.parse(getUmpireCompetitonData())
             let orgItem = await getOrganisationData();
             let userOrganisationId = orgItem ? orgItem.organisationId : 0;
@@ -68,10 +68,8 @@ class AddUmpire extends Component {
             let isCompParent = userOrganisationId === compOrgId
             this.setState({ isCompParent });
             this.props.umpireListAction({ refRoleId: JSON.stringify([5]), entityTypes: 1, compId: compId, offset: 0 })
-            if (compId) {
-                this.props.getUmpireAffiliateList({ id: compId })
-                this.setState({ isUmpireAffiliate: true })
-            }
+            this.props.getUmpireAffiliateList({ id: compId })
+            this.setState({ isUmpireAffiliate: true })
             const teamsBody = { competitionId: compId, organisationId: userOrganisationId };
             if (this.state.tableRecord) teamsBody.umpireId = this.state.tableRecord.id;
             await this.props.getUmpireTeams(teamsBody);
@@ -80,8 +78,18 @@ class AddUmpire extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        if (isEqual(this.props.umpireState.affilateList, nextProps.umpireState.affilateList)) {
-            if (this.state.isUmpireAffiliate === true && this.props.umpireState.onAffiliateLoad === false) {
+
+        if (!isEqual(this.props.umpireState, nextProps.umpireState)) {
+            if (!!this.state.loader && !this.props.umpireState.onLoad) {
+                if (!!this.state.isEdit) {
+                    this.setInitialFieldValue();
+                }
+                this.setState({ load: false, loader: false })
+            }
+        }
+
+        if (!isEqual(this.props.umpireState.affilateList, nextProps.umpireState.affilateList)) {
+            if (this.state.isUmpireAffiliate && !this.props.umpireState.onAffiliateLoad) {
                 let compId = JSON.parse(getUmpireCompetiton())
                 if (this.state.isEdit === true) {
                     this.props.updateAddUmpireData(this.state.tableRecord, 'isEditUmpire')
@@ -140,6 +148,12 @@ class AddUmpire extends Component {
                 'Contact no': umpireData.mobileNumber,
                 umpireNewAffiliateName,
                 'teamsNames': umpireData.teamId
+            })
+            this.setState({
+                existingUmpireCoach_CheckBox: this.props.umpireState.umpireCoachCheckBox,
+                isUmpireCoach: this.props.umpireState.umpireCoachCheckBox,
+                isUmpire: this.props.umpireState.umpireCheckbox,
+                existingUmpireCheckBox: this.props.umpireState.umpireCheckbox,
             })
         } else {
             if (!this.state.isCompParent) {
@@ -205,6 +219,7 @@ class AddUmpire extends Component {
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
 
+
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -231,9 +246,10 @@ class AddUmpire extends Component {
                                     // value
                                     //     ? this.props.umpireSearchAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
                                     //     : this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
-
-                                    value && value.length > 2
-                                        ? this.props.umpireSearchAction({ refRoleId: JSON.stringify(refRoleTypes('member')), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value })
+                                    
+                                    const compId = JSON.parse(getUmpireCompetiton());
+                                    value && value.length > 2 && (!!this.state.competition_id || !!compId)
+                                        ? this.props.umpireSearchAction({ refRoleId: JSON.stringify(refRoleTypes('member')), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id || compId, userName: value })
                                         : this.props.umpireClear()
                                 }}
                             >

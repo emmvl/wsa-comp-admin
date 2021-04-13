@@ -377,7 +377,7 @@ class Umpire extends Component {
 
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
-        if (organisationId) await this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
+        if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
         this.props.getRefBadgeData(this.props.appstate.accreditation);
         const competitionId = JSON.parse(localStorage.getItem("umpireCompetitionId"));
         if (!!competitionId ) {
