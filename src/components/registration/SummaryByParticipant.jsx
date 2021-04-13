@@ -698,6 +698,14 @@ const columns = [
     },
   },
   {
+    title: AppConstants.paidBy,
+    dataIndex: "paidBy",
+    key: "paidBy",
+    sorter: true,
+    width: 200,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+  },
+  {
     title: AppConstants.voucherOrDiscountCode,
     dataIndex: "governmentVoucherNumber",
     key: "governmentVoucherNumber",
