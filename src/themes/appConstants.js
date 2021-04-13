@@ -47,10 +47,8 @@ const AppConstants = {
     female: "Female",
     unspecified: "Unspecified",
     dob: "Date of Birth",
-    competitionCategory: "Competition Category",
     competitionInvitees: "Competition Invitees",
     participant_id: "Participant ID",
-    participant_fullName: "Participant Full Name",
     participant_firstName: "Participant First Name",
     participant_middleName: "Alternative or Middle Name",
     participant_lastName: "Participant Last Name",
@@ -69,7 +67,6 @@ const AppConstants = {
     firstName: "First Name",
     lastName: "Last Name",
     documentType: "Document Type",
-    documentUploadDate: "Date Uploaded",
     documentUrl: "Document Urls",
     sameAddress: "Use same Address as Participant",
     additionalInfoReqd: "Additional Information required",
@@ -85,15 +82,12 @@ const AppConstants = {
     lastCaptainName: "Name your last Captain",
     playWithFriend: "Play with a friend",
     referFriend: "Refer a friend",
-    friend: "Friend",
-    referfriend_friendLiketoPlay: "Refer a friend : Do you have a friend you think would like to play?",
     friendLikeToPlay: "Do you have a friend you think would like to play?",
     existingMedConditions: "Existing Medical Conditions",
     regularMedicalConditions: "Regular Medications",
     hearAboutTheCompetition: "How did you hear about this Netball Competition?",
     who_fav_bird: "Who is your favourite Firebird?",
     consentForPhotos: "Do you give consent for photos to be taken and used for promotional purposes",
-    addOtherReg: "Add Another Registration",
     favouriteTeam: "Favourite Netball Team",
     OtherInfoReqd: "Other information required",
     yourSupportImportant: "Your Support is important for the continued success of our Club. Can you help?",
@@ -105,11 +99,9 @@ const AppConstants = {
     childNationality: "What nationality are you",
     childLangSpoken: "Languages spoken at home",
     haveDisability: "Do you have a disability?",
-    addAnotherQuestion: "Add Another question",
     uniformAndMerchandise: "Uniforms and Merchandise",
     vouchers: "Vouchers",
     addVoucher: "Add voucher",
-
     agreeTerm: "I have read and agree to the  ",
     termsAndConditions: "Terms and Conditions",
     stateTermsAndConditions: "Admin Terms and Conditions",
@@ -117,18 +109,15 @@ const AppConstants = {
     reviewOrder: "Review Order",
     checkOptions: "Checkout Options",
     voucherLink: "Voucher link",
-    nearestCompetition: "Nearest Competition",
     photo: "Photo",
     addParent_guardian: "Add Parent/Guardian",
     addFriend: "Add Friend",
-
     usernamePasswordIncorrect: "Login Unsuccessful. Incorrect Username or Password",
     home: "Home",
     user: "User",
     registration: "Registration",
     competitions: "Competitions",
     liveScores: "Live Scores",
-    events: "Events",
     shop: "Shop",
     umpires: "Umpires",
     incidents: "Incidents",
@@ -140,7 +129,6 @@ const AppConstants = {
     appRegoForm: "App Rego Form",
     competition: "Competition",
     division: "Division",
-    addTimeSlot: "Add another time slot",
     saveDraft: "Save Draft",
     next: "Next",
     participateInComp: "Participating-In Competitions",
@@ -161,7 +149,6 @@ const AppConstants = {
     proposedGrade: "Proposed Grade",
     finalisedGrade: "Finalised Grade",
     comments: "Comments",
-
     ladder: "Ladder",
     competitionFormat: "Competition Format",
     membershipProduct: "Membership Product",
@@ -180,10 +167,8 @@ const AppConstants = {
     technical: "Technical",
     unsportsmanlike: "Unsportsmanlike",
     disqualifying: "Disqualifying",
-    enterCountFouls: "Enter count of fouls",
     suspendedFrom: "Suspended From",
     suspendedTo: "Suspended Till",
-    mandatePlayerAge: "Mandate Player Age Restrictions",
     team: "Team",
     umpire: "Umpire",
     coach: "Coach",
@@ -197,12 +182,9 @@ const AppConstants = {
     seasonalFee: "Individual User Seasonal Fee",
     type: "Type",
     fees: "Fees",
-    feesPaid: "Fees Paid",
-    feesOwing: "Fees Owing",
     discount: "Discount",
     discounts: "Discounts",
     generalDiscount: "General Discount",
-    fixedAmount: "Fixed $ amount",
     percentageOff: "Percentage off",
     amount: "Amount",
     description: "Description",
@@ -218,31 +200,21 @@ const AppConstants = {
     delete: "Delete",
     year2019: "2019",
     timeSlot: "Time Slots",
-    timeBetweenGames: "Time between games",
     timeBetweenMatches: "Time between matches",
     mins: "mins",
     save_publish: "Save & Publish",
     back: "Back",
     finals: "Finals",
     useDefault: " Use Default",
-    finalFixtures: "Finals Fixture Template",
     matchType: "Match Type",
-    quarters: "Quarters",
     duration: "Duration",
     matchDuration: "Match Duration",
     mainBreak: "Main Break",
     quarterBreak: "Quarter Break",
     qtrBreak: "Qtr Break",
     betweenGames: "Between Games",
-    assignManually: "Assign Manually",
     regenerateDraw: "Regenerate",
     saveDraw: "Save Draws",
-
-    /// *****Competition Finals */
-    extraTimeIfDraw1: "Extra time if a Draw - 1st Time",
-    applyAllRounds: "Apply to all Rounds",
-    applyAllSemiAndGrand: "Apply to Semi and Grand Final",
-    applyGrandOnly: "Apply to Grand Final Only",
     extraTimeDuration: "Extra Time Duration",
     extraTimeMainBreak: "Extra Time Main Break",
     extraTimeBreak: "Extra Time Break",
@@ -253,19 +225,13 @@ const AppConstants = {
     addAnotherFinalFormat: "Add Another Finals Format",
     setAsDefault: "Set as Default",
     applyFinalFormat: "Apply Final Format",
-    //* ****************Competition Fixtures */
     fixtures: "Fixtures",
     add_TimeSlot: "Add Timeslot",
     addCourt: "Add Court",
     RegistrationRestrictionType: "RegistrationRestrictionType",
     CompetitionRegistration: "Competition Registration",
-
-    //* ****************Competition Format */
     newCompetition_name: "Competition Name you are Transferring to?",
     use_default_competitionFormat: "Use default Competition Format Settings",
-    standard_round_robin: "Standard Round Robin",
-    double_round_robin: "Double Round Robin",
-    halves: "Halves",
     fixture_template: "Fixture Template",
     frequency: "Frequency",
     timeBetweenRounds: "Time between Rounds",
@@ -275,31 +241,22 @@ const AppConstants = {
     setUpFinalTemplate_optional: "Set Up Finals Template (Optional)",
     addNewCompetitionFormat: "Add New Competition Format",
     createDraftDraw: "Create Draft Draw",
-
-    /** *****competition Ladder */
     addNewLadderScheme: "Add New Ladder Format",
     ladderAdjustment: "Ladder Adjustment",
     addNewAdjustment: "Add new Adjustment",
     recalculateLadder: "Recalculate Ladder",
     finalise: "Finalise",
     ladderFormatScheme: "Ladder Point Scheme Name",
-
-    /** *competition matchSheet */
     matchSheets: "Match Sheets",
     teams: "Teams",
-    gameTimeTracking: "Game Time Tracking",
     periods: "Periods",
     minutes: "Minutes",
     totalGames: "Games",
     positionTracking: "Position Tracking",
-    shooting: "Shooting ",
     preview: "Preview",
     previews: "Previews",
-    print: "Print",
     printAll: "Print All",
     printProcessing: 'Processing Downloads, Please click refresh after a short while',
-
-    /** ** competition Open Reg form */
     competitionDetails: "Competition Details",
     competitionLogo: "Competition Logo",
     addShortNotes_registering: "Write a brief description of the Competition..",
@@ -320,43 +277,31 @@ const AppConstants = {
     playerInEachTeam: "Players in each team",
     minNumber: "Minimum Number",
     maxNumber: "Maximum Number",
-    teams_in_each_grade_pool: "Teams in each grade/pool",
     registrationInvitees: "Registration Invitees",
-    anyOrganisation: "Any organisation",
     direct: "Direct",
-    notApplicable: " Not Applicable",
     percentageOff_FixedAmount: "Percentage off or Fixed Amount",
     governmentVouchers: "Government Vouchers",
     charityRoundUp: "Charity round up",
-    /** *****Competition Part Player grade calculate */
     minPlayersTeam: "Min. players/Team",
     numberOfTeams: "# Teams",
     extraPlayers: "Extra Players",
-
     playerGradingToggle: "Player Grading Toggle",
     playerGrading: "Player Grading",
     open: "Open",
-    gradeAndNameTeams: "Grade and Name Teams",
-    teamToggle: "Team Toggle",
     submit: "Submit",
     final: "Final",
     addDivisions: "Add Divisions",
     addTeams: "Add Teams",
     winter_2019: "Winter 2019",
     how_Add_teams_players: "How will you add teams and players?",
-    addManually: "Add Manually",
-    addCompetitionDetails: "Add Competition Details",
     SetUP_Template_Optional: "Set Up Finals Template (Optional) >",
     re_grading: "Re-grading",
     step1: "Step-1",
     step2: "Step-2",
-    gradeToggle: "Grade Toggle",
     finalisedDraw: "Finalised Draw",
     confirm: "Confirm",
     replicateWhichCompetition: "Replicate which competition",
     year2018: "2018",
-    winter2018: "2018 Winter",
-    newCompetitionName: "New Competition Name",
     competitionType: "Competition Type",
     startDate: "Start Date",
     registrationFees: "Registration Fees",
@@ -365,14 +310,12 @@ const AppConstants = {
     divisionAge: "Division/Age",
     divisionGrade: "Division Grade",
     div: "Div",
-    competitionFormatGameTimes: "Competition Format & Game Times",
     review: "Review",
     Step_3: "Step 3",
     contactNumber: "Contact Number",
     addAnotherCourt: "Add another court",
     addAnotherVenue: "Add another venue",
     venueAndTimes: "Venue And Times",
-    club_TeamName: "Club/Team Name",
     game_Days: "Game Day(s)",
     dayOfTheWeek: "Day of the week",
     startTime: "Start Time",
@@ -381,10 +324,8 @@ const AppConstants = {
     courts: "Courts",
     applyTo: "Apply to",
     addAnother: "Add another",
-    courtDetails: "Court Details",
     inbox: "Actionbox",
     viewAll: "View All",
-    eventsToday: "Events Today",
     competitionsOverview: "Competitions Overview",
     addNew: "Add New",
     participatingInCompetitions: "Participating In Competitions",
@@ -394,8 +335,6 @@ const AppConstants = {
     statistics: "Statistics",
     personalDetails: "Personal Details",
     medical: "Medical",
-    addAnotherDetail: "Add another detail",
-    register: "Register",
     username: "Username",
     products: "Products",
     productDetails: "Product Details",
@@ -420,22 +359,10 @@ const AppConstants = {
     stateFees: "State Fees",
     allFees: "All Fees",
     addAnotherVoucher: "Add Another Voucher",
-
-    /// registration membership fees list
     addMembershipProduct: "Add Membership Product",
-
-    // comp court and times assign
-    applyToAllVenues: "Apply to all venues",
-    applySettingsToIndividualVenue: "Apply settings to individual venue",
-    timeslotsAllocatedBasedOnGame: "Timeslots allocated based on game times",
-    manuallyAddTimeslots: "Manually Add Timeslots",
-    evenRotationTimeslots: "Even rotation of teams to timeslots",
-    divisionAndGradeTimeslots: "Allocate Divisions and Grades to same timeslot",
-    /* //registration// */
     addAFee: "Add a Fee",
     competitionFees: "Competition Fees",
     please_Sel_mem_pro: "Please select membership product",
-    net_set_go: "Net Set Go",
     addDivision: "Add Division",
     allDivisions: "All Divisions",
     perDivision: "Per Division",
@@ -455,9 +382,7 @@ const AppConstants = {
     how_users_Register: "How Users Register",
     app: "App",
     advancedSettings: "Advanced Settings",
-    ask_to_nominate: "Ask players to nominate two positions",
     disclaimers: "Disclaimers",
-    addDisclaimer: "Add Disclaimer",
     disclaimerLink: "Disclaimer Link",
     addAnotherDisclaimerLink: "Add Another Disclaimer Link",
     openRegistrations: "Open Registrations",
@@ -476,8 +401,6 @@ const AppConstants = {
     roles: "Roles",
     genders: "Genders",
     alternate_location: "Alternative location (within 25km)",
-    internet: "Internet",
-    socialMedia: "Social Media",
     other: "Other",
     participant: "Participant",
     specialNotes: "Special Notes",
@@ -486,25 +409,14 @@ const AppConstants = {
     membership: "Membership",
     payments: "Payments",
     general: "General",
-    early: "Early",
-    family: "Family",
-    custom: "Custom",
-    amountType: "Amount Type",
     addDiscount: "Add Discount",
     question: "Do you have a disability?",
-
-    /// //formik validation/////
-
-    pleaseSelectCompetition: "Please select competition",
-    pleaseSelectYear: "Please Select Year",
     select: "Select",
     trainingDaysAndTimes: "Training days and Times",
-    // ******** Live Score Matches **********
     matchList: "Match List",
     addMatches: "Add Matches",
     export: "Export",
     import: "Import",
-    matchName: "WSA 2 VS WSA 1",
     addMatch: "Add Match",
     date: "Date",
     divisionName: "Division Name",
@@ -524,17 +436,14 @@ const AppConstants = {
     scorerName: "Scorer Name",
     score: "Score",
     players: "Players",
-
     addScorer: "Add Scorer",
     selectTeam: "Select Team",
     emailAdd: "Email Address",
     enterEmail: "Enter Email",
     contactNO: "Contact no",
     contact_No: "Contact No",
-
     enterContactNo: "Enter Valid Contact Number",
     scorers: "Scorers",
-
     addTeam: "Add Team",
     teamName: "Team Name",
     enterTeamName: "Enter Team Name",
@@ -545,7 +454,6 @@ const AppConstants = {
     new: "New",
     existing: "Existing",
     teamList: "Team List",
-
     managersList: "Manager List",
     addManager: "Add Manager",
     importManager: "Import Manager",
@@ -553,15 +461,9 @@ const AppConstants = {
     aboutManager: "About Manager",
     managerProfile: "Manager Profile",
     emailAddress: "email@gmail.com",
-    teamManagers: "Team Manager",
-    emailValue: "email@gmail.com",
-    nameValue: "test score",
-    contactValue: "9646097979",
     enterFirstName: "Enter First Name",
     enterLastName: "Enter Last Name",
     enterDateOfBirth: "Enter date of birth",
-    assignToMatch: "Assign To Match",
-    aboutScorer: "About Scorer",
     importMatch: "Import Match",
     fileInput: "File Input",
     importTeam: "Import Team",
@@ -588,7 +490,6 @@ const AppConstants = {
     shootingState: "Shooting Stats",
     incidentDetails: "Incident Detail",
     photos: "Photos",
-    // 24-Jan
     forfeit: "Forfeit",
     abandon: "Abandon",
     endMatch: "End match",
@@ -607,9 +508,7 @@ const AppConstants = {
     newsExpiryTime: "News Expiry Time",
     newsDetail: "News Detail",
     settings: "Settings",
-    sponsorshipBanners: "Sponsorship Banners",
     venues: "Venues",
-    matchSettings: "Match Settings",
     wouldLikeRecord: "Would you like to record?",
     record: "Record",
     report: "Report",
@@ -621,14 +520,12 @@ const AppConstants = {
     acceptScores: "Accept scores",
     refereeAcceptScores: "Referee to Accept Scores",
     scorerAcceptScores: "Scorer to Accept Scores",
-    scoringAndTimer: 'Scoring and Timer',
     single: "Single",
     timer: "Timer",
     ladderSettings: "Ladder Settings",
     publish_notify: "Publish and Notify",
     backToNews: "Back to all news",
     app: "App",
-
     scorerHeading: "Scorer",
     banners: "Banners",
     uploadImage: "Upload Image",
@@ -648,7 +545,6 @@ const AppConstants = {
     bannerFormat: "Banner Format",
     teamAttendance: "Team Attendance",
     newsList: "News List",
-    gameTime: "Game Time",
     goalState: "Goal Statistics",
     bulkMatchChange: "Bulk Match Change",
     whatDoWantDO: "What do you want to do?",
@@ -663,97 +559,54 @@ const AppConstants = {
     pushBack: "Push Back",
     court: "Court",
     selectCourt: "Select Court",
-    endMatches: "End Matches",
-    selectResultType: "Select Result Type",
     round_1: "Round 1",
     round_2: "Round 2",
     selectRoundOne: "Select Round 1",
-    selectRoundTwo: "Select Round 2",
     bringForward: "Bring forward",
     changeMatchCriteria: "Change matches with the following criteria",
     selectReason: "Select Reason",
-    newsPost: "News Post",
-    scorerProfile: "Scorer Profile",
     affiliate: "Affiliate",
     selectAffiliate: "Select Affiliate",
     useClubLogo: "Use Affiliate Logo",
     activeNews: "Active News",
     addNewRound: "Add New Round",
-    twoHalves: "TWO_HALVES",
-    fourQuarters: "FOUR_QUARTERS",
     editBanners: "Edit Banners",
     editBanner: "Edit Banner",
     addBanners: "Add Banners",
-    /// /export URl
     exportUrl: "/players/csv?",
-
     membershipTypeName: "Membership Type Name",
     pleaseEnterMembershipTypeName: "Please Enter Membership Type Name",
-
-    // venue new constants
-    evenRotation: "Even rotation",
-    allocateToSameCourt: "Allocate to same court",
-    noPreference: "No Preference",
     anyGradePreference: "Do you have any court preferences for divisions or grades?",
-    timeSlotRotation: "TimeSlot rotation",
-    proceedLowerGrade: "Precede lower grades with higher grades",
-
     saveAsDefault: "Save as Default",
-
-    // time slot constants
     anyTimePreference: "Do you have any timeslot preferences for divisions or grades?",
     none: "None",
-    timeslotsAllocatedBasedOnMatches: "Timeslots allocated based on match duration",
-    enterTimeMatchesEachDay: "Enter time matches should run each day",
-    allocateToSameTimeslot: "Allocate to same time slot",
     newCompetition: "New Competition",
     teamPreferences: "Team Preferences",
-
-    // team grading summary
     teamGradingSummary: "Team Grading Summary",
     addGrade: "Add Grade",
-
-    // new changes in venue
     linkToHomeAffiliate: "Link To Home Affiliate",
     addressOne: "Address Line 1",
     addressTwo: "Address Line 2",
     suburb: "Suburb",
     postcode: "Postcode",
-
-    editCompetition: "Edit Competition",
     selectVenue: "Select Venue",
-
-    /// //live scores
-    teamSearch: "Team Search",
     managerSearch: "Manager Search",
     scorerSearch: "Scorer Search",
-
     organisationTypeRefId: "organisationTypeRefId",
     affiliatedToOrgId: "affiliatedToOrgId",
     street1: "street1",
     street2: "street2",
     stripeCustomerAccountId: "Stripe Customer ID",
-    suburbField: "suburb",
-    stateRefId: "stateRefId",
     middleName: "Middle Name",
-
-    /// /Team Grading
     finalTeamGrading: "Final Team Grading",
-
-    /// /Team Grading summary
     updateGradeName: "Update Grade Name",
     gradeName: "Grade Name",
     pleaseEnterGradeName: "Please enter grade name",
-
-    /// livescores
     todaysIncidents: "Today's Incidents",
     todaysMatch: "Today's Matches",
     recipientSelection: "Select Recipients",
-
-    /// /added 2 march
     ByMatch: "By Match",
     total: "Total",
-    // End User Registration
     areYouRegisteringYourself: "Are you registering yourself?",
     whoAreYouRegistering: "Who are you registering?",
     child: "Child",
@@ -783,26 +636,17 @@ const AppConstants = {
     venuesList: "Venue List",
     venueDeleteConfirm: "Are you sure you want to delete this venue?",
     enhancedRoundRobin: "EnhancedRoundRobin",
-
     createTeam: "Create Team",
     unassigned: "Unassigned",
     gameTimeStatistics: "Game Time Statistics",
     searchManager: "Search Manager",
     searchScorer: "Search Scorer",
     divisionList: "Division List",
-
-    /// add news
-
     notifyAgain: "Notify again",
     notify: "Notify",
-
     editDivision: "Edit Division",
-
-    /// ///Organisation Levels enums
     national: "national",
     state: "state",
-
-    /// //user roles enums
     super_admin: "super_admin",
     admin: "admin",
     manager: "Manager",
@@ -817,9 +661,6 @@ const AppConstants = {
     web_umpires_admin: "web_umpires_admin",
     web_results_admin: "web_results_admin",
     web_finance_admin: "web_finance_admin",
-
-    // game time statistics list
-
     period: "PERIOD",
     minute: "MINUTE",
     matches: "MATCH",
@@ -828,13 +669,8 @@ const AppConstants = {
     productDeleteConfirmMsg: "Are you sure you want to delete this product?",
     participantDeleteConfirmMsg: "Are you sure you want to delete this participant?",
     friendDeleteConfirmMsg: "Are you sure you want to delete this friend?",
-    registrationOptionConfirmMsg:
-        "Changing the registration type will clear the information you have entered already. Please confirm you wish to proceed.",
     pleaseEnterTeamName: "Please Enter Team Name",
-
     selectPlayer: "Select Player",
-    injury: "Injury",
-    selectInjury: "Select Injury",
     claim: "Claim",
     yesNo: "Yes/No",
     playerConst: "Player",
@@ -849,13 +685,11 @@ const AppConstants = {
     selectRound: "Select Round",
     linked: "Linked",
     importDivision: "Import Division",
-    primaryContact: "Primary Contacts",
     assignMatches: "Assign Matches",
     venueChange: "Venue Change",
     importIncident: "Import Incident",
     endDate: "End Date",
     please_Sel_Fee: "Please complete fees on the previous tab",
-
     short_Name: "Short Name",
     backToScorer: "Back to all Scorers",
     otherInformation: "Other Information",
@@ -872,7 +706,6 @@ const AppConstants = {
     fixedDuration: "Fixed Duration",
     specificTime: "Specific Time",
     selectOrganisation: "Select Organisation",
-
     goalExport: "/stats/export/scoringByPlayer?competitionId=",
     gameTimeExport: "/stats/export/gametime?competitionId=",
     teamAttendanceExport: "/players/export/teamattendance?competitionId=",
@@ -880,30 +713,19 @@ const AppConstants = {
     invalidPlayers: "Invalid Records",
     matchExport: "/matches/export?competitionId=",
     courtChange: "Court Change",
-
     totalCompetitions: "Total Competitions",
-    livescoreCompetitions: "Live score competitions",
     toEditRegistrationDetails: "To edit registration details, please go to",
     registrationArea: "registration area",
-
-    friends: "Friends",
-    referFriends: "Referred Friends",
-
     logoImageSize: "Selected file must be less then 2 MB",
     logoType: "Selected file must be PNG, GIF or JPEG format",
     logo_size: 2000000,
     referaFriend: "Refer a Friend",
     playWithAFriend: "Play with a Friend",
-
     divisionsTimeSlot: "Add Divisions (in timeslot order - first to last)",
     gradesTimeSlot: "Add Grades (in timeslot order - first to last)",
     poolsTimeSlot: "Add Pools (in timeslot order - first to last)",
-
     seasonFixture: "Season Fixture",
-    season: "Season",
-    types: "Types",
     payment: "Payment",
-
     firstlevelAffiliate: "Affiliates - 1st level Affiliates - Association/Leagues",
     secondlevelAffiliate: "Affiliates - 2nd level Affiliates - Club/ School",
     anyOrgAssociation: "Any organisation - Association/Leagues",
@@ -911,12 +733,10 @@ const AppConstants = {
     NoRegistrations: "No Registrations",
     submitPayment: "Submit Payment",
     connectToStripe: "Connect to Stripe",
-    goToStripeDashboard: "Go to Stripe Dashboard",
     exportPayments: "Export Payments",
     exportWithdrawals: "Export Withdrawals",
     stripePaymentDashboard: "Stripe Payments Dashboard",
     stripeWithdrawalsDashboard: "Stripe Withdrawals Dashboard",
-    setupStripeForPayments: "Set up Stripe for Payments",
     setupStripeForWithdrawals: "Set up Stripe for Withdrawals",
     dispute_description: "Result in dispute",
     draft_description: "Final result entered and unconfirmed",
@@ -949,13 +769,10 @@ const AppConstants = {
     addPreference: "Add Preference",
     forgotResetPassword: "Forgot/ Reset Password",
     returnToLogin: "Return to login",
-    sendEmail: "Send Email",
-    forgotPassword: "Forgot Password",
     logo: "Logo",
     registrationFormQuestions: "Registration Form Questions",
     noInformationProvided: "No information provided",
     bankAccountForWithdrawals: "Bank Account for Withdrawals",
-
     previous: "Previous",
     totalPages: "Total pages",
     currentPage: "Current page",
@@ -967,10 +784,8 @@ const AppConstants = {
     timeouts: "Timeouts",
     applyToHalves: "Apply to Halves",
     applyToQuarters: "Apply to Quarters",
-    turnOffBuzzer: "Turn off Buzzer",
     turnOff_30Second: "30 second warning",
     payouts: "Payouts",
-
     coachExport: "/users/byRole/export",
     managerExport: "/users/byRole/export",
     scorerExport: "/roster/exportScorer?entityTypeId=",
@@ -984,7 +799,6 @@ const AppConstants = {
     addCoach: "Add Coach",
     editCoach: "Edit Coach",
     coachList: "Coach List",
-    exportRegQuestion: "Reg. Form Questions",
     noDataAvailable: "No Data Available",
     recordUmpire: "Record Umpire",
     deleteDivision: "Delete Competition Division",
@@ -993,20 +807,15 @@ const AppConstants = {
     competitionDivisionValidation: "If there are any players graded to this division, they will be unassigned.",
     exception: "Exception",
     exceptionHeading: "This allows you to schedule a match at a venue or time outside the automatic scheduling",
-
-    // Add Venue ToolTip Messages
-
     LatitudeMsg: `1. Go to google maps https://www.google.com/maps\n\n'
       2. Click on satellite view.\n\n
       3. Search for your venue.\n\n
       4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.`,
-
     overRideSlotMsg:
         "Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am",
     gameDayMsg: "Add the days of the week, matches can be played at this venue. Click + Add Day.",
     courtsMsg:
         "Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.",
-
     activeNewsMsg: "A list of all of the news that currently appears in the Game Day App",
     todayMatchMsg:
         "A list of all the matches being played on this day. This list shows whether scorers have been set, attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.",
@@ -1022,29 +831,19 @@ const AppConstants = {
       Abandon Matches - Abandon one, a number or all matches that are incomplete or not played.\n\n
       End Matches - End one, a number or all matches.\n\n
       Double Header - Create a double header where two rounds are played in the one round allocation ie. Round 2 is rained out and the association decides to play Round 2 and Round 3 together as two half matches.`,
-
     courtChangeMsg: "Move the matches on one, many or all Venues, Courts to another Venue, Court.",
     shortNameMsg: "The short name is used in the APP to make it easier for users to search.",
     recordUmpireMsg: "The Scorer or Manager of a match will document the Umpire names and the Clubs they belong to.",
-    gameTimeTrackMsg:
-        "If selected it portrays the Game Time played by the team and players of that team in the Game Day App.",
     positionTrackMsg: "If Selected allows tracking of team positions by player.",
-    recordGoalAttemptMsg:
-        "If selected allows for the recording of Goal Attempts, Misses and Penalty Misses by player.",
-    centerPassEnableMsg: "Enable Centre Pass display. ",
-    incidentEnableMsg:
-        "Enable the tracking of incidents including disciplinary, injury- first aid and injury - ambulance.",
     recordMsg:
         "Choose between allowing scorers to record their own team, both teams or the oppositions team attendance.",
     reportMsg:
         "Determine which game time report you would like managers and coaches to see - choose between minute, period or games.",
     singleScoringMsg: "Team A is the only team scoring the match.",
     fiftyScoringMsg: "Team A scores first half and Team B scores second half",
-
     timerMsg: `Central  - games start, break and end at the same time. The Scorer has no ability to pause.\n\n
       Central with per match override - games all start at the designated time but can be paused and resumed by the Scorer anytime throughout the game.\n\n
       Per Match - games are started and paused by the Scorer.`,
-
     buzzerMsg: `Click on Turn off the Buzzer so it doesnt signal the start, breaks or end of the game.\n\n
       Click on 30 second warning so it doesnt sound with a 30 second warning for players to take the court.`,
     newsPublishMsg: "Publish the news/ message to the App only.",
@@ -1071,13 +870,10 @@ const AppConstants = {
     timeSlotNoPrefMsg: "There is no preference for the timeslots Divisions, Grades and Teams play in.",
     timeSlotEvenRotationMsg: "Divisions, Grades and Teams equally rotate through the timeslots.",
     allocateToSameTimeslotMsg: "Divisions and Grades can be allocated to a Timeslot.",
-
     affiliateDirectory: "Affiliate Directory",
-
     evenRotationMsgFor_V_T: "Evenly rotate Divisions or Grades to Courts.",
     allocateToSameCourtMsg: "Allocate Divisions or Grades to the same courts.",
     noPreferenceMsgFor_V_T: "There is No Preference for Court Rotations or Allocations",
-
     newTeamUserMsg: "Add a user who has NOT created an account in the App, is an administrator or has registered.",
     existingTeamUserMsg: "Add a user who has either created an account in the App, is an administrator or has registered.",
     doubleRoundRobinMsg: "Teams play each other twice. Finals are optional.",
@@ -1087,25 +883,12 @@ const AppConstants = {
         "Choose Equally rotate teams home/away venue competition if competition features Home and Away venues.",
     equallyRotateCentralizedVenueMsg:
         "Choose Equally rotate teams - centralised venue competition if competition is run at centralised venues.",
-
-    /// /Competition Format Screen
-    applyMatchFormatMsg:
-        "Choose whether the match format is applied to all Divisions or whether it is different for particular Divisions.",
-    applyFinalFormatMsg:
-        "Choose to enable Finals. Apply Final format to all Divisions or by particular Division. ",
-    matchDurationCompFormatMsg: "Total Match time NOT including breaks.",
-    mainBreakCompFormatMsg: "Break Duration at half-time.",
-    qtrBreakCompFormatMsg: "Break Duration at end of 1st and 3rd quarters.",
-
-    /// /Registration Competition Fees
     regInviteesAffiliatesMsg:
         "Organisations that are affiliated below your organisation. They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.",
     regInviteesAnyOrgMsg:
         "Add Organisation(s) not linked below your organisation in your State.They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.",
     regInviteesDirectMsg:
         "Users (Players, Coaches, Umpire etc) will register direct to your organisation and you will place them into teams (if they are not directly registering teams to your organisation).",
-
-    /// /Registration Form List
     regFormDashBoardMsg:
         "After you have added your Competition Fees, locate the Competition in the Registration Form table and click on edit (three dots in Action) to add Registration details and open registrations.",
     regFormOpenMsg: "List the date you want Registrations to open and be made available to users.",
@@ -1130,16 +913,10 @@ const AppConstants = {
         "Add the ability for users Registering to round up their registration to the nearest $1, $5 or $10 to support the pre-defined charity.",
     discountMsg:
         "Choose the discount you would like to apply to your Competition Fee. Please note, this discount only applies to your organisations Competition Fee. You can choose which membership Product and Type this fee is applied to.",
-    discountTypeMsg:
-        "Currently the only choices are - Discount Code or Family. You can offer both discounts for the one competition but Family will be applied first. ",
-
-    /// /Registration Membership Fee
-
     membershipProductNameMsg: "Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee",
     validityMsg: `Add how long you want the membership product to be available:\n\n
       * Calendar Year - 1st Jan to 31st Dec in that year\n\n
       * 12 months from date of Registration`,
-
     membershipCasualFeeMsg: "Fee charged to participate in a single game.",
     membershipSeasonalFeeMsg: "Fee charged to join a Netball competition.",
     firstComRegOnlyMsg:
@@ -1148,21 +925,16 @@ const AppConstants = {
         "Fee charged to the User every time they join a competition in the defined period (whether it be calendar year or 12 months from date of registration).",
     membershipDiscountMsg:
         "Discounts applied here apply to Player Membership Fees only.",
-
-    /// /For Users Module
     orgTypeMsg:
         "Detail the type of organisation being added. State Organisations can add Associations/ Leagues and Clubs/ Schools, Associations can only add Clubs/ Schools.",
     addAffiliatePermissionLevelMsg: `Choose the permission level for each contact.\n\n
       Admin - can access all areas in the platform.\n\n
       Umpires Admin - can access the Umpires platform.\n\n
       Finance Admin - can access Payments and the Registration platform.`,
-
     ourOrgPermissionLevelMsg: `Choose the permission level for each contact.\n\n
       Admin - can access all areas in the platform.\n\n
       Umpires Admin - can access the Umpires platform.\n\n
       Finance Admin - can access Payments and the Registration platform.`,
-
-    selectedTeams: "Selected Teams Array",
     importCoach: "Import Coaches",
     ladderLink: "Ladder Link",
     inviteTypeRef: "InviteType",
@@ -1181,7 +953,6 @@ const AppConstants = {
     resultStatus: "Result Status",
     whichTeamForfeited: "Which team forfeited?",
     matchAbandoned: "Match Abandoned?",
-
     addUmpire: "Add Umpire",
     editUmpire: "Edit Umpire",
     umpireSearch: "Umpire Search",
@@ -1190,12 +961,8 @@ const AppConstants = {
     finalsMessage: "Finals has not been enabled for this Competition",
     allowTeamRegistration: "Allow Team Registrations",
     individualRegistrations: "Individual User Registrations",
-
-    /// //////shop
     importUmpire: "Import Umpire",
-
     addAProduct: "Add a Product",
-    addProduct: "Add Product",
     enterTitle: "Enter Title",
     pricing: "Pricing",
     price: "Price",
@@ -1227,24 +994,17 @@ const AppConstants = {
         "You have elected to use the same email for your Parent and yourself. You will lose your login unless you update your own email address first.",
     parentMsg2Admin:
         "You have elected to use the same email for the Child and Parent. The child will not retain their own login. If you would like them to have their own login please give them a separate email address first.",
-    numbersOfOrders: "Number of ORDERS",
     valueOfOrders: "Value of ORDERS",
     orderId: "Order Id",
     netProfit: "Net Profit",
     paid: "Paid",
-    notPaid: "Not Paid",
-    addOrder: "Add Order",
     paymentStatus: "Payment Status",
-
     fulfilmentStatus: "Fulfilment Status",
     attendanceRecordingTime: "Attendance Recording Time",
-    lineupSelection: "Lineup Selection",
     _days: "Days",
     _hours: "Hours",
     _minutes: "Minutes",
-
     lineUpSelectionMsg: "We can’t enable lineup selection without position tracking",
-    // umpireListExport: "https://users-api-dev.worldsportaction.com/users/byRole/export/org?",
     umpireListExport: "users/byRole/export/org?",
     disabilityCareNumber: "Disability care Number",
     typeOfDisability: "Type of Disability",
@@ -1254,13 +1014,11 @@ const AppConstants = {
     productType: "Product Type",
     divisionGradeAndTeams: "Division, Grade and Teams",
     numbersOfTeams: "Number of teams",
-
     shipping: "Shipping",
     pickup: "Pickup",
     pickupInstructions: "Pick Up Instructions",
     productDimensionsWeight: "Product dimensions and weight",
     dimensions: "Dimensions",
-    size: "Size",
     sku: "SKU",
     option: "Option",
     addVariantOption: "Add variant option",
@@ -1272,33 +1030,18 @@ const AppConstants = {
     actionBoxConfirmMsg: "Are you sure you want to complete this activity?",
     backToUmpire: "Back to all Umpires",
     assignMatch: "Assign Match",
-    generateRoster: "Generate Roster",
     howUmpiresAllocated: "How are Umpires Allocated",
-    umpirePreferences: "Umpire Preferences:",
-    noOfMatches: "Number of Matches they can ",
-    timeBetweenUmpireMatch: "Time between Umpiring Matches",
     umpireReservePref: "Umpire Reserve",
-    reserveAllocationTiming: "Reserve Allocation timing",
     activeUmpireCoach: "Activate Umpire Coaches",
     umpirePoolsDivision: "Umpire Pools Allocation To Divisions/Grades",
     allocateUmpires: 'Allocate Umpires',
-    allocationAlgorithmModaltitle: 'Apply allocation algorithm to these rounds',
     noPoolAdded: "Pools were not added to this competition yet.",
-    allocatePools: "Allocate Pools To",
-    badgeAA: "Badge AA",
-    badgeA: "Badge A",
-    badgeB: "Badge B",
-    badgeC: "Badge C",
     umpireCoach: "Umpire Coach",
-    juniorUnbadge: "Junior Unbadge",
     umpirePools: "Umpire Pools",
     competitionVenueAllocation: "Competition Venue allocation",
     divisionToFieldLinkage: "Division to Field Linkage",
     fieldSizes: "Field sizes",
-    eighths: "Eighths",
-    full: "Full",
     squadSelection: "Squad Selection",
-    umpireExport: "/umpire/export?competitionId=",
     invite: "Invite",
     send: "Send",
     noSend: "No Send",
@@ -1309,13 +1052,9 @@ const AppConstants = {
     incident: "Incidents",
     selectIncident: "Select Incident",
     _spectator: "Spectator",
-    discipline: "Discipline",
-    injuryAmbulance: "Injury - Ambulance",
-    injuryFirstAdd: "Injury - First Aid",
     emailExp: "/^-?(0|[1-9][0-9]*)(.[0-9]*)?$/",
     childDetails: "Child Details",
     documents: "Documents",
-    registrationDivision: "Registration Divisions",
     addRegDivision: "Add Registration Divisions",
     downLoadImportHeading: "Download the matches list first then populate umpires details to upload ",
     assignUmpireToMatch: "Assign Umpires To Matches",
@@ -1331,10 +1070,7 @@ const AppConstants = {
     bulkScoreUpload: "Bulk Scores Upload",
     umpireRoster: "Umpire Roster",
     registrationDivisions: "Registration Divisions",
-    membershipProductRestrictions: "Membership Product Restrictions",
     activeUmpireReserves: "Activate Umpire reserves",
-    simultaneousMatchAllocations: "Simultaneous match allocations",
-    poolName: "Pool Name",
     umpireReserve: "Umpire Reserve",
     points: "Points",
     reasonForChange: "Reason For Change",
@@ -1365,8 +1101,6 @@ const AppConstants = {
     payoutTimedoutError: "Your report is still being generated, please check back in half an hour!",
     variantDeletedMessage: "Variant deleted successfully.",
     refreshDownloads: "Refresh Downloads",
-
-    // Account
     account: "Account",
     profileMenu: "Profile",
     passwordMenu: "Password",
@@ -1388,15 +1122,9 @@ const AppConstants = {
     generateFixtures: "Generate Fixtures",
     doTheySayForGame: "Do they say they have taken the court for training, grading or a competition game?",
     reasonToDeRegister: "Reasons why they would like to de-register?",
-    overCommitted: "I am over committed with other activities and can't fit in time for netball",
-    injuredOrHealthReason: "I have been injured or health reason (not netball related)",
-    decideNotToParticipate: "Decided not to participate in netball",
-    moveToDiffGeographicalArea: "Moving to different geographical area",
-    otherReason: "Other",
     approvals: "Approvals",
     approve: "APPROVE",
     decline: "DECLINE",
-    stateWideMsg: "State-wide messages",
     allOrganisation: "All Organisations",
     individualOrganisation: "Individual Organisation",
     firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
@@ -1405,7 +1133,6 @@ const AppConstants = {
     instalmentDate: "Instalment Date",
     addInstalmentDate: "+ Add Instalment date",
     settingsAddedMessage: "Settings added successfully.",
-    addressAddedMessage: "Address added successfully.",
     deleteVariantOption: "Delete variant option",
     deleteVariantOptionDescription: "Please confirm you want to delete this variant option?",
     deleteProductType: "Delete product type",
@@ -1415,8 +1142,6 @@ const AppConstants = {
     charity: "Charity",
     termsAndCond: "T&Cs",
     roundUp: "Round Up",
-
-    /// id for home dashboard
     whatDoYouWantToPublish: "What do you want to Publish?",
     part: "Part",
     home_page_heading: "home_page_heading",
@@ -1434,18 +1159,12 @@ const AppConstants = {
     acct_settings_label: "acct_settings_label",
     help_support_label: "help&support_label",
     home_table_view: "home_table_view",
-    //* ************************ */
-
     editRegrade: "Edit/Regrade",
     fullCompetition: "Full Competition",
     competitionStartDate: "Competition Start Date",
     statusPublishHover:
         "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
-
     teamRankingError: "Team ranking has not been completed",
-    venueAddressDetailsError: "Please input venue address in details",
-    venueAddressError: "Please select a venue from the venue search",
-    venueAddressSelect: "Please select a venue from the venue search",
     venueSearch: "Venue Search",
     matchSheetsNoPrintError: "There is no match sheets to print.",
     selectTemplateTypeError: "Please select template type.",
@@ -1459,7 +1178,6 @@ const AppConstants = {
     pleaseInputAddress: "Please input address",
     roundsNotAvailable: "Rounds not available",
     venueSavedSuccessfully: "Successfully Saved",
-    checkVenueAddressDuplication: "Check venue address duplication",
     successMessage: "Successfully inserted",
     videoSize: "Selected file must be less then 2 MB",
     video_size: 2048000,
@@ -1473,14 +1191,10 @@ const AppConstants = {
     impersonationOrgSelect: "Choose an organization to access",
     numberOfOrders: "Number of Orders",
     teamRegistrations: "Team Registrations",
-
     umpirePayments: "Umpire Payments",
-    bulkPayment: "Bulk Payment",
-    whoAssignsUmpire: "Who Assigns Umpires",
     umpireRate: "Umpire Rate",
     umpireResRate: "Ump. Reserve Rate",
     umpireCoachRate: "Ump. Coach Rate",
-    addAnotherGroup: "Add Another Group",
     umpirePaymentSetting: "Umpire Payment Settings",
     refundFullAmount: "Refund Full Amount",
     refundPartialAmount: "Refund Partial Amount",
@@ -1494,11 +1208,9 @@ const AppConstants = {
     receiptUrl: "Receipt Url",
     extraTime: "Extra Extra Time",
     compDeleteConfirm: "Are you sure you want to delete (COMP_NAME)?",
-    createRoster: "Create Roster",
     addLiveStream: "Add Live-Stream",
     liveStreamlink: "Live-Stream Link",
     uponRegistration: "Upon Registration",
-    reg: "REG",
     dateRange: "Date Range",
     publishToLivescore:
         "Do you want to publish teams and players to Match Day so managers and coaches can communicate with their teams (prior to the draw being finalised)?",
@@ -1514,7 +1226,6 @@ const AppConstants = {
       “Registered” (when all fees have been paid)`,
     totalFeeMsg:
         "A fee charged to a player each time they take the court (where the seasonal fee is not being charged).",
-    telExp: "^[0-9]{10}$",
     update: "Update",
     invalidRecords: "Invalid Records",
     resetLadder: "Reset Ladder",
@@ -1526,9 +1237,7 @@ const AppConstants = {
     extra_Time: "Extra Time",
     extraTimeType: "Extra Time Type",
     extraTimeqtrBreak: "Extra Time Quarter Break",
-    alsoAssignAsUmpireCoach: "Also assign as Umpire Coach",
     recordGoalAttempt: "Record goal attempt",
-    addAnotherPool: "Add Pool",
     mergeCompetition: "Merge Competition",
     differencesBetween: "There are some differences between",
     oneHasPreference: "Which one has preference:",
@@ -1560,7 +1269,6 @@ const AppConstants = {
     showByMatches: "Show By Matches",
     hideFilter: "Hide Filter",
     showAll: "Show all",
-    showLess: "Show less",
     competitionDates: "Competition Dates",
     replicateSetting: "Replicate Settings",
     venuePreferences: "Venue Preferences",
@@ -1568,13 +1276,11 @@ const AppConstants = {
     pools: "Pools",
     gradesOrPools: "Grades / Pools",
     playOff3rdPosition: "Playoff for 3rd position",
-    whoPlaysWho: "Who plays who",
     whoPlaysWhoValidation: "Please remove duplicate from who plays who",
     umpireActivity: "Umpire Activity",
     showFilter: "Show Filter",
     hide: "Hide",
     importDraws: "Import Draws",
-
     heroImageForCompetition: "Hero Image for Registration Form",
     heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
     poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
@@ -1634,7 +1340,6 @@ const AppConstants = {
     removeException: "Remove Exception",
     reasonRegisterTitle: "Why would you like to de-register?",
     useRound1Template: "Use Round 1 template",
-
     purchase: "Purchases",
     membershipFeesRepayConfirmMsg:
         "Users have already registered to this membership fee. Do you want to proceed?",
@@ -1645,25 +1350,19 @@ const AppConstants = {
     regoFormConfirmMsg:
         "Some users may receive this email a second time. Do you want to proceed with an email notification?",
     emailNotificationUpdate: "Email Notification Update",
-
     unavailable: "Unavailable",
     teamGrading: "Team Grading",
     usernameEmail: "Username/Email",
     proceedText: "Proceed",
     categories: "Categories",
-
     umpirePaymentExport: "/matchUmpire/payments/export?",
-
     communicationList: "Communication List",
     addCommunication: "Add Communication",
     notification: "Notification",
-    news: "News",
-    sms: "SMS",
     backToCommunication: "Back to all communication",
     active: "Active",
     published: "Published",
     publishedDate: "Published Date",
-
     matchDay: "Match Day",
     matchDayComp: "Match Day Competitions",
     backToMatchDay: "Back To Match Day",
@@ -1680,7 +1379,6 @@ const AppConstants = {
     fromDob: "From DOB",
     toDob: "To DOB",
     maxMembershipFeePayable: "Maximum Membership Fee Payable (excl. GST)",
-    addAnotherMembershipProduct: "Add Another Membership Product",
     becsSetupNotificationTitle: "BECS Debit setup done",
     becsSetupNotificationBody:
         "Congratulations, you have successfully completed BECS debit setup",
@@ -1702,7 +1400,6 @@ const AppConstants = {
     userToMerge: "User to Merge",
     possibleMatches: "Possible Matches",
     possibleMatchesDescription: "Select the user you want to merge with and press Next",
-    selectDetailsToKeep: "Select which details to keep",
     merge: "Merge",
     userMergedSuccessfully: "User merged successfully",
     selectAllFromThisUser: "Select all from this user",
@@ -1718,7 +1415,6 @@ const AppConstants = {
     ownRegistration: "Own Registration",
     otherRegistration: "Other Registration",
     yourProfile: "Your Profile",
-
     paidBy: "Paid by",
     feeType: "Fee Type",
     paymentType: "Payment Type",
@@ -1747,7 +1443,6 @@ const AppConstants = {
     gamesRedeemed: "Games Redeemed",
     gamesToRedeem: "Games to redeem",
     howManyGames: "How many games?",
-
     divisionRemoveMsg: "Are you sure you want to remove division settings?",
     divisionAllDivisionMsg: "This will clear your other settings. Ok to proceed?",
     manuallyAllocate: "Manually Allocate",
@@ -1755,7 +1450,6 @@ const AppConstants = {
     umpireYourOwnTeam: "Umpire Your Own - Team",
     umpireYourOwnOrganisation: "Umpire Your Own - Organisation",
     maxNumberOfMatches: "Maximum number of matches",
-
     coachAccreditation: "Coach Accreditation",
     teamMembers: "Team Members",
     addTeamMembers: "Add Team Members",
@@ -1782,8 +1476,7 @@ const AppConstants = {
     directDebit: "Direct Debit",
     creditCard: "Credit/Debit Card",
     directDebitMsg: "A transaction fee of 1.5% +30c applies (capped at $3.50).",
-    creditCardMsg:
-        "A transaction fee of 2.25% + 30c is charged for domestic credit cards and 3.0% + 30c for International. For American express cards a fee of 2.7% + 30c applies.",
+    creditCardMsg: "A transaction fee of 2.25% + 30c is charged for domestic credit cards and 3.0% + 30c for International. For American express cards a fee of 2.7% + 30c applies.",
     stripeMandate1: `By providing your bank account details and confirming this payment,
   you agree to this Direct Debit Request and the`,
     stripeMandate2: `, and authorise Stripe Payments Australia Pty Ltd ACN 160 180 343 Direct Debit User ID number 507156(“Stripe”) to debit your account through the Bulk Electronic Clearing System (BECS) on behalf of World Sport Action Pty Ltd (the "Merchant") for any amounts separately communicated to you by the Merchant.You certify that you are either
@@ -1801,26 +1494,17 @@ const AppConstants = {
     noPoolMsg: "There are no pools in this competition",
     noUmpirePayments: "No umpire payment through the platform",
     yesUmpirePayments: "Umpire payments through the platform",
-
     thankYouRegistering: "Thank you for registering!",
-    emailConfirmNewUserMessage:
-        "We have sent you an email confirmation with your new login details. Please log in to the website to manage your profile.",
-    emailConfirmExistingUserMessage:
-        "We have sent you an email confirmation. You can view your registrations and manage your profile on our website.",
-
+    emailConfirmNewUserMessage: "We have sent you an email confirmation with your new login details. Please log in to the website to manage your profile.",
+    emailConfirmExistingUserMessage: "We have sent you an email confirmation. You can view your registrations and manage your profile on our website.",
     subTotal: "Sub-total",
     transactionFee: "Transaction Fee",
     totalPaymentDue: "Total Payment Due",
-
     warning: "Warning",
-    confirmSaveMessage: "Would you like to save your changes?",
-
-    removed: "Removed",
     removeFromTeam: "Remove from Team",
     removedFromGame: "Removed from game",
     addToTeam: "Add to Team",
     removeFromTeamPopUpMsg: "Do you want to remove this user from the team?",
-
     deletePool: "Delete pool",
     removePoolMsg: "Are you sure you want to delete this pool?",
     removeMsg: "Are you sure you want to delete",
@@ -1829,14 +1513,11 @@ const AppConstants = {
     addUmpireToPool: "Add umpire to pool",
     toPool: "to pool",
     umpireAlreadyInPool: "This umpire is already added to this pool.",
-    confirmUnassignMsg:
-        "This umpire is also added to another pool. Would you like to move him to Unassigned section?",
+    confirmUnassignMsg: "This umpire is also added to another pool. Would you like to move him to Unassigned section?",
     removeFromAllPools: "Remove from all pools",
     poolAddedSuccessMsg: "New pool was added successfully",
     poolRemovedSuccessMsg: "Pool was removed successfully",
-
     yourOrder: "Your Order",
-
     summaryByParticipant: "Summary by participant",
     nominationFeesPaid: "Nomination Fees Paid",
     nominationFeesDeclined: "Nomination Fees Declined",
@@ -1845,17 +1526,13 @@ const AppConstants = {
     competitionFeesDeclined: "Competition Fees Declined",
     competitionFeesOwing: "Competition Fees Owing",
     affiliateIfApplicable: "Affiliate (if applicable)",
-
     userDetailsInvalid: "User Details Invalid",
     pleaseInputAmount: "Please input amount",
-
     cashReceived: "Cash Received",
     retryPayment: "Retry Payment",
-
     parentDetails: "Parent details",
     noOfRegisteredUsersInfo: "Number of individual users who are registered to your organisation or 1st / 2nd level affiliates (if applicable)",
     noOfRegistrationsInfo: "Note: number of registrations are counted per role / competition",
-    refund: "Refund",
     maximumAmountPopupTxt: "Refund cannot be processed since the requested amount is more than the applicable amount.",
     enterRefundAmount: "Please enter the amount to be Refunded.",
     enterAmount: "Enter the Amount",
@@ -2048,6 +1725,8 @@ const AppConstants = {
     invoice: "Invoice",
     regPaidModalMsg: "Do you want to mark the invoice as paid?",
     yourRelationship: "What is your Relationship?",
+    userId: "User ID",
+    competitionId: "Competition ID",
 };
 
 export default AppConstants;
