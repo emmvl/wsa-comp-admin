@@ -67,8 +67,8 @@ class MultiFieldDrawsFullCourtTimeline extends Component {
         const nextTarget = getNextEventForSwap(drawData[targetXIndex].slotsArray, targetObjectDate, targetYIndex);
 
         // define if the swappable event finishes before next event or end of the working day
-        const targetObjectRestrictionEnd = this.getDayTimeRestrictions(targetDraws, targetObjectDate).endTime;
-        const sourceObjectRestrictionEnd = this.getDayTimeRestrictions(sourceDraws, sourceObejctDate).endTime;
+        const targetObjectRestrictionEnd = this.props.getDayTimeRestrictions(targetDraws, targetObjectDate).endTime;
+        const sourceObjectRestrictionEnd = this.props.getDayTimeRestrictions(sourceDraws, sourceObejctDate).endTime;
 
         const sourceEndNew = moment(targetObject.matchDate).add(diffTimeSource, 'minutes');
         const startTimeNextTarget = nextTarget ? moment(nextTarget.matchDate) : targetObjectRestrictionEnd;
@@ -86,7 +86,7 @@ class MultiFieldDrawsFullCourtTimeline extends Component {
     }
 
     onSwap(source, target, drawData, round_Id) {
-        this.setState({
+        this.props.setDraggingState({
             isDragging: false,
             tooltipSwappableTime: null
         });
@@ -123,7 +123,61 @@ class MultiFieldDrawsFullCourtTimeline extends Component {
             );
         }
     }
+    ///////update the competition draws on  swapping and hitting update Apis if both has value
+    updateCompetitionDraws = (
+        sourceObejct,
+        targetObject,
+        sourceIndexArray,
+        targetIndexArray,
+        drawData,
+        round_Id,
+        newEndTimeSource,
+        newEndTimeTarget
+    ) => {
+        const key = this.props.firstTimeCompId === "-1" || this.props.filterDates ? "all" : "add";
+        const customSourceObject = {
+            drawsId: targetObject.drawsId,
+            homeTeamId: sourceObejct.homeTeamId,
+            awayTeamId: sourceObejct.awayTeamId,
+            matchDate: moment(targetObject.matchDate).format('YYYY-MM-DD HH:mm'),
+            startTime: targetObject.startTime,
+            endTime: newEndTimeSource,
+            venueCourtId: targetObject.venueCourtId,
+            competitionDivisionGradeId: sourceObejct.competitionDivisionGradeId,
+            isLocked: 1,
+        };
+        const customTargetObject = {
+            drawsId: sourceObejct.drawsId,
+            homeTeamId: targetObject.homeTeamId,
+            awayTeamId: targetObject.awayTeamId,
+            matchDate: moment(sourceObejct.matchDate).format('YYYY-MM-DD HH:mm'),
+            startTime: sourceObejct.startTime,
+            endTime: newEndTimeTarget,
+            venueCourtId: sourceObejct.venueCourtId,
+            competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
+            isLocked: 1,
+        };
 
+
+        this.updateEditDrawArray(customSourceObject);
+        this.updateEditDrawArray(customTargetObject);
+
+        const sourceXIndex = sourceIndexArray[0];
+        const sourceYIndex = sourceIndexArray[1];
+        const targetXIndex = targetIndexArray[0];
+        const targetYIndex = targetIndexArray[1];
+             
+        let newSourceObj={...sourceObejct, ...customTargetObject};
+        Object.keys(DrawConstant.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
+        
+        let newTargetObj={...targetObject, ...customSourceObject};
+        Object.keys(DrawConstant.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
+
+        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
+        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
+        this.props.updateCourtTimingsDrawsDragSuccessAction();
+       
+    };
     updateEditDrawArray(draw) {
         const editdraw = this.props.editedDraw;
         const drawExistsIndex = editdraw.draws.findIndex(d => d.drawsId == draw.drawsId);
