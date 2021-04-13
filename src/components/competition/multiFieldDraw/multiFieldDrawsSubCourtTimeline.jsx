@@ -578,7 +578,7 @@ class MultiFieldDrawsSubCourtTimeline extends Component {
                     }
                 }
 
-                if (targetToAdd.length > 1) {
+                if (targetToAdd.length > 0) {
                     destinationVenueCourt.slotsArray.push(...targetToAdd);
                     sortSlot(destinationVenueCourt.slotsArray);
                 }

@@ -1221,8 +1221,16 @@ class MultifieldDrawsNewTimeline extends Component {
         }
 
         // check unavailable time during the day
-
-        const courtVenueId = courtData.slotsArray.find(slot => slot.venueId).venueId;
+        // 
+        const courtVenueId = courtData.venueId;
+        if(!courtVenueId){
+            let slot=courtData.slotsArray.find(slot => slot.venueId);
+            if(slot){
+                courtVenueId=slot.venueId;
+            }else{
+                console.log("can not find venueid for slot");
+            }
+        }
         const courtId = courtData.venueCourtId;
 
         let venueDaySchedule;
