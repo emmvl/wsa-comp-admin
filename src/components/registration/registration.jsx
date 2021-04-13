@@ -1421,6 +1421,7 @@ class Registration extends Component {
                         {this.transferModalView()}
                         {this.voucherReceivedModalView()}
                         {this.otherModalView()}
+                        {this.instalmentRetryModalView()}
                     </Content>
                 </Layout>
             </div>
