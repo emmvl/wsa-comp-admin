@@ -36,8 +36,8 @@ class AddUmpire extends Component {
         this.state = {
             selectedItems: [],
             load: false,
-            tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
-            isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
+            tableRecord: props.location.state && props.location.state.tableRecord ? props.location.state.tableRecord : null,
+            isEdit: props.location.state && props.location.state.isEdit ? props.location.state.isEdit : false,
             loader: false,
             showOption: false,
             competition_id: null,
@@ -57,8 +57,11 @@ class AddUmpire extends Component {
     }
 
     async componentDidMount() {
+        console.log(this.state.tableRecord);
         let compId = getUmpireCompetiton() ? JSON.parse(getUmpireCompetiton()) : null;
-
+        if (this.state.tableRecord) {
+            this.props.updateAddUmpireData(this.props.location.state.tableRecord, 'isEditUmpire');
+        }
         if (compId) {
             this.setState({ competition_Id: compId})
             let compData = JSON.parse(getUmpireCompetitonData())
