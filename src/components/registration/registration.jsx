@@ -389,7 +389,8 @@ class Registration extends Component {
             modalMessage: null,
             actionView: 0,
             cancelDeRegistrationLoad: false,
-            isInvoiceFailed: 0
+            isInvoiceFailed: 0,
+            instalmentRetryModalVisible: false
         };
 
         this_Obj = this;
@@ -479,6 +480,9 @@ class Registration extends Component {
             if(this.state.loading == true && (this.props.liveScoreDashboardState.onRetryPaymentLoad == false || this.props.registrationDashboardState.onRegRetryPaymentLoad == false)){
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
+                }
+                if(this.props.liveScoreDashboardState.checkCardAvailability == 1) {
+                    this.setState({instalmentRetryModalVisible: true})
                 }
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
@@ -724,7 +728,8 @@ class Registration extends Component {
                     userId: selectedRow.userId,
                     divisionId: selectedRow.divisionId,
                     competitionId: selectedRow.competitionUniqueKey,
-                    paidByUserId: paidByUserId
+                    paidByUserId: paidByUserId,
+                    checkCardAvailability: 0
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ loading: true });
@@ -740,6 +745,40 @@ class Registration extends Component {
             }
         }
         this.setState({otherModalVisible: false});
+    }
+
+    handleinstalmentRetryModal = (key) => {
+        const {selectedRow} = this.state;
+        let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers) ? selectedRow.paidByUsers[0].paidByUserId : null
+        if(key == "cancel") {
+            this.setState({instalmentRetryModalVisible: false})
+        }
+        else if (key == "yes") {
+            let payload = {
+                processTypeName: "instalment",
+                registrationUniqueKey: selectedRow.registrationUniqueKey,
+                userId: selectedRow.userId,
+                divisionId: selectedRow.divisionId,
+                competitionId: selectedRow.competitionUniqueKey,
+                paidByUserId: paidByUserId,
+                checkCardAvailability: 1
+            }
+            this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+            this.setState({ loading: true, instalmentRetryModalVisible: false });
+        }
+        else if (key == "no") {
+            let payload = {
+                processTypeName: "instalment",
+                registrationUniqueKey: selectedRow.registrationUniqueKey,
+                userId: selectedRow.userId,
+                divisionId: selectedRow.divisionId,
+                competitionId: selectedRow.competitionUniqueKey,
+                paidByUserId: paidByUserId,
+                checkCardAvailability: 2
+            }
+            this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+            this.setState({ loading: true, instalmentRetryModalVisible: false });
+        }
     }
 
     receiveCashPayment = (key) => {
@@ -1335,6 +1374,26 @@ class Registration extends Component {
                 centered
             >
                <p style = {{marginLeft: '20px'}}>{modalMessage}</p>
+            </Modal>
+        )
+    }
+
+    instalmentRetryModalView = () => {
+        return(
+            <Modal
+                title= {AppConstants.failedInstalmentRetry}
+                visible={this.state.instalmentRetryModalVisible}
+                onCancel={() => this.handleinstalmentRetryModal("cancel")}
+                footer={[
+                    <Button onClick={this.handleinstalmentRetryModal("no")}>
+                      {AppConstants.no}
+                    </Button>,
+                    <Button style={{backgroundColor: '#ff8237', borderColor: '#ff8237'}} onClick={this.handleinstalmentRetryModal("yes")}>
+                    {AppConstants.yes}
+                  </Button>
+                  ]}
+            >
+               <p style = {{marginLeft: '20px'}}>{"Message"}</p>
             </Modal>
         )
     }
