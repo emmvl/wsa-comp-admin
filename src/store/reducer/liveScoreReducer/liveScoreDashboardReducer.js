@@ -95,6 +95,7 @@ function liveScoreDashboardsReducer(state = initialState, action) {
                 onRetryPaymentLoad: false,
                 retryPaymentMessage: action.result.message,
                 retryPaymentSuccess: action.result.success,
+                checkCardAvailability: action.result.cardAvailability
             };
 
             case ApiConstants.API_LIVE_SCORE_PLAYERS_TO_PAY_CASH_RECEIVED_LOAD:
@@ -106,7 +107,6 @@ function liveScoreDashboardsReducer(state = initialState, action) {
                     onRetryPaymentLoad: false,
                     retryPaymentMessage: action.result.message,
                     retryPaymentSuccess: action.result.success,
-                    checkCardAvailability: action.result.cardAvailability
                 };
 
             case ApiConstants.SET_LIVE_SCORE_DASHBOARD_LIST_PAGE_SIZE:

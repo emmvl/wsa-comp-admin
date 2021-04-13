@@ -483,6 +483,7 @@ class Registration extends Component {
                 }
                 if(this.props.liveScoreDashboardState.checkCardAvailability == 1) {
                     this.setState({instalmentRetryModalVisible: true})
+                    return
                 }
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
@@ -1385,15 +1386,16 @@ class Registration extends Component {
                 visible={this.state.instalmentRetryModalVisible}
                 onCancel={() => this.handleinstalmentRetryModal("cancel")}
                 footer={[
-                    <Button onClick={this.handleinstalmentRetryModal("no")}>
+                    <Button onClick={() => this.handleinstalmentRetryModal("no")}>
                       {AppConstants.no}
                     </Button>,
-                    <Button style={{backgroundColor: '#ff8237', borderColor: '#ff8237'}} onClick={this.handleinstalmentRetryModal("yes")}>
+                    <Button style={{backgroundColor: '#ff8237', borderColor: '#ff8237', color: "white"}} onClick={() => this.handleinstalmentRetryModal("yes")}>
                     {AppConstants.yes}
                   </Button>
                   ]}
+                  centered
             >
-               <p style = {{marginLeft: '20px'}}>{"Message"}</p>
+               <p style = {{marginLeft: '20px'}}>{AppConstants.instalmentRetryModalTxt}</p>
             </Modal>
         )
     }
