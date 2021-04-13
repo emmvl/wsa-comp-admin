@@ -528,61 +528,7 @@ class MultifieldDrawsNewTimeline extends Component {
         }
     }
 
-    ///////update the competition draws on  swapping and hitting update Apis if both has value
-    updateCompetitionDraws = (
-        sourceObejct,
-        targetObject,
-        sourceIndexArray,
-        targetIndexArray,
-        drawData,
-        round_Id,
-        newEndTimeSource,
-        newEndTimeTarget
-    ) => {
-        const key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add";
-        const customSourceObject = {
-            drawsId: targetObject.drawsId,
-            homeTeamId: sourceObejct.homeTeamId,
-            awayTeamId: sourceObejct.awayTeamId,
-            matchDate: moment(targetObject.matchDate).format('YYYY-MM-DD HH:mm'),
-            startTime: targetObject.startTime,
-            endTime: newEndTimeSource,
-            venueCourtId: targetObject.venueCourtId,
-            competitionDivisionGradeId: sourceObejct.competitionDivisionGradeId,
-            isLocked: 1,
-        };
-        const customTargetObject = {
-            drawsId: sourceObejct.drawsId,
-            homeTeamId: targetObject.homeTeamId,
-            awayTeamId: targetObject.awayTeamId,
-            matchDate: moment(sourceObejct.matchDate).format('YYYY-MM-DD HH:mm'),
-            startTime: sourceObejct.startTime,
-            endTime: newEndTimeTarget,
-            venueCourtId: sourceObejct.venueCourtId,
-            competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
-            isLocked: 1,
-        };
 
-
-        this.updateEditDrawArray(customSourceObject);
-        this.updateEditDrawArray(customTargetObject);
-
-        const sourceXIndex = sourceIndexArray[0];
-        const sourceYIndex = sourceIndexArray[1];
-        const targetXIndex = targetIndexArray[0];
-        const targetYIndex = targetIndexArray[1];
-             
-        let newSourceObj={...sourceObejct, ...customTargetObject};
-        Object.keys(DrawConstant.switchDrawNameFields).forEach(key => newSourceObj[key] = targetObject[key]);         
-        
-        let newTargetObj={...targetObject, ...customSourceObject};
-        Object.keys(DrawConstant.switchDrawNameFields).forEach(key => newTargetObj[key] = sourceObejct[key]); 
-
-        drawData[sourceXIndex].slotsArray[sourceYIndex]=newSourceObj;
-        drawData[targetXIndex].slotsArray[targetYIndex]=newTargetObj;
-        this.props.updateCourtTimingsDrawsDragSuccessAction();
-       
-    };
     updateEditDrawArray=(draw)=>{
         const editdraw= this.state.editedDraw;        
         const drawExistsIndex=editdraw.draws.findIndex(d=>d.drawsId==draw.drawsId);
