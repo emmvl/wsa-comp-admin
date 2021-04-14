@@ -57,7 +57,6 @@ class AddUmpire extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.state.tableRecord);
         let compId = getUmpireCompetiton() ? JSON.parse(getUmpireCompetiton()) : null;
         if (this.state.tableRecord) {
             this.props.updateAddUmpireData(this.props.location.state.tableRecord, 'isEditUmpire');
