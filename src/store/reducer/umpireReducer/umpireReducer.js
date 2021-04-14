@@ -220,7 +220,7 @@ function umpireState(state = initialState, action) {
             };
         case ApiConstants.GET_UMPIRE_TEAMS_LOAD:
             return {
-                ...state, onLoad: true
+                ...state, onLoad: true, umpireOwnTeam: false,
             }
         case ApiConstants.GET_UMPIRE_TEAMS_SUCCESS:
             const umpire = action.data

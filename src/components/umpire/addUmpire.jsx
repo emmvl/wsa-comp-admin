@@ -127,6 +127,16 @@ class AddUmpire extends Component {
                 this.setInitialFieldValue()
             }
         }
+
+        if (!!this.props.umpireState.umpireOwnTeam && 
+            (this.props.umpireState.umpireOwnTeam !== nextProps.umpireState.umpireOwnTeam)){
+            if (!!this.state.isEdit) {
+                this.formRef.current.setFieldsValue({
+                    ...this.formRef.current.getFieldsValue(),
+                    'teamsNames': this.props.umpireState.umpireData.teamId
+                })
+            }
+        }
     }
 
     setSelectedAffiliateValue = (affiliateIds) => {
