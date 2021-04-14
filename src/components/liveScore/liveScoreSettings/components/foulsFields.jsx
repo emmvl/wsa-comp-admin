@@ -21,32 +21,78 @@ const rows = [
     AppConstants.disqualifying,
 ]
 
-const FoulsFields = ({ onChange, values = [] }) => {
-    const [currentValues, setCurrentValues] = useState([])
+const FoulsFields = ({ onChange, values = {} }) => {
+    const [currentValues, setCurrentValues] = useState({})
 
     const saveChanges = debounce(onChange, 1000);
 
     const handleFoulsChange = (rowName, target) => {
+        // const fieldName = target.name;
+        // const fieldValue = getOnlyNumbers(target.value);
+        // const currentRow = currentValues.find((row) => row.name === rowName)
+        // const currentRowValues = (currentRow?.values) || {};
+        
+        // const newRowValues = {
+        //     ...currentRowValues,
+        //     [fieldName]: fieldValue,
+        // }
+
+        // if (currentRow) {
+        //     currentRow.values = newRowValues;
+        // } else {
+        //     currentValues.push({
+        //         name: rowName,
+        //         values: newRowValues,
+        //     })
+        // }
+
+        // {
+        //     "removedFromGame":[
+        //     { "type":"P", "value":1 },
+        //     { "type":"T", "value":1 },
+        //     { "type":"D", "value":1 },
+        //     { "type":"U", "value":1 }
+        //     ],
+            
+        //     "sendOffReport":[
+        //     { "type":"P", "value":1 },
+        //     { "type":"T", "value":1 },
+        //     { "type":"D", "value":1 },
+        //     { "type":"U", "value":1 }
+        //     ],
+            
+        //     "sinBin":[
+        //     { "type":"P", "value":1 },
+        //     { "type":"T", "value":1 },
+        //     { "type":"D", "value":1 },
+        //     { "type":"U", "value":1 }
+        //     ],
+            
+        //     "includeInPersonalFouls":[
+        //     { "type":"P", "value":1 },
+        //     { "type":"T", "value":1 },
+        //     { "type":"D", "value":1 },
+        //     { "type":"U", "value":1 }
+        //     ]
+            
+        //     }
+
+        const firstLetterOfRowName = rowName.charAt(0).toUpperCase();
         const fieldName = target.name;
         const fieldValue = getOnlyNumbers(target.value);
-        const currentRow = currentValues.find((row) => row.name === rowName)
-        const currentRowValues = (currentRow?.values) || {};
+        const currentRow = currentValues[fieldName] || [];
 
-        const newRowValues = {
-            ...currentRowValues,
-            [fieldName]: fieldValue,
-        }
+        const newRowValues = [
+            ...currentRow,
+            {type: firstLetterOfRowName, value: fieldValue},
+        ];
+        
+        let newValues = {
+            ...currentValues,
+            [fieldName]: newRowValues,
+        };
+        setCurrentValues(newValues);
 
-        if (currentRow) {
-            currentRow.values = newRowValues;
-        } else {
-            currentValues.push({
-                name: rowName,
-                values: newRowValues,
-            })
-        }
-
-        setCurrentValues([...currentValues])
         saveChanges({
             target: {
                 name: "foulsSettings",
@@ -56,10 +102,14 @@ const FoulsFields = ({ onChange, values = [] }) => {
     };
 
     const getFieldValuePath = (rowName, fieldName) => {
-        const currentRowIndex = currentValues?.findIndex((row) => row.name === rowName);
+        const firstLetterOfRowName = rowName.charAt(0).toUpperCase();
+        const fieldValues = currentValues[fieldName] || [];
+        if (fieldValues.length === 0) return "";
+
+        const currentRowIndex = fieldValues?.findIndex((row) => row.type === firstLetterOfRowName);
         if (currentRowIndex === -1) return "";
 
-        return `[${currentRowIndex}].values.${fieldName}`
+        return `[${fieldName}][${currentRowIndex}].value`
     }
 
     const renderHeaders = () => (
@@ -127,9 +177,9 @@ const FoulsFields = ({ onChange, values = [] }) => {
     )
 
     useEffect(() => {
-        if (currentValues.length) return;
+        if (Object.keys(currentValues).length) return;
 
-        setCurrentValues(cloneDeep(values) || []);
+        setCurrentValues(cloneDeep(values) || {});
     }, [values])
 
     return renderFieldsTable()

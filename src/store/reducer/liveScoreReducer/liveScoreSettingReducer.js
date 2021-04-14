@@ -41,7 +41,7 @@ const initialState = {
         extraTimeMainBreak: null,
         extraTimeQuarterBreak: null,
         recordUmpire: [],
-        foulsSettings: [],
+        foulsSettings: {},
     },
     buzzerEnabled: false,
     warningBuzzerEnabled: false,
