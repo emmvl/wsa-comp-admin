@@ -2053,7 +2053,7 @@ class MultifieldDrawsNewTimeline extends Component {
             >
                 {dateItem.draws && dateItem.draws.map((courtData, index) => {
                     let width=70;
-                    if(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED=="true"){                        
+                    if(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED==="true"){                        
                         if(courtData.isExpanded){
                             width=448;
                         }
@@ -2065,7 +2065,8 @@ class MultifieldDrawsNewTimeline extends Component {
                             className="d-flex justify-content-center"
                             style={{ width: width }}
                         >
-                            <span className="app-color pointer f-13" onClick={() => this.toggleCourt(courtData)}>{courtData.isExpanded ? "-" : "+"}</span>
+                            {process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED==="true" &&( 
+                            <span className="app-color pointer f-13" onClick={() => this.toggleCourt(courtData)}>{courtData.isExpanded ? "-" : "+"}</span>)}                           
                             <span className="draws-x-head-text">
                                 {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                             </span>
