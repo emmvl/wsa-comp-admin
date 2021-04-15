@@ -829,11 +829,11 @@ class UmpireDashboard extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.umpireDashboardState.onLoad}
+                        loading={this.props.umpireDashboardState.onLoad || this.props.umpireCompetitionState.onLoad}
                         className="home-dashboard-table"
                         columns={umpireType === "USERS" ? columnsInvite : columns}
                         // columns={columnsInvite}
-                        dataSource={umpireListResult}
+                        dataSource={this.props.umpireDashboardState.onLoad || this.props.umpireCompetitionState.onLoad ? [] : umpireListResult}
                         pagination={false}
                         rowKey={(record) => "umpireListResult" + record.id}
                     />
@@ -1092,7 +1092,8 @@ class UmpireDashboard extends Component {
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
-                                    value={this.state.selectedComp}
+                                    value={this.state.selectedComp || ""}
+                                    loading={this.props.umpireCompetitionState.onLoad}
                                 >
                                     {competition.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>

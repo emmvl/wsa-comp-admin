@@ -334,7 +334,7 @@ class UmpirePayments extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={onLoad}
+                        loading={onLoad || this.props.umpireCompetitionState.onLoad}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={umpirePaymentList}
@@ -506,7 +506,7 @@ class UmpirePayments extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        const { paymentStatus } = this.props.umpirePaymentState
+        const { paymentStatus, onLoad} = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
@@ -526,6 +526,7 @@ class UmpirePayments extends Component {
                                     style={{ minWidth: 200, maxWidth: 250 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp || ""}
+                                    loading={this.props.umpireCompetitionState.onLoad}
                                 >
                                     {competition.map((item) => (
                                         <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
@@ -558,6 +559,7 @@ class UmpirePayments extends Component {
                                 <Checkbox
                                     className="single-checkbox"
                                     checked={paymentStatus}
+                                    disabled={onLoad || this.props.umpireCompetitionState.onLoad}
                                     onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
                                 >
                                     All

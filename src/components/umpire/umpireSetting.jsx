@@ -374,6 +374,7 @@ class UmpireSetting extends PureComponent {
                                     style={{ minWidth: 200 }}
                                     onChange={this.onChangeComp}
                                     value={this.state.selectedComp}
+                                    loading={this.props.umpireCompetitionState.onLoad}
                                 >
                                     {!!competitionList && competitionList.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>

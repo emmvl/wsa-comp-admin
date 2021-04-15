@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Form, Modal } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message, Form, Modal, Spin } from "antd";
 import Icon from '@ant-design/icons';
 import { SearchOutlined } from "@ant-design/icons";
 import { getRefBadgeData } from '../../store/actions/appAction'
@@ -505,7 +505,7 @@ class Umpire extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.umpireState.onLoad}
+                        loading={this.props.umpireState.onLoad || this.props.umpireCompetitionState.onLoad}
                         className="home-dashboard-table"
                         columns={this.state.columns}
                         dataSource={umpireListResult}
@@ -703,7 +703,8 @@ class Umpire extends Component {
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ minWidth: 200 }}
                                 onChange={(comp) => this.onChangeComp({ comp })}
-                                value={this.state.selectedComp}
+                                value={this.state.selectedComp || ""}
+                                loading={this.props.umpireCompetitionState.onLoad}
                             >
                                 {competition.map((item) => (
                                     <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>

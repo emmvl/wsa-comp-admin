@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavLink } from 'react-router-dom';
-import { Layout, Button, Select, Breadcrumb, Form, Modal, } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form, Modal, Spin} from 'antd';
 
 import { getRefBadgeData } from '../../store/actions/appAction';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
@@ -230,6 +230,7 @@ class UmpireDivisions extends Component {
                                     style={{ minWidth: 200 }}
                                     onChange={this.onChangeComp}
                                     value={!this.props.umpireCompetitionState.onLoad ? this.state.selectedComp : null}
+                                    loading={this.props.umpireCompetitionState.onLoad}
                                 >
                                     {competition.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
@@ -295,14 +296,29 @@ class UmpireDivisions extends Component {
             <div className="content-view pt-5">
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
-
-                {(!!umpirePoolData && !this.props.umpireCompetitionState.onLoad) &&
+                { this.props.umpireCompetitionState.onLoad || this.props.umpirePoolAllocationState.onLoad 
+                    ?
+                    <div style={{ 
+                        height: 100, width: "100%",
+                        display: "flex", justifyContent: "center", alignItems: "center"
+                    }}>
+                        <Spin size="large" />
+                    </div>
+                    : 
                     <>
-                        {!!umpirePoolData.length ? umpirePoolData.map((item, index) => (
-                            this.poolView(item, index)
-                        )) : this.noPoolView()}
-                    </>
+                        {(!!umpirePoolData) &&
+                        <>
+                            {
+                                !!umpirePoolData.length 
+                                    ? umpirePoolData.map((item, index) => (this.poolView(item, index))) 
+                                    : this.noPoolView()
+                            }
+                        </>
                 }
+                    </>
+
+                }
+                
             </div>
         )
     }
