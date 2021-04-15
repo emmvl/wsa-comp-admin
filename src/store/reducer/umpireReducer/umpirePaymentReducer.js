@@ -65,23 +65,13 @@ function getPayementTransferFilterData(umpirePaymentArr) {
 }
 
 function getAllSelectedBoxData(umpirePaymentArr) {
-    let arr = []
-    for (let i in umpirePaymentArr) {
-
-        if (umpirePaymentArr[i].paymentStatus === "approved" || umpirePaymentArr[i].paymentStatus === "approved") {
-
-            arr.push(umpirePaymentArr[i])
-        }
-    }
-    return arr;
+    return umpirePaymentArr.filter(payment => payment.paymentStatus === "approved");
 }
 
 function umpirePaymentState(state = initialState, action) {
 
     switch (action.type) {
         case ApiConstants.API_GET_UMPIRE_PAYMENT_DATA_LOAD:
-
-
             return { ...state, onLoad: true, umpirePaymentObject: action };
 
         case ApiConstants.API_GET_UMPIRE_PAYMENT_DATA_SUCCESS:
@@ -167,12 +157,11 @@ function umpirePaymentState(state = initialState, action) {
 
 
             } else if (key === 'selectedValue') {
-                console.log(allData);
                 let userId = allData.userId
                 let matchUmpireId = allData.id
                 let stripeId = allData.user ? allData.user.stripeAccountId : null
 
-                const targetIndex = postData.findIndex(record => record.id === matchUmpireId)
+                const targetIndex = postData.findIndex(record => record.matchUmpireId === matchUmpireId)
                 // Update paymentTransferPostData
                 if (data) { 
                     postData.push({ userId, matchUmpireId, stripeId});
@@ -186,6 +175,15 @@ function umpirePaymentState(state = initialState, action) {
                 const umpireIndex = umpirePaymentArr.findIndex(record => record.id === matchUmpireId);
                 if (umpireIndex > -1) umpirePaymentArr[umpireIndex].selectedValue = data;
                 const newPaymentStatus = umpirePaymentArr.every(payment => !!payment.selectedValue);
+                // let updatedPayment = umpireIndex > -1 ? umpirePaymentArr[umpireIndex] : null
+                // if (!data && updatedPayment && updatedPayment.paymentStatus === 'approved') { 
+                //     updatedPayment.approvedByUser = null;
+                //     updatedPayment.approved_at = null;
+                //     updatedPayment.approvedByUserId = null;
+                //     updatedPayment.paymentStatus = 'unpaid';
+                //     updatedPayment.selectedValue = false;
+                //     umpirePaymentArr[umpireIndex] = updatedPayment;
+                // }
 
                 return {
                     ...state,
@@ -226,15 +224,12 @@ function umpirePaymentState(state = initialState, action) {
             };
 
         case ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_LOAD:
-
-
             return { ...state, onPaymentLoad: true };
 
         case ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_SUCCESS:
             return {
                 ...state,
                 onPaymentLoad: false,
-
             };
 
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
