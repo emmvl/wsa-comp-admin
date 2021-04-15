@@ -110,11 +110,9 @@ function umpirePaymentState(state = initialState, action) {
             };
 
         case ApiConstants.API_UPDATE_UMPIRE_PAYMENT_DATA:
-            let data = action.data.data
-            let key = action.data.key
-            let index = action.data.index
-            let umpirePaymentArr = state.umpirePaymentList
-            let array = []
+            const { data, key, index = null, allData = {} } = action.data;
+            let umpirePaymentArr = state.umpirePaymentList;
+            let postData = state.paymentTransferPostData;
             if (key === 'allCheckBox') {
                 for (let i in umpirePaymentArr) {
                     if (umpirePaymentArr[i].paymentStatus === "unpaid") {
@@ -169,67 +167,31 @@ function umpirePaymentState(state = initialState, action) {
 
 
             } else if (key === 'selectedValue') {
-                let userId = action.data.allData.userId
-                let matchUmpireId = action.data.allData.id
-                let stripeId = action.data.allData.user ? action.data.allData.user.stripeAccountId : null
+                console.log(allData);
+                let userId = allData.userId
+                let matchUmpireId = allData.id
+                let stripeId = allData.user ? allData.user.stripeAccountId : null
 
-                if (data) {
-
-                    let obj = {
-                        userId: userId,
-                        matchUmpireId: matchUmpireId,
-                        stripeId: stripeId
-                    }
-
-                    state.paymentTransferPostData.push(obj)
+                const targetIndex = postData.findIndex(record => record.id === matchUmpireId)
+                // Update paymentTransferPostData
+                if (data) { 
+                    postData.push({ userId, matchUmpireId, stripeId});
                 } else {
-
-                    let postData = state.paymentTransferPostData
-                    let userId = action.data.allData.userId
-                    for (let i in postData) {
-                        if (postData[i].userId === userId) {
-                            postData.splice(i, 1);
-                            break;
-                        }
-                    }
-                    state.paymentTransferPostData = postData
-                }
-
-
-                for (let i in umpirePaymentArr) {
-                    if (i === index) {
-                        umpirePaymentArr[i]["selectedValue"] = data
+                    if (targetIndex > -1) {
+                        postData.splice(targetIndex, 1)
                     }
                 }
 
-                for (let j in umpirePaymentArr) {
-                    if (umpirePaymentArr[j][key] === true) {
-                        array.push(umpirePaymentArr[j])
-                    }
-                }
+                // Update umpirePaymentList
+                const umpireIndex = umpirePaymentArr.findIndex(record => record.id === matchUmpireId);
+                if (umpireIndex > -1) umpirePaymentArr[umpireIndex].selectedValue = data;
+                const newPaymentStatus = umpirePaymentArr.every(payment => !!payment.selectedValue);
 
-                if (umpirePaymentArr.length === array.length) {
-                    state.paymentStatus = true
-                } else {
-                    state.paymentStatus = false
-                }
-
-                state.umpirePaymentList = umpirePaymentArr
-
-            } else if (key === "hoverVisible") {
-                let paymentData = state.umpirePaymentList
-                if (data) {
-                    for (let i in paymentData) {
-                        if (i === index) {
-                            paymentData[i][key] = data
-                        }
-                    }
-                } else {
-                    for (let i in paymentData) {
-                        if (i === index) {
-                            paymentData[i][key] = data
-                        }
-                    }
+                return {
+                    ...state,
+                    umpirePaymentList: umpirePaymentArr,
+                    paymentTransferPostData: postData,
+                    paymentStatus: newPaymentStatus
                 }
 
             } else if (key === "clearData") {

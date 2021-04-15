@@ -301,10 +301,6 @@ class UmpirePayments extends Component {
         }
     }
 
-    changeHover(record, index, onHoverValue) {
-        this.props.updateUmpirePaymentData({ data: onHoverValue, key: "hoverVisible", index: index })
-    }
-
     handleShowSizeChange = async (page, pageSize) => {
         await this.props.setPageSizeAction(pageSize);
         this.handlePageChange(page);
