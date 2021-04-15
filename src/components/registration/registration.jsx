@@ -390,7 +390,8 @@ class Registration extends Component {
             actionView: 0,
             cancelDeRegistrationLoad: false,
             isInvoiceFailed: 0,
-            instalmentRetryModalVisible: false
+            instalmentRetryModalVisible: false,
+            retryPaymentMethod: 1
         };
 
         this_Obj = this;
@@ -762,20 +763,7 @@ class Registration extends Component {
                 divisionId: selectedRow.divisionId,
                 competitionId: selectedRow.competitionUniqueKey,
                 paidByUserId: paidByUserId,
-                checkCardAvailability: 1
-            }
-            this.props.liveScorePlayersToPayRetryPaymentAction(payload);
-            this.setState({ loading: true, instalmentRetryModalVisible: false });
-        }
-        else if (key == "no") {
-            let payload = {
-                processTypeName: "instalment",
-                registrationUniqueKey: selectedRow.registrationUniqueKey,
-                userId: selectedRow.userId,
-                divisionId: selectedRow.divisionId,
-                competitionId: selectedRow.competitionUniqueKey,
-                paidByUserId: paidByUserId,
-                checkCardAvailability: 2
+                checkCardAvailability: this.state.retryPaymentMethod
             }
             this.props.liveScorePlayersToPayRetryPaymentAction(payload);
             this.setState({ loading: true, instalmentRetryModalVisible: false });
@@ -1380,13 +1368,14 @@ class Registration extends Component {
     }
 
     instalmentRetryModalView = () => {
+        let instalmentRetryDetails = this.props.liveScoreDashboardState.retryPaymenDetails
         return(
             <Modal
                 title= {AppConstants.failedInstalmentRetry}
                 visible={this.state.instalmentRetryModalVisible}
                 onCancel={() => this.handleinstalmentRetryModal("cancel")}
                 footer={[
-                    <Button onClick={() => this.handleinstalmentRetryModal("no")}>
+                    <Button onClick={() => this.handleinstalmentRetryModal("cancel")}>
                       {AppConstants.no}
                     </Button>,
                     <Button style={{backgroundColor: '#ff8237', borderColor: '#ff8237', color: "white"}} onClick={() => this.handleinstalmentRetryModal("yes")}>
@@ -1396,6 +1385,21 @@ class Registration extends Component {
                   centered
             >
                <p style = {{marginLeft: '20px'}}>{AppConstants.instalmentRetryModalTxt}</p>
+               <Radio.Group
+                value={this.state.retryPaymentMethod}
+                onChange={(e) => this.setState({ retryPaymentMethod: e.target.value })}
+               >
+                   {instalmentRetryDetails?.card && 
+                        <Radio value={1}>
+                            {AppConstants.creditCardOnly} {instalmentRetryDetails?.cardNumber}
+                        </Radio>
+                   }
+                   {instalmentRetryDetails?.directDebit && 
+                        <Radio value={2}>
+                            {AppConstants.directDebit}
+                        </Radio>
+                   }
+               </Radio.Group>
             </Modal>
         )
     }
