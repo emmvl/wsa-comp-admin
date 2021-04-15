@@ -1727,6 +1727,8 @@ const AppConstants = {
     yourRelationship: "What is your Relationship?",
     userId: "User ID",
     competitionId: "Competition ID",
+    instalmentRetryModalTxt: "Please select the payment type to retry.",
+    creditCardOnly: "Credit Card"
 };
 
 export default AppConstants;
