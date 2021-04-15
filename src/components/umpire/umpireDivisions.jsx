@@ -229,7 +229,7 @@ class UmpireDivisions extends Component {
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 200 }}
                                     onChange={this.onChangeComp}
-                                    value={this.state.selectedComp}
+                                    value={!this.props.umpireCompetitionState.onLoad ? this.state.selectedComp : null}
                                 >
                                     {competition.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
@@ -296,7 +296,7 @@ class UmpireDivisions extends Component {
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
 
-                {!!umpirePoolData &&
+                {(!!umpirePoolData && !this.props.umpireCompetitionState.onLoad) &&
                     <>
                         {!!umpirePoolData.length ? umpirePoolData.map((item, index) => (
                             this.poolView(item, index)

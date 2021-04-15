@@ -191,11 +191,11 @@ const columns = [
                     />
                 ) : (
                         <Tooltip
-                            className="comp-player-table-tag2 h-100"
-                            onMouseEnter={() => this_obj.changeHover(record, index, true)}
-                            onMouseLeave={() => this_obj.changeHover(record, index, false)}
-                            visible={record.hoverVisible}
                             title="Please ask the user to set up their bank details"
+                            placement="left"
+                            trigger='hover'
+                            autoAdjustOverflow
+                            arrowPointAtCenter
                         >
                             <Checkbox className="single-checkbox" disabled />
                         </Tooltip>
@@ -339,7 +339,7 @@ class UmpirePayments extends Component {
                         columns={columns}
                         dataSource={umpirePaymentList}
                         pagination={false}
-                        rowKey={(record) => `umpirePayments${record.matchId}`}
+                        rowKey={(record) => `umpirePayments${record.matchId}${record.userId}`}
                     />
                 </div>
 
