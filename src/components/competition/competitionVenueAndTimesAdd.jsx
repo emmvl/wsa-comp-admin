@@ -12,6 +12,7 @@ import {
     TimePicker,
     message,
     Form,
+    Modal,
 } from 'antd';
 import moment from 'moment';
 // import CSVReader from 'react-csv-reader'
@@ -63,6 +64,11 @@ class CompetitionVenueAndTimesAdd extends Component {
             hover: false,
             venueAddress: null,
             venueAddressError: '',
+            isCreator: null,
+            fieldConfigurationRefIdIndex: null,
+            venueConfigurationModalIsOpened: false,
+            isModalTableIndex: null,
+            elementIndex: null,
             courtColumns: [
                 {
                     title: AppConstants.courtNumbers,
@@ -190,6 +196,37 @@ class CompetitionVenueAndTimesAdd extends Component {
                 },
                 {
                     title: "",
+                    dataIndex: "fieldConfigurationRefId",
+                    key: "fieldConfigurationRefId",
+                    width: 200,
+                    render: (fieldConfigurationRefId, record, index) => (
+                        (process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === 'true') && (
+                            <div>
+                                <img
+                                    className="venue-configuration-image"
+                                    src={this.getImageForVenueConfig(index, fieldConfigurationRefId)}
+                                    alt=""
+                                    height={80}
+                                />
+                                <img
+                                    className="venue-configuration-control"
+                                    src={AppImages.chevronRight}
+                                    alt=""
+                                    height={25}
+                                    onClick={() => {
+                                        this.setState({venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndex: index})
+                                    }}
+                                />
+
+                                <Form.Item name={`fieldConfigurationRefId${index}`}>
+                                    <Input type="hidden" value={fieldConfigurationRefId} />
+                                </Form.Item>
+                            </div>
+                        )
+                    )
+                },
+                {
+                    title: "",
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
@@ -206,7 +243,17 @@ class CompetitionVenueAndTimesAdd extends Component {
                     )
                 }
             ],
-            manualAddress: false
+            manualAddress: false,
+            venueConfigurationImages: [
+                AppImages.venueConfiguration1,
+                AppImages.venueConfiguration2,
+                AppImages.venueConfiguration3,
+                AppImages.venueConfiguration4,
+                AppImages.venueConfiguration5,
+                AppImages.venueConfiguration6,
+                AppImages.venueConfiguration7,
+                AppImages.venueConfiguration8,
+            ],
 
         };
         this.myRef = React.createRef();
@@ -268,6 +315,31 @@ class CompetitionVenueAndTimesAdd extends Component {
                 this.setFormFieldValue();
             }
         }
+    }
+
+    getImageForVenueConfig = (index, fieldConfigurationRefId, tableIndex = null) => {
+        if (!!fieldConfigurationRefId) {
+            return this.state.venueConfigurationImages[fieldConfigurationRefId - 1]
+        }
+
+        if (!!tableIndex) {
+            const configIndex = this.props.venueTimeState.venuData.venueCourts[tableIndex]?.fieldConfigurationRefId
+            return this.state.venueConfigurationImages[!!configIndex ? configIndex - 1 : 0]
+        }
+
+        if (!!index) {
+            let i = 1;
+            while (index - i >= 0) {
+                const configIndex = this.props.venueTimeState.venuData.venueCourts[index - i].fieldConfigurationRefId
+                const image = this.state.venueConfigurationImages[!!configIndex ? configIndex - 1 : 0]
+                if (image) {
+                    return image
+                }
+                i++;
+            }
+        }
+
+        return this.state.venueConfigurationImages[0];
     }
 
     setFormFieldValue = () => {
@@ -815,6 +887,29 @@ class CompetitionVenueAndTimesAdd extends Component {
                         use12Hours={false}
                     />
                 </div>
+                {(process.env.REACT_APP_VENUE_CONFIGURATION_ENABLED === 'true') && (
+                    <div className="col-sm-1">
+                        <img
+                            className="venue-configuration-image"
+                            src={this.getImageForVenueConfig(index, item.fieldConfigurationRefId, tableIndex)}
+                            alt=""
+                            height={80}
+                        />
+                        <img
+                            className="venue-configuration-control"
+                            src={AppImages.chevronRight}
+                            alt=""
+                            height={25}
+                            onClick={() => {
+                                this.setState({isModalTableIndex: tableIndex, elementIndex: index, venueConfigurationModalIsOpened: true, fieldConfigurationRefIdIndexSeparateTime: index})
+                            }}
+                        />
+
+                        <Form.Item style={{height: 0}} name={`fieldConfigurationRefIdIndexSeparateTime${index}`}>
+                            <Input type="hidden" value={item.fieldConfigurationRefIdIndexSeparateTime} />
+                        </Form.Item>
+                    </div>
+                )}
                 <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
                     <span className="user-remove-btn">
                         <i className="fa fa-trash-o" aria-hidden="true" />
@@ -1002,11 +1097,47 @@ class CompetitionVenueAndTimesAdd extends Component {
         message.error(ValidationConstants.plzReviewPage)
     };
 
+    venueConfigurationModal = () => (
+        <Modal
+            title="Venue Configuration"
+            visible={this.state.venueConfigurationModalIsOpened}
+            className="venue-configuration-modal"
+            onCancel={() => {this.setState({venueConfigurationModalIsOpened: false})}}
+            onOk={() => {this.setState({venueConfigurationModalIsOpened: false})}}
+            foter={[]}>
+            {
+                this.state.venueConfigurationImages.map((item, key) => (
+                    <img
+                        className={"venue-configuration-image " + ( this.isSelected(key) ? "selected" : "" ) }
+                        src={item}
+                        key={"venue_configuration_images" + key}
+                        alt=""
+                        height={150}
+                        onClick={() => {
+                            this.props.updateVenuAndTimeDataAction(
+                                key+1,
+                                (this.state.isModalTableIndex>0 ||this.state.isModalTableIndex===0) ? this.state.elementIndex : this.state.fieldConfigurationRefIdIndex,
+                                'fieldConfigurationRefId',
+                                (this.state.isModalTableIndex>0 ||this.state.isModalTableIndex===0) ? 'addTimeSlotField' : 'courtData',
+                                this.state.isModalTableIndex,
+                            )
+                            this.setState({isModalTableIndex: null, elementIndex: null, fieldConfigurationRefId: key, venueConfigurationModalIsOpened: false});
+                        }}
+                    />
+                ))
+            }
+        </Modal>
+    )
+
+    isSelected = (id = 0) => {
+        return this.state.fieldConfigurationRefId === id;
+    }
+
     render() {
         return (
             <div className="fluid-width default-bg">
                 <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />
-
+                {this.venueConfigurationModal()}
                 <DashboardLayout
                     menuHeading={this.state.screenHeader}
                     menuName={this.state.screenHeader}
