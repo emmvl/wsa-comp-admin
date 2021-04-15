@@ -57,7 +57,6 @@ class AddUmpire extends Component {
     }
 
     async componentDidMount() {
-        console.log(this.state.tableRecord);
         let compId = getUmpireCompetiton() ? JSON.parse(getUmpireCompetiton()) : null;
         if (this.state.tableRecord) {
             this.props.updateAddUmpireData(this.props.location.state.tableRecord, 'isEditUmpire');
@@ -126,6 +125,16 @@ class AddUmpire extends Component {
                 this.setSelectedAffiliateValue(umpireData.affiliates)
                 this.setState({ affiliateLoader: false })
                 this.setInitialFieldValue()
+            }
+        }
+
+        if (!!this.props.umpireState.umpireOwnTeam && 
+            (this.props.umpireState.umpireOwnTeam !== nextProps.umpireState.umpireOwnTeam)){
+            if (!!this.state.isEdit) {
+                this.formRef.current.setFieldsValue({
+                    ...this.formRef.current.getFieldsValue(),
+                    'teamsNames': this.props.umpireState.umpireData.teamId
+                })
             }
         }
     }
