@@ -102,22 +102,12 @@ function createCoachArray(result) {
     return coachArray
 }
 
-function getAffiliateData(selectedAffiliateId, affiliateArray) {
-    const affiliateObj = []
-    let obj = ''
-    for (const i in affiliateArray) {
-        for (const j in selectedAffiliateId) {
-            if (selectedAffiliateId[j] === affiliateArray[i].id) {
-                obj = {
-                    name: affiliateArray[i].name,
-                    id: affiliateArray[i].id,
-                }
-                affiliateObj.push(obj)
-                break;
-            }
-        }
-    }
-    return affiliateObj;
+function getAffiliateData(selectedAffiliateId = [], affiliateArray = []) {
+    if (!selectedAffiliateId || !affiliateArray) return [];
+    const affiliateData = affiliateArray
+                            .filter(affiliate => selectedAffiliateId.includes(affiliate.id))
+                            .map(affiliate => ({ id: affiliate.id, name: affiliate.name }));
+    return affiliateData;
 }
 
 export function getAffiliatesDataFromRoleEntities(linkedEntities = []) {
@@ -230,7 +220,7 @@ function umpireState(state = initialState, action) {
             };
         case ApiConstants.GET_UMPIRE_TEAMS_LOAD:
             return {
-                ...state, onLoad: true
+                ...state, onLoad: true, umpireOwnTeam: false,
             }
         case ApiConstants.GET_UMPIRE_TEAMS_SUCCESS:
             const umpire = action.data
@@ -258,6 +248,11 @@ function umpireState(state = initialState, action) {
                         ...state.umpireData,
                         teams: selectedTeams,
                         teamId: teamIds,
+                        id: umpire.id,
+                        firstName: umpire.firstName,
+                        lastName: umpire.lastName,
+                        mobileNumber: umpire.mobileNumber,
+                        email: umpire.email,
                     },
                 }
             } else {

@@ -237,7 +237,7 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-           (isArrayNotEmpty(record.actionViews)  && ((record.actionViews.find(x => x == 'governmentVoucher') ) ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
+           (isArrayNotEmpty(record.actionViews) && ((record.actionViews.find(x => x == 'governmentVoucher') ) ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
            (record.deRegistered != 1 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
            record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee" ||
            record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer")))

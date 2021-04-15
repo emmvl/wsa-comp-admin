@@ -13,7 +13,7 @@ import ValidationConstants from "themes/validationConstant";
 // import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData } from "util/sessionStorage";
+import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData, getOrganisationData, getUmpireCompetitonData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
 import {
     umpireMainListAction,
@@ -114,7 +114,9 @@ class Umpire extends Component {
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                     render: (rank, record) => {
                         const { rankedUmpiresCount } = this.props.umpireState;
-                        const currentOrganisationId = JSON.parse(localStorage.getItem("setOrganisationData"))?.organisationId;
+                        const organisationData = localStorage.getItem("setOrganisationData");
+                        const parsedOrganisation = organisationData ? JSON.parse(organisationData) : null;
+                        const currentOrganisationId = parsedOrganisation ? parsedOrganisation?.organisationId : null;
                         const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData"))?.organisationId;
 
                         return (
@@ -377,7 +379,7 @@ class Umpire extends Component {
 
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
-        if (organisationId) await this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
+        if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
         this.props.getRefBadgeData(this.props.appstate.accreditation);
         const competitionId = JSON.parse(localStorage.getItem("umpireCompetitionId"));
         if (!!competitionId ) {
@@ -385,30 +387,31 @@ class Umpire extends Component {
         }
     }
 
-    async componentDidUpdate(nextProps) {
+    async componentDidUpdate(prevProps) {
         // const { sortBy, sortOrder } = this.state;
-        if (!isEqual(nextProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
+        if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
                     ? this.props.umpireCompetitionState.umpireComptitionList
                     : [];
-                let firstComp = (compList && compList.length > 0) ? compList[0].id : 0;
-                let compData = (compList && compList.length > 0) ? compList[0]: {};
+                let firstComp = (compList && compList.length > 0) ? compList[0].id : null;
+                let compData = (compList && compList.length > 0) ? compList[0]: null;
 
-                if (getUmpireCompetiton()) {
-                    let compId = JSON.parse(getUmpireCompetiton());
+                let unparsedData = getUmpireCompetiton()
+                let compId = unparsedData ? JSON.parse(unparsedData) : null;
+                unparsedData = getUmpireCompetitonData();
+                const storedCompData = unparsedData ? JSON.parse(unparsedData) : null;
+                if (compId) {
                     let index = (compList && Array.isArray(compList)) ? compList.findIndex(x => x.id === compId) : -1;
                     if (index > -1 && compList && !!compList.length && compList[index] && compList[index].id) {
                         firstComp = compList[index].id;
                         compData = compList[index];
-                    } else if (!!firstComp && !!compData) {
-                        setUmpireCompition(firstComp);
-                        setUmpireCompitionData(JSON.stringify(compData));
                     }
-                } else {
-                    if (firstComp) setUmpireCompition(firstComp);
-                    if (compData) setUmpireCompitionData(JSON.stringify(compData));
-                }
+                } 
+                
+                if (firstComp && firstComp !== compId) setUmpireCompition(firstComp);
+                if (!isEqual(compData, storedCompData)) setUmpireCompitionData(JSON.stringify(compData));
+
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
                 let orgItem = await getOrganisationData();
                 let userOrganisationId = orgItem ? orgItem.organisationId : 0;
@@ -418,9 +421,13 @@ class Umpire extends Component {
                 this.setState({ isCompParent, compOrganisationId });
                 let sortBy = this.state.sortBy;
                 let sortOrder = this.state.sortOrder;
-                const organisationId = JSON.parse(localStorage.getItem("setOrganisationData"))?.organisationId;
-                const competitionId = localStorage.getItem("umpireCompetitionId");
-                if (!!firstComp && organisationId && competitionId) {
+                unparsedData = localStorage.getItem("setOrganisationData");
+                let parsedData = unparsedData ? JSON.parse(unparsedData) : null;
+                const organisationId = parsedData?.organisationId;
+                unparsedData = getUmpireCompetiton();
+                parsedData = unparsedData ? JSON.parse(unparsedData) : null;
+                const competitionId = parsedData;
+                if (organisationId && competitionId) {
                     this.props.getUmpireList({
                         organisationId,
                         competitionId,
@@ -429,7 +436,7 @@ class Umpire extends Component {
                         sortOrder,
                     });
                     this.setState({
-                        selectedComp: firstComp,
+                        selectedComp: competitionId,
                         loading: false,
                         competitionUniqueKey: compKey,
                         compArray: compList,

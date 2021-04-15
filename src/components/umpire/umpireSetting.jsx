@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -48,7 +48,7 @@ const initialNoUmpireAllocationGetData = {
     hasUmpires: false,
 };
 
-class UmpireSetting extends Component {
+class UmpireSetting extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
