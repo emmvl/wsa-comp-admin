@@ -258,6 +258,11 @@ function umpireState(state = initialState, action) {
                         ...state.umpireData,
                         teams: selectedTeams,
                         teamId: teamIds,
+                        id: umpire.id,
+                        firstName: umpire.firstName,
+                        lastName: umpire.lastName,
+                        mobileNumber: umpire.mobileNumber,
+                        email: umpire.email,
                     },
                 }
             } else {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -48,7 +48,7 @@ const initialNoUmpireAllocationGetData = {
     hasUmpires: false,
 };
 
-class UmpireSetting extends Component {
+class UmpireSetting extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -625,16 +625,16 @@ class UmpireSetting extends Component {
     handleSave = () => {
         const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
         const { selectedComp, allocationSettingsData } = this.state;
-
+        
         const noUmpiresSettingArray = allocationSettingsData
-            .filter(item => !item.hasUmpires && !!item.divisions.length)
+            .filter(item => !item.hasUmpires)
             .map(item => ({
                 allDivisions: item.allDivisions,
                 divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
             }));
         
         const umpireAllocationSettingsArray = allocationSettingsData
-            .filter(item => !!item.hasUmpires && !!item.divisions.length)
+            .filter(item => !!item.hasUmpires)
             .map(item => ({
                 activateCoaches: item.activateCoaches,
                 activateReserves: item.activateReserves,

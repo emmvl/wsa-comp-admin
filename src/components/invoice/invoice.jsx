@@ -109,6 +109,7 @@ class RegistrationInvoice extends Component {
     topView = () => {
         const { invoiceData, getAffiliteDetailData } = this.props.stripeState;
         const userDetail = invoiceData != null ? invoiceData.yourInfo : null;
+        const invoiceInfo = invoiceData != null ? invoiceData.billTo : null;
         const organisationLogo = invoiceData != null ? invoiceData.organisationLogo : null;
         const isSchoolRegistrationApplied = invoiceData != null ? invoiceData.isSchoolRegistrationApplied : 0;
         const msg = isSchoolRegistrationApplied === 1 ? `(${AppConstants.toBeInvoicedViaSchool})` : ""
@@ -130,8 +131,7 @@ class RegistrationInvoice extends Component {
                         </label>
                         <div className="invoice-receipt">
                             <div className="invoice-receipt-num">
-                                Receipt No.
-                                {userDetail && (userDetail.receiptId ? userDetail.receiptId : "100000")}
+                                Receipt No.{invoiceInfo && (invoiceInfo.receiptId ? invoiceInfo.receiptId : "100000")}
                             </div>
                             <div className="schoolInvoiceTxt">{msg}</div>
                         </div>
