@@ -482,7 +482,7 @@ class Registration extends Component {
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
                 }
-                if(this.props.liveScoreDashboardState.checkCardAvailability == 1) {
+                if(this.props.liveScoreDashboardState.retryPaymenDetails.card == true || this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true) {
                     this.setState({instalmentRetryModalVisible: true})
                     return
                 }
@@ -1376,16 +1376,16 @@ class Registration extends Component {
                 onCancel={() => this.handleinstalmentRetryModal("cancel")}
                 footer={[
                     <Button onClick={() => this.handleinstalmentRetryModal("cancel")}>
-                      {AppConstants.no}
+                      {AppConstants.cancel}
                     </Button>,
                     <Button style={{backgroundColor: '#ff8237', borderColor: '#ff8237', color: "white"}} onClick={() => this.handleinstalmentRetryModal("yes")}>
-                    {AppConstants.yes}
+                    {AppConstants.ok}
                   </Button>
                   ]}
                   centered
             >
                <p style = {{marginLeft: '20px'}}>{AppConstants.instalmentRetryModalTxt}</p>
-               <Radio.Group
+               <Radio.Group className={"reg-competition-radio"}
                 value={this.state.retryPaymentMethod}
                 onChange={(e) => this.setState({ retryPaymentMethod: e.target.value })}
                >
