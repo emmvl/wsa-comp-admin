@@ -80,12 +80,15 @@ const FoulsFields = ({ onChange, values = {} }) => {
         const firstLetterOfRowName = rowName.charAt(0).toUpperCase();
         const fieldName = target.name;
         const fieldValue = getOnlyNumbers(target.value);
-        const currentRow = currentValues[fieldName] || [];
+        const currentRow = (currentValues[fieldName] || []).filter(row => row.type !== firstLetterOfRowName);
 
-        const newRowValues = [
-            ...currentRow,
-            {type: firstLetterOfRowName, value: fieldValue},
-        ];
+        let newRowValues = currentRow;
+        if (fieldValue !== '0') {
+            newRowValues = [
+                ...newRowValues,
+                {type: firstLetterOfRowName, value: fieldValue}
+            ];
+        }
         
         let newValues = {
             ...currentValues,
@@ -96,7 +99,7 @@ const FoulsFields = ({ onChange, values = {} }) => {
         saveChanges({
             target: {
                 name: "foulsSettings",
-                value: currentValues,
+                value: newValues,
             },
         })
     };
@@ -178,8 +181,8 @@ const FoulsFields = ({ onChange, values = {} }) => {
 
     useEffect(() => {
         if (Object.keys(currentValues).length) return;
-
-        setCurrentValues(cloneDeep(values) || {});
+         
+        setCurrentValues(cloneDeep(values) || (process.env.REACT_APP_FLAVOUR === 'football' ? {"sendOffReport": [{"type": "RC", "value" : 1}]} : {}));
     }, [values])
 
     return renderFieldsTable()
