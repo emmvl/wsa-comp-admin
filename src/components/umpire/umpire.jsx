@@ -114,7 +114,9 @@ class Umpire extends Component {
                     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
                     render: (rank, record) => {
                         const { rankedUmpiresCount } = this.props.umpireState;
-                        const currentOrganisationId = JSON.parse(localStorage.getItem("setOrganisationData"))?.organisationId;
+                        const organisationData = localStorage.getItem("setOrganisationData");
+                        const parsedOrganisation = organisationData ? JSON.parse(organisationData) : null;
+                        const currentOrganisationId = parsedOrganisation ? parsedOrganisation?.organisationId : null;
                         const competitionOrganisationId = JSON.parse(localStorage.getItem("umpireCompetitionData"))?.organisationId;
 
                         return (
@@ -391,12 +393,14 @@ class Umpire extends Component {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
                     ? this.props.umpireCompetitionState.umpireComptitionList
-                    : prevProps.umpireCompetitionState.umpireComptitionList;
-                let firstComp = (compList && compList.length > 0) ? compList[0].id : 0;
-                let compData = (compList && compList.length > 0) ? compList[0]: {};
+                    : [];
+                let firstComp = (compList && compList.length > 0) ? compList[0].id : null;
+                let compData = (compList && compList.length > 0) ? compList[0]: null;
 
-                let compId = JSON.parse(getUmpireCompetiton()) || null;
-                const storedCompData = JSON.parse(getUmpireCompetitonData()) || null;
+                let unparsedData = getUmpireCompetiton()
+                let compId = unparsedData ? JSON.parse(unparsedData) : null;
+                unparsedData = getUmpireCompetitonData();
+                const storedCompData = unparsedData ? JSON.parse(unparsedData) : null;
                 if (compId) {
                     let index = (compList && Array.isArray(compList)) ? compList.findIndex(x => x.id === compId) : -1;
                     if (index > -1 && compList && !!compList.length && compList[index] && compList[index].id) {
@@ -417,8 +421,12 @@ class Umpire extends Component {
                 this.setState({ isCompParent, compOrganisationId });
                 let sortBy = this.state.sortBy;
                 let sortOrder = this.state.sortOrder;
-                const organisationId = JSON.parse(localStorage.getItem("setOrganisationData"))?.organisationId;
-                const competitionId = JSON.parse(getUmpireCompetiton()) || null;
+                unparsedData = localStorage.getItem("setOrganisationData");
+                let parsedData = unparsedData ? JSON.parse(unparsedData) : null;
+                const organisationId = parsedData?.organisationId;
+                unparsedData = getUmpireCompetiton();
+                parsedData = unparsedData ? JSON.parse(unparsedData) : null;
+                const competitionId = parsedData;
                 if (organisationId && competitionId) {
                     this.props.getUmpireList({
                         organisationId,

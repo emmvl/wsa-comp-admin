@@ -237,7 +237,7 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-           (record.actionView && (record.actionView == 3 ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
+           (isArrayNotEmpty(record.actionViews) && ((record.actionViews.find(x => x == 'governmentVoucher') ) ? (record.paymentStatus != "De-Registered" && record.paymentStatus != "Pending De-Registration") : true) ||
            (record.deRegistered != 1 && (record.paymentStatus == "Registered" || record.paymentStatus == "Pending Registration Fee" ||
            record.paymentStatus == "Pending Competition Fee" || record.paymentStatus == "Pending Membership Fee" ||
            record.paymentStatus == "Pending De-Registration" || record.paymentStatus == "Pending Transfer")))
@@ -389,7 +389,9 @@ class Registration extends Component {
             modalMessage: null,
             actionView: 0,
             cancelDeRegistrationLoad: false,
-            isInvoiceFailed: 0
+            isInvoiceFailed: 0,
+            instalmentRetryModalVisible: false,
+            retryPaymentMethod: 1
         };
 
         this_Obj = this;
@@ -479,6 +481,12 @@ class Registration extends Component {
             if(this.state.loading == true && (this.props.liveScoreDashboardState.onRetryPaymentLoad == false || this.props.registrationDashboardState.onRegRetryPaymentLoad == false)){
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
+                }
+                if(this.props.liveScoreDashboardState.retryPaymenDetails) {
+                    if(this.props.liveScoreDashboardState.retryPaymenDetails.card == true || this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true) {
+                        this.setState({instalmentRetryModalVisible: true, loading: false})
+                        return
+                    }
                 }
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
@@ -724,7 +732,8 @@ class Registration extends Component {
                     userId: selectedRow.userId,
                     divisionId: selectedRow.divisionId,
                     competitionId: selectedRow.competitionUniqueKey,
-                    paidByUserId: paidByUserId
+                    paidByUserId: paidByUserId,
+                    checkCardAvailability: 0
                 }
                 this.props.liveScorePlayersToPayRetryPaymentAction(payload);
                 this.setState({ loading: true });
@@ -740,6 +749,27 @@ class Registration extends Component {
             }
         }
         this.setState({otherModalVisible: false});
+    }
+
+    handleinstalmentRetryModal = (key) => {
+        const {selectedRow} = this.state;
+        let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers) ? selectedRow.paidByUsers[0].paidByUserId : null
+        if(key == "cancel") {
+            this.setState({instalmentRetryModalVisible: false})
+        }
+        else if (key == "yes") {
+            let payload = {
+                processTypeName: "instalment",
+                registrationUniqueKey: selectedRow.registrationUniqueKey,
+                userId: selectedRow.userId,
+                divisionId: selectedRow.divisionId,
+                competitionId: selectedRow.competitionUniqueKey,
+                paidByUserId: paidByUserId,
+                checkCardAvailability: this.state.retryPaymentMethod
+            }
+            this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+            this.setState({ loading: true, instalmentRetryModalVisible: false });
+        }
     }
 
     receiveCashPayment = (key) => {
@@ -1339,6 +1369,43 @@ class Registration extends Component {
         )
     }
 
+    instalmentRetryModalView = () => {
+        let instalmentRetryDetails = this.props.liveScoreDashboardState.retryPaymenDetails
+        return(
+            <Modal
+                title= {AppConstants.failedInstalmentRetry}
+                visible={this.state.instalmentRetryModalVisible}
+                onCancel={() => this.handleinstalmentRetryModal("cancel")}
+                footer={[
+                    <Button onClick={() => this.handleinstalmentRetryModal("cancel")}>
+                      {AppConstants.cancel}
+                    </Button>,
+                    <Button style={{backgroundColor: '#ff8237', borderColor: '#ff8237', color: "white"}} onClick={() => this.handleinstalmentRetryModal("yes")}>
+                    {AppConstants.ok}
+                  </Button>
+                  ]}
+                  centered
+            >
+               <p style = {{marginLeft: '20px'}}>{AppConstants.instalmentRetryModalTxt}</p>
+               <Radio.Group className={"reg-competition-radio"}
+                value={this.state.retryPaymentMethod}
+                onChange={(e) => this.setState({ retryPaymentMethod: e.target.value })}
+               >
+                   {instalmentRetryDetails?.card && 
+                        <Radio value={1}>
+                            {AppConstants.creditCardOnly} {instalmentRetryDetails?.cardNumber}
+                        </Radio>
+                   }
+                   {instalmentRetryDetails?.directDebit && 
+                        <Radio value={2}>
+                            {AppConstants.directDebit}
+                        </Radio>
+                   }
+               </Radio.Group>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width default-bg">
@@ -1362,6 +1429,7 @@ class Registration extends Component {
                         {this.transferModalView()}
                         {this.voucherReceivedModalView()}
                         {this.otherModalView()}
+                        {this.instalmentRetryModalView()}
                     </Content>
                 </Layout>
             </div>
