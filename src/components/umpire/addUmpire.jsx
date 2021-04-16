@@ -64,7 +64,7 @@ class AddUmpire extends Component {
         if (compId) {
             this.setState({ competition_Id: compId})
             let compData = getUmpireCompetitonData() ? JSON.parse(getUmpireCompetitonData()): null;
-            let orgItem = getOrganisationData() ? JSON.parse(getOrganisationData()) : null;
+            let orgItem = getOrganisationData();
             let userOrganisationId = orgItem ? orgItem.organisationId : null;
             let compOrgId = compData ? compData?.organisationId : null
             let isCompParent = userOrganisationId !== null && compOrgId !== null && userOrganisationId === compOrgId
