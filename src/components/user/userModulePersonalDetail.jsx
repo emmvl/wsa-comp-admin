@@ -1872,9 +1872,11 @@ class UserModulePersonalDetail extends Component {
         }
 
         if ((this.props.registrationDashboardState.onRegRetryPaymentLoad == false || this.props.liveScoreDashboardState.onRetryPaymentLoad == false) && this.state.retryPaymentOnLoad == true) {
-            if(this.props.liveScoreDashboardState.retryPaymenDetails.card == true || this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true) {
-                this.setState({instalmentRetryModalVisible: true, retryPaymentOnLoad: false})
-                return
+            if(this.props.liveScoreDashboardState.retryPaymenDetails) {
+                if(this.props.liveScoreDashboardState.retryPaymenDetails.card == true || this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true) {
+                    this.setState({instalmentRetryModalVisible: true, retryPaymentOnLoad: false})
+                    return
+                }
             }
             this.setState({ retryPaymentOnLoad: false });
             this.handleRegistrationTableList(

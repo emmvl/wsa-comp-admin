@@ -482,9 +482,11 @@ class Registration extends Component {
                 if(this.props.liveScoreDashboardState.retryPaymentSuccess){
                     message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
                 }
-                if(this.props.liveScoreDashboardState.retryPaymenDetails.card == true || this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true) {
-                    this.setState({instalmentRetryModalVisible: true})
-                    return
+                if(this.props.liveScoreDashboardState.retryPaymenDetails) {
+                    if(this.props.liveScoreDashboardState.retryPaymenDetails.card == true || this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true) {
+                        this.setState({instalmentRetryModalVisible: true, loading: false})
+                        return
+                    }
                 }
                 this.setState({ loading: false });
                 this.handleRegTableList(1);
