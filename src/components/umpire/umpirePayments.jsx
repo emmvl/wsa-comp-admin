@@ -333,7 +333,7 @@ class UmpirePayments extends Component {
                         loading={onLoad || this.props.umpireCompetitionState.onLoad}
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={umpirePaymentList}
+                        dataSource={onLoad || this.props.umpireCompetitionState.onLoad ? [] : umpirePaymentList}
                         pagination={false}
                         rowKey={(record) => `umpirePayments${record.id}`}
                     />

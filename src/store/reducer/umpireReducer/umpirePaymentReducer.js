@@ -71,9 +71,11 @@ function umpirePaymentState(state = initialState, action) {
             switch (key) {
                 case 'allCheckBox':
                     const selectedPayments = umpirePaymentArr.map(
-                        payment => payment.paymentStatus === 'unpaid' 
-                            ? ({ ...payment, selectedValue: data })
-                            : payment
+                        payment => data
+                            ? ({ ...payment, selectedValue: true })
+                            : payment.paymentStatus === 'unpaid'
+                                ? ({ ...payment, selectedValue: false })
+                                : payment
                     )
                     const unpaidPayments = selectedPayments.filter(
                         payment => payment.paymentStatus === 'unpaid'
