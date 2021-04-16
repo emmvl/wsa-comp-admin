@@ -462,7 +462,10 @@ class DeRegistration extends Component {
                         {(registrationSelection || []).map((item) => (
                             <div key={`regChangeType_${item.id}`}>
                                 <div className="contextualHelp-RowDirection" style={{alignItems:"center"}}>
-                                    <Radio value={item.id}>{item.value}</Radio>
+                                    <Radio 
+                                        value={item.id}
+                                        disabled={item.value=="Transfer" && sourceFrom == AppConstants.teamRegistration}
+                                    >{item.value}</Radio>
                                     <div className="ml-n20">
                                         <Tooltip placement="bottom">
                                             <span>{item.helpMsg}</span>
