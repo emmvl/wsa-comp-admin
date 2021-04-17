@@ -406,7 +406,7 @@ class UmpireRoster extends Component {
             <div className="comp-dash-table-view mt-0">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={onLoad}
+                        loading={onLoad || this.props.umpireCompetitionState.onLoad}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={umpireListResult}
@@ -637,6 +637,7 @@ class UmpireRoster extends Component {
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
+                                    loading={this.props.umpireCompetitionState.onLoad}
                                 >
                                     {competition.map((item) => (
                                         <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>

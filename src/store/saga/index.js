@@ -1,4 +1,4 @@
-import { all, fork, takeEvery } from 'redux-saga/effects';
+import { all, fork, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import ApiConstants from 'themes/apiConstants';
 import appSaga from './appSaga';
@@ -488,7 +488,7 @@ export default function* rootSaga() {
     /// / Umpire Module
     yield takeEvery(ApiConstants.API_UMPIRE_LIST_LOAD, umpireSaga.umpireListSaga);
     yield takeEvery(ApiConstants.API_NEW_UMPIRE_LIST_LOAD, umpireSaga.newUmpireListSaga);
-    yield takeEvery(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga);
+    yield takeLatest(ApiConstants.API_UMPIRE_COMPETITION_LIST_LOAD, umpireCompSaga.getUmpireCompSaga);
     yield takeEvery(ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD, umpireSaga.getAffiliateSaga);
     yield takeEvery(ApiConstants.GET_UMPIRE_TEAMS_LOAD, umpireSaga.getUmpireTeamsSaga); 
     yield takeEvery(ApiConstants.API_UMPIRE_SEARCH_LOAD, umpireSaga.umpireSearchSaga);

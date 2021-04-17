@@ -63,18 +63,18 @@ class AddUmpire extends Component {
         }
         if (compId) {
             this.setState({ competition_Id: compId})
-            let compData = JSON.parse(getUmpireCompetitonData())
-            let orgItem = await getOrganisationData();
-            let userOrganisationId = orgItem ? orgItem.organisationId : 0;
-            let compOrgId = compData ? compData.organisationId : 0
-            let isCompParent = userOrganisationId === compOrgId
+            let compData = getUmpireCompetitonData() ? JSON.parse(getUmpireCompetitonData()): null;
+            let orgItem = getOrganisationData();
+            let userOrganisationId = orgItem ? orgItem.organisationId : null;
+            let compOrgId = compData ? compData?.organisationId : null
+            let isCompParent = userOrganisationId !== null && compOrgId !== null && userOrganisationId === compOrgId
             this.setState({ isCompParent });
             this.props.umpireListAction({ refRoleId: JSON.stringify([5]), entityTypes: 1, compId: compId, offset: 0 })
             this.props.getUmpireAffiliateList({ id: compId })
             this.setState({ isUmpireAffiliate: true })
             const teamsBody = { competitionId: compId, organisationId: userOrganisationId };
             if (this.state.tableRecord) teamsBody.umpireId = this.state.tableRecord.id;
-            await this.props.getUmpireTeams(teamsBody);
+            this.props.getUmpireTeams(teamsBody);
             this.setInitialFieldValue()
         }
     }

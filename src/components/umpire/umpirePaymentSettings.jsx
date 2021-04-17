@@ -604,27 +604,32 @@ class UmpirePaymentSetting extends Component {
 
         return (
             <div className="content-view mt-5">
-                { !this.props.umpirePaymentSettingState.onLoad && this.allowPaymentsSwitcher() }
-                { (allowPayment && !this.props.umpirePaymentSettingState.onLoad) &&
+                { !this.props.umpireCompetitionState.onLoad &&
                     <>
-                        {isOrganiserView ?
+                        { !this.props.umpirePaymentSettingState.onLoad && this.allowPaymentsSwitcher() }
+                        { (allowPayment && !this.props.umpirePaymentSettingState.onLoad) &&
                             <>
-                                <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
-                                <div className="d-flex flex-column">
-                                    {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, true)}
-                                    {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, false)}
-                                </div>
-                            </>
-                        :
-                            <div className="d-flex flex-column">
-                                {this.umpireSettingsSectionView(null, true)}
-                            </div>
-                        }
+                                {isOrganiserView ?
+                                    <>
+                                        <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoPayUmpire}</span>
+                                        <div className="d-flex flex-column">
+                                            {this.umpireSettingsSectionView(AppConstants.competitionOrganiser, true)}
+                                            {this.umpireSettingsSectionView(AppConstants.affiliateOrganisations, false)}
+                                        </div>
+                                    </>
+                                :
+                                    <div className="d-flex flex-column">
+                                        {this.umpireSettingsSectionView(null, true)}
+                                    </div>
+                                }
 
-                        {this.deleteConfirmModalView()}
-                        {this.allDivisionModalView()}
+                                {this.deleteConfirmModalView()}
+                                {this.allDivisionModalView()}
+                            </>
+                        }
                     </>
                 }
+                
             </div>
         );
     };

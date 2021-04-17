@@ -191,11 +191,11 @@ const columns = [
                     />
                 ) : (
                         <Tooltip
-                            className="comp-player-table-tag2 h-100"
-                            onMouseEnter={() => this_obj.changeHover(record, index, true)}
-                            onMouseLeave={() => this_obj.changeHover(record, index, false)}
-                            visible={record.hoverVisible}
                             title="Please ask the user to set up their bank details"
+                            placement="left"
+                            trigger='hover'
+                            autoAdjustOverflow
+                            arrowPointAtCenter
                         >
                             <Checkbox className="single-checkbox" disabled />
                         </Tooltip>
@@ -301,10 +301,6 @@ class UmpirePayments extends Component {
         }
     }
 
-    changeHover(record, index, onHoverValue) {
-        this.props.updateUmpirePaymentData({ data: onHoverValue, key: "hoverVisible", index: index })
-    }
-
     handleShowSizeChange = async (page, pageSize) => {
         await this.props.setPageSizeAction(pageSize);
         this.handlePageChange(page);
@@ -334,12 +330,12 @@ class UmpirePayments extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={onLoad}
+                        loading={onLoad || this.props.umpireCompetitionState.onLoad}
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={umpirePaymentList}
+                        dataSource={onLoad || this.props.umpireCompetitionState.onLoad ? [] : umpirePaymentList}
                         pagination={false}
-                        rowKey={(record) => `umpirePayments${record.matchId}`}
+                        rowKey={(record) => `umpirePayments${record.id}`}
                     />
                 </div>
 
@@ -506,7 +502,7 @@ class UmpirePayments extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        const { paymentStatus } = this.props.umpirePaymentState
+        const { paymentStatus, onLoad} = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         let isCompetitionAvailable = this.state.selectedComp ? false : true
         return (
@@ -526,6 +522,7 @@ class UmpirePayments extends Component {
                                     style={{ minWidth: 200, maxWidth: 250 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp || ""}
+                                    loading={this.props.umpireCompetitionState.onLoad}
                                 >
                                     {competition.map((item) => (
                                         <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
@@ -558,6 +555,7 @@ class UmpirePayments extends Component {
                                 <Checkbox
                                     className="single-checkbox"
                                     checked={paymentStatus}
+                                    disabled={onLoad || this.props.umpireCompetitionState.onLoad}
                                     onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
                                 >
                                     All
