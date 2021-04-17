@@ -1838,7 +1838,7 @@ class UserModulePersonalDetail extends Component {
             const personal = this.props.userState.personalData;
             const organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
             const payload = {
-                userId: personal.userId,
+                userId: this.state.userId, //personal.userId
                 organisationId,
             };
             this.props.getUserModulePersonalByCompetitionAction(payload);
@@ -1959,7 +1959,7 @@ class UserModulePersonalDetail extends Component {
         const personal = userState.personalData;
         const organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         data.section = data.status == "Linked" ? "unlink" : "link";
-        data.childUserId = personal.userId;
+        data.childUserId = this.state.userId; // personal.userId
         data.organisationId = organisationId;
         this.props.userProfileUpdateAction(data);
         this.setState({ unlinkOnLoad: true });
@@ -1970,7 +1970,7 @@ class UserModulePersonalDetail extends Component {
         const personal = userState.personalData;
         const organisationId = getOrganisationData() ? getOrganisationData().organisationUniqueKey : null;
         data.section = data.status == "Linked" ? "unlink" : "link";
-        data.parentUserId = personal.userId;
+        data.parentUserId = this.state.userId; // personal.userId
         data.organisationId = organisationId;
         this.props.userProfileUpdateAction(data);
         this.setState({ unlinkOnLoad: true });
@@ -2418,7 +2418,8 @@ class UserModulePersonalDetail extends Component {
                     </span>
 
                     <span className="year-select-heading pt-0">
-                        {`#${personal.userId}`}
+                        {`#${this.state.userId}`} 
+                        {/* {`#${personal.userId}`}  */}
                     </span>
                 </div>
 
@@ -2968,9 +2969,9 @@ class UserModulePersonalDetail extends Component {
                             <div className="desc-text-style side-bar-profile-data other-info-font">{personal.isDisability == 0 ? "No" : "Yes"}</div>
                         </div> */}
                     </div>
-
+                    
                 </div>
-
+                
                 {/* Upload Documents */}
                 <div>
                     <div
