@@ -12,7 +12,7 @@ import AppImages from "../../themes/appImages";
 import { liveScoreGoalListAction, setPageSizeAction, setPageNumberAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
 import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage'
-// import { liveScore_formateDateTime } from '../../themes/dateformate'
+import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 
@@ -58,7 +58,7 @@ const columns1 = [
         key: 'startTime',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('date'),
-        // render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
+        render: (startTime) => <span>{liveScore_formateDateTime(startTime)}</span>
     },
     {
         title: AppConstants.team,
