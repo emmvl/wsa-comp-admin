@@ -1,4 +1,4 @@
-@import "../themes/colorVariables.css";
+@import '../themes/colorVariables.css';
 
 .innerSelect-value .ant-select-selection-selected-value {
   max-width: 155px !important;
@@ -38,12 +38,18 @@
 .ant-menu-submenu-vertical-left > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
 .ant-menu-submenu-vertical-right > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before,
 .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before {
-  background: -webkit-gradient(linear, left top, right top, from(var(--app-color)), to(var(--app-color)));
+  background: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(var(--app-color)),
+    to(var(--app-color))
+  );
   background: linear-gradient(to right, var(--app-color), var(--app-color));
 }
 
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }
 
 .ant-menu-submenu-vertical > .ant-menu-submenu-title .ant-menu-submenu-arrow::before,
@@ -186,7 +192,7 @@
 
   .comp-product-search-inp-width {
     width: 180px !important;
-    margin-left: 15px
+    margin-left: 15px;
   }
 
   .dashboard-lay-search-button {

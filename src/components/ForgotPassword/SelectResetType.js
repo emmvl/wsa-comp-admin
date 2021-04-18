@@ -1,15 +1,15 @@
-import React, { useCallback, useState } from "react";
-import { NavLink } from "react-router-dom";
-import { Button } from "antd";
+import React, { useCallback, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { Button } from 'antd';
 
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+import AppConstants from '../../themes/appConstants';
+import AppImages from '../../themes/appImages';
 
 function SelectResetType(props) {
   const { source, submitType } = props;
-  const [resetType, setResetType] = useState("email");
+  const [resetType, setResetType] = useState('email');
 
-  const onChangeType = useCallback((e) => {
+  const onChangeType = useCallback(e => {
     setResetType(e.target.value);
   }, []);
 
@@ -37,10 +37,12 @@ function SelectResetType(props) {
               type="radio"
               name="resetType"
               value="email"
-              checked={resetType === "email"}
+              checked={resetType === 'email'}
               onChange={onChangeType}
             />
-            <label className="ml-3" htmlFor="email">Email</label>
+            <label className="ml-3" htmlFor="email">
+              Email
+            </label>
           </div>
 
           <div className="d-flex">
@@ -49,17 +51,23 @@ function SelectResetType(props) {
               type="radio"
               name="resetType"
               value="sms"
-              checked={resetType === "sms"}
+              checked={resetType === 'sms'}
               onChange={onChangeType}
             />
-            <label className="ml-3" htmlFor="sms">SMS</label>
+            <label className="ml-3" htmlFor="sms">
+              SMS
+            </label>
           </div>
         </div>
 
-        <div className={`comp-finals-button-view d-flex justify-content-${source !== "mobile" ? "between" : "center"} mt-4`}>
-          {source !== "mobile" && (
+        <div
+          className={`comp-finals-button-view d-flex justify-content-${
+            source !== 'mobile' ? 'between' : 'center'
+          } mt-4`}
+        >
+          {source !== 'mobile' && (
             <div className="pr-5">
-              <NavLink to={{ pathname: "/login" }}>
+              <NavLink to={{ pathname: '/login' }}>
                 <Button className="open-reg-button" type="primary">
                   {AppConstants.returnToLogin}
                 </Button>
@@ -67,11 +75,7 @@ function SelectResetType(props) {
             </div>
           )}
 
-          <Button
-            className="open-reg-button"
-            type="primary"
-            onClick={onSubmitType}
-          >
+          <Button className="open-reg-button" type="primary" onClick={onSubmitType}>
             {AppConstants.next}
           </Button>
         </div>

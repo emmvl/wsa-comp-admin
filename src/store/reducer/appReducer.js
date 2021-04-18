@@ -1,9 +1,9 @@
-import ApiConstants from "../../themes/apiConstants";
-import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
+import ApiConstants from '../../themes/apiConstants';
+import { getRegistrationSetting } from '../objectModel/getRegSettingObject';
 // import { getUserId, getOrganisationData } from "../../util/sessionStorage";
-import AppConstants from "../../themes/appConstants";
-import { reverseArray } from 'util/permissions'
-import { clearCompetitionLocalStorage } from "util/sessionStorage";
+import AppConstants from '../../themes/appConstants';
+import { reverseArray } from 'util/permissions';
+import { clearCompetitionLocalStorage } from 'util/sessionStorage';
 
 const initialState = {
   onLoad: false,
@@ -22,12 +22,12 @@ const initialState = {
   formSettings: [],
   regMethod: [],
   membershipProductTypes: [],
-  typesOfCompetition: [],//////////types of competition from the reference table in the competition fees
-  competitionFormatTypes: [],////competition format types in the competition fees section from the reference table
-  registrationInvitees: [],////competition registration invitees
-  seasonalPaymentOption: [],////payment option  competition payment
-  charityRoundUp: [],/// charity roun in competititon
-  govtVoucher: [],// vouchers in competition discount section
+  typesOfCompetition: [], //////////types of competition from the reference table in the competition fees
+  competitionFormatTypes: [], ////competition format types in the competition fees section from the reference table
+  registrationInvitees: [], ////competition registration invitees
+  seasonalPaymentOption: [], ////payment option  competition payment
+  charityRoundUp: [], /// charity roun in competititon
+  govtVoucher: [], // vouchers in competition discount section
   casualPaymentOption: [],
   matchTypes: [],
   enhancedRoundRobinTypes: [],
@@ -46,8 +46,17 @@ const initialState = {
   demographicSetting: [],
   netballQuestionsSetting: [],
   otherQuestionsSetting: [],
-  helpMessage: [AppConstants.knockOutMsg, AppConstants.roundRobinMsg, AppConstants.doubleRoundRobinMsg, AppConstants.enhancedRoundRobinMsg],
-  regInviteesMsg: [AppConstants.regInviteesAffiliatesMsg, AppConstants.regInviteesAnyOrgMsg, AppConstants.regInviteesDirectMsg],
+  helpMessage: [
+    AppConstants.knockOutMsg,
+    AppConstants.roundRobinMsg,
+    AppConstants.doubleRoundRobinMsg,
+    AppConstants.enhancedRoundRobinMsg,
+  ],
+  regInviteesMsg: [
+    AppConstants.regInviteesAffiliatesMsg,
+    AppConstants.regInviteesAnyOrgMsg,
+    AppConstants.regInviteesDirectMsg,
+  ],
   membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
   allYearList: [],
   allCompetitionTypeList: [],
@@ -61,7 +70,7 @@ function arraymove(arr, fromIndex, toIndex) {
   var element = arr[fromIndex];
   arr.splice(fromIndex, 1);
   arr.splice(toIndex, 0, element);
-  return arr
+  return arr;
 }
 
 // function sortfunction(a, b) {
@@ -78,58 +87,57 @@ function arraymove(arr, fromIndex, toIndex) {
 // }
 
 function filteredSettingArray(result) {
-  let demographic = []
-  let netballQuestions = []
-  let otherQuestions = []
-  let advanceSettings = []
+  let demographic = [];
+  let netballQuestions = [];
+  let otherQuestions = [];
+  let advanceSettings = [];
   for (let i in result) {
     // if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
     //   demographic.push(result[i])
     // }
     if (result[i].id >= 7 && result[i].id <= 14) {
-      netballQuestions.push(result[i])
+      netballQuestions.push(result[i]);
     }
     // else if (result[i].id == 8 || result[i].id == 9 || result[i].id == 12 || result[i].id == 11) {
     //   otherQuestions.push(result[i])
     // }
     else if (result[i].id >= 1 && result[i].id <= 6) {
-      advanceSettings.push(result[i])
+      advanceSettings.push(result[i]);
     }
   }
-  netballQuestions = arraymove(netballQuestions, 2, 1)
-  otherQuestions = arraymove(otherQuestions, 3, 2)
+  netballQuestions = arraymove(netballQuestions, 2, 1);
+  otherQuestions = arraymove(otherQuestions, 3, 2);
   return {
     demographic,
     netballQuestions,
     otherQuestions,
-    advanceSettings
-  }
+    advanceSettings,
+  };
 }
 
 function getCompetitionFormatTypeWithHelpMsg(data, helpMsg) {
   for (let i in data) {
-    data[i]['helpMsg'] = helpMsg[i]
+    data[i]['helpMsg'] = helpMsg[i];
   }
   return data;
 }
 
 function getRegInviteesWithHelpMsg(data, helpMsg) {
   for (let i in data) {
-    data[i]['helpMsg'] = helpMsg[i]
+    data[i]['helpMsg'] = helpMsg[i];
   }
   return data;
 }
 
 function getMembershipProductFeesTypesWithHelpMsg(data, helpMsg) {
   for (let i in data) {
-    data[i]['helpMsg'] = helpMsg[i]
+    data[i]['helpMsg'] = helpMsg[i];
   }
   return data;
 }
 
 function getFilterBadgeData(badgeData) {
-
-  let arr = []
+  let arr = [];
   for (let i in badgeData) {
     let obj = {
       description: badgeData[i].description,
@@ -139,31 +147,29 @@ function getFilterBadgeData(badgeData) {
       subReferences: badgeData[i].subReferences,
       umpireRate: 0,
       umpReserveRate: 0,
-      umpCoachRate: 0
-    }
-    arr.push(obj)
+      umpCoachRate: 0,
+    };
+    arr.push(obj);
   }
   return arr;
 }
 
 function appState(state = initialState, action) {
   switch (action.type) {
-
     case ApiConstants.API_APP_FAIL:
       return {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
     case ApiConstants.API_APP_ERROR:
       return {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
-
 
     /////get the common year list reference
     case ApiConstants.API_YEAR_LIST_LOAD:
@@ -171,13 +177,13 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_YEAR_LIST_SUCCESS:
-      let yearListSorted = action.yearList ? reverseArray(action.yearList) : []
+      let yearListSorted = action.yearList ? reverseArray(action.yearList) : [];
       return {
         ...state,
         onLoad: false,
         yearList: yearListSorted,
         competitionTypeList: action.competetionListResult,
-        status: action.status
+        status: action.status,
       };
 
     /////get the common year list reference
@@ -186,12 +192,12 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_ONLY_YEAR_LIST_SUCCESS:
-      let yearSorted = action.result ? reverseArray(action.result) : []
+      let yearSorted = action.result ? reverseArray(action.result) : [];
       return {
         ...state,
         onLoad: false,
         yearList: yearSorted,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_FEE_TYPE_LIST_SUCCESS:
@@ -199,7 +205,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         feeTypes: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_PAYMENT_OPTIONS_LIST_SUCCESS:
@@ -207,7 +213,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         paymentOptions: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_PAYMENT_METHODS_LIST_SUCCESS:
@@ -215,9 +221,9 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         paymentMethods: action.result,
-        status: action.status
+        status: action.status,
       };
-  
+
     /////get the common membership product validity type list reference
     case ApiConstants.API_PRODUCT_VALIDITY_LIST_LOAD:
       return { ...state, onLoad: true };
@@ -227,7 +233,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         productValidityList: action.result,
-        status: action.status
+        status: action.status,
       };
 
     /////get the common Competition type list reference
@@ -241,7 +247,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         competitionTypeList: action.result,
-        status: action.status
+        status: action.status,
       };
 
     ///get the common Membership Product Fees Type
@@ -249,13 +255,16 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_SUCCESS:
-      const membershipProductFeesTypesWithHelpMsg = getMembershipProductFeesTypesWithHelpMsg(action.result, state.membershipProductFeeMsg)
+      const membershipProductFeesTypesWithHelpMsg = getMembershipProductFeesTypesWithHelpMsg(
+        action.result,
+        state.membershipProductFeeMsg,
+      );
       return {
         ...state,
         onLoad: false,
         // membershipProductFeesTypes: action.result,
         membershipProductFeesTypes: membershipProductFeesTypesWithHelpMsg,
-        status: action.status
+        status: action.status,
       };
 
     // // get Role Entity List for current  user
@@ -291,7 +300,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         commonDiscountTypes: action.result,
-        status: action.status
+        status: action.status,
       };
     //registration form method
 
@@ -303,7 +312,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         regMethod: action.result,
-        status: action.status
+        status: action.status,
       };
 
     //registration form Venue
@@ -318,7 +327,7 @@ function appState(state = initialState, action) {
         status: action.status,
         error: action.error,
         mainVenueList: action.result,
-        searchVenueList: action.result
+        searchVenueList: action.result,
       };
 
     //registration form advance  settings
@@ -327,7 +336,7 @@ function appState(state = initialState, action) {
 
     case ApiConstants.API_REG_FORM_SETTINGS_SUCCESS:
       const result = getRegistrationSetting(action.result);
-      let multipleSettingsArray = filteredSettingArray(result)
+      let multipleSettingsArray = filteredSettingArray(result);
       return {
         ...state,
         onLoad: false,
@@ -335,24 +344,24 @@ function appState(state = initialState, action) {
         demographicSetting: multipleSettingsArray.demographic,
         netballQuestionsSetting: multipleSettingsArray.netballQuestions,
         otherQuestionsSetting: multipleSettingsArray.otherQuestions,
-        status: action.status
+        status: action.status,
       };
-
 
     ////competition format init refernce APis
     case ApiConstants.API_REG_COMPETITION_FEE_INIT_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_REG_COMPETITION_FEE_INIT_SUCCESS:
-      const invitees = getRegistrationSetting(action.inviteesResult)
-      const regInviteesWithHelpMsg = getRegInviteesWithHelpMsg(invitees, state.regInviteesMsg)
-      let notApplicableIndex = invitees.findIndex(
-        x => x.name === "not_applicable"
-      );
-      invitees.splice(notApplicableIndex, 1)
-      const casualPayment = getRegistrationSetting(action.paymentOptionResult)
+      const invitees = getRegistrationSetting(action.inviteesResult);
+      const regInviteesWithHelpMsg = getRegInviteesWithHelpMsg(invitees, state.regInviteesMsg);
+      let notApplicableIndex = invitees.findIndex(x => x.name === 'not_applicable');
+      invitees.splice(notApplicableIndex, 1);
+      const casualPayment = getRegistrationSetting(action.paymentOptionResult);
       // const seasonalPayment = getRegistrationSetting(action.paymentOptionResult[1])
-      const competitionFormatTypeWithHelpMsg = getCompetitionFormatTypeWithHelpMsg(action.competitionFormat, state.helpMessage)
+      const competitionFormatTypeWithHelpMsg = getCompetitionFormatTypeWithHelpMsg(
+        action.competitionFormat,
+        state.helpMessage,
+      );
       return {
         ...state,
         onLoad: false,
@@ -376,7 +385,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         matchTypes: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD:
@@ -387,7 +396,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         competitionFormatTypes: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_COMPETITION_TYPES_LOAD:
@@ -398,7 +407,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         typesOfCompetition: action.result,
-        status: action.status
+        status: action.status,
       };
 
     /////////
@@ -407,21 +416,21 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-      let yearResult = action.yearList ? reverseArray(action.yearList) : []
-      let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
+      let yearResult = action.yearList ? reverseArray(action.yearList) : [];
+      let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult));
       let yearobject = {
-        description: "All",
+        description: 'All',
         id: -1,
-        name: "All",
+        name: 'All',
         sortOrder: 10,
         subReferences: null,
-      }
+      };
       let competitionobject = {
-        competitionId: "0",
-        competitionName: "All",
+        competitionId: '0',
+        competitionName: 'All',
         id: 0,
-      }
-      competitionResult.unshift(competitionobject)
+      };
+      competitionResult.unshift(competitionobject);
 
       let arr = [];
       if (!yearResult.find(x => x.id === -1)) {
@@ -432,7 +441,7 @@ function appState(state = initialState, action) {
 
       yearResult = arr;
 
-      if (action.data === "new") {
+      if (action.data === 'new') {
         // let arr = [];
         // arr.push(yearobject);
         // arr.push(...yearResult);
@@ -451,24 +460,23 @@ function appState(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_LIST:
-      state.selectedCompetition = action.data
+      state.selectedCompetition = action.data;
       return {
         ...state,
         onLoad: false,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.CLEAR_COMPETITION_DATA:
-      state.competitionList = []
+      state.competitionList = [];
       return { ...state };
-
 
     /////////
     case ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_Participate_COMPETITION_SUCCESS:
-      let participate_yearListSorted = action.yearList ? reverseArray(action.yearList) : []
+      let participate_yearListSorted = action.yearList ? reverseArray(action.yearList) : [];
       return {
         ...state,
         onLoad: false,
@@ -482,7 +490,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
-      let own_yearListSorted = action.yearList ? reverseArray(action.yearList) : []
+      let own_yearListSorted = action.yearList ? reverseArray(action.yearList) : [];
       return {
         ...state,
         onLoad: false,
@@ -491,7 +499,6 @@ function appState(state = initialState, action) {
         own_YearArr: own_yearListSorted,
         status: action.status,
       };
-
 
     // case ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_SUCCESS:
     //   if (state.own_CompetitionArr.length > 0) {
@@ -542,41 +549,38 @@ function appState(state = initialState, action) {
     //     ...state
     //   }
 
-
     case ApiConstants.CLEAR_OWN_COMPETITION_DATA:
-      if (action.key === "participate_CompetitionArr") {
-        state.participate_CompetitionArr = []
+      if (action.key === 'participate_CompetitionArr') {
+        state.participate_CompetitionArr = [];
+      } else if (action.key === 'all') {
+        clearCompetitionLocalStorage();
+        state.participate_CompetitionArr = [];
+        state.own_CompetitionArr = [];
+        state.all_own_CompetitionArr = [];
+      } else {
+        state.own_CompetitionArr = [];
+        state.all_own_CompetitionArr = [];
       }
-      else if (action.key === "all") {
-        clearCompetitionLocalStorage()
-        state.participate_CompetitionArr = []
-        state.own_CompetitionArr = []
-        state.all_own_CompetitionArr = []
-      }
-      else {
-        state.own_CompetitionArr = []
-        state.all_own_CompetitionArr = []
-      }
-      return { ...state }
+      return { ...state };
 
     case ApiConstants.CLEAR_FILTER_SEARCH_VENUE:
-      state.venueList = state.mainVenueList
+      state.venueList = state.mainVenueList;
       return {
         ...state,
-      }
+      };
 
     case ApiConstants.API_ADD_VENUE_SUCCESS:
       if (action.result != null) {
-        state.mainVenueList.push(action.result)
-        state.venueList.push(action.result)
-        state.searchVenueList.push(action.result)
+        state.mainVenueList.push(action.result);
+        state.venueList.push(action.result);
+        state.searchVenueList.push(action.result);
       }
 
       return {
         ...state,
-      }
+      };
     case ApiConstants.Search_Venue_updated_Competition:
-      return { ...state, venueList: action.filterData }
+      return { ...state, venueList: action.filterData };
 
     case ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD:
       return { ...state, onLoad: true };
@@ -586,7 +590,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         enhancedRoundRobinTypes: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_EXPORT_FILES_LOAD:
@@ -596,7 +600,7 @@ function appState(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_EXPORT_FILES_LOAD:
@@ -606,38 +610,39 @@ function appState(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        status: action.status
+        status: action.status,
       };
     //update status ref id
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
-      let publishCompetitionid = action.competitionId
-      let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId === publishCompetitionid)
-      state.own_CompetitionArr[publishedCompIndex].statusRefId = action.result.statusRefId
+      let publishCompetitionid = action.competitionId;
+      let publishedCompIndex = state.own_CompetitionArr.findIndex(
+        x => x.competitionId === publishCompetitionid,
+      );
+      state.own_CompetitionArr[publishedCompIndex].statusRefId = action.result.statusRefId;
       return {
         ...state,
         onLoad: false,
-        status: action.status
-      }
+        status: action.status,
+      };
 
     ///clear reducer data
     case ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS:
-      state.participate_CompetitionArr = []
-      state.own_CompetitionArr = []
-      state.own_YearArr = []
-      state.participate_YearArr = []
+      state.participate_CompetitionArr = [];
+      state.own_CompetitionArr = [];
+      state.own_YearArr = [];
+      state.participate_YearArr = [];
       return {
-        ...state
+        ...state,
+      };
 
-      }
-
-    ////Ref Badge 
+    ////Ref Badge
     case ApiConstants.API_GET_REF_BADGE_LOAD:
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_REF_BADGE_SUCCESS:
-      let filterBadgeData = getFilterBadgeData(action.result)
-      state.filterBadgeArr = filterBadgeData
-      state.accreditation = action.result
+      let filterBadgeData = getFilterBadgeData(action.result);
+      state.filterBadgeArr = filterBadgeData;
+      state.accreditation = action.result;
       return {
         ...state,
         onLoad: false,
@@ -650,7 +655,7 @@ function appState(state = initialState, action) {
         ...state,
         onLoad: false,
         discountMethod: action.result,
-        status: action.status
+        status: action.status,
       };
 
     default:

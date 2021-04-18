@@ -1,12 +1,12 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "themes/appConstants";
-import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
-import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
-import UserAxiosApi from "store/http/userHttp/userAxiosApi";
+import AppConstants from 'themes/appConstants';
+import ApiConstants from 'themes/apiConstants';
+import history from 'util/history';
+import { receiptImportResult } from 'util/showImportResult';
+import LiveScoreAxiosApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
+import UserAxiosApi from 'store/http/userHttp/userAxiosApi';
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_LIVE_SCORE_MANAGER_FAIL });
@@ -20,7 +20,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
-  console.log(error)
+  console.log(error);
   yield put({
     type: ApiConstants.API_LIVE_SCORE_MANAGER_ERROR,
     error: error,
@@ -32,7 +32,7 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    message.error(error && error.error ? error.error : AppConstants.somethingWentWrong);
   } else {
     message.config({
       duration: 1.5,
@@ -76,7 +76,12 @@ function* liveScoreManagerListSaga(action) {
 // Add/Edit Manager Saga
 function* liveScoreAddEditManagerSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddEditManager, action.data, action.compOrgId, action.isParent);
+    const result = yield call(
+      LiveScoreAxiosApi.liveScoreAddEditManager,
+      action.data,
+      action.compOrgId,
+      action.isParent,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -85,9 +90,9 @@ function* liveScoreAddEditManagerSaga(action) {
         status: result.status,
       });
 
-      message.success("Add Manager - Successfully Added");
+      message.success('Add Manager - Successfully Added');
 
-      history.push("/matchDayManagerList");
+      history.push('/matchDayManagerList');
     } else {
       yield call(failSaga, result);
     }
@@ -99,7 +104,12 @@ function* liveScoreAddEditManagerSaga(action) {
 // Search Manager Saga
 function* liveScoreManagerSearchSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.liveScoreSearchManager, action.data, action.competitionOrgId, action.roleId);
+    const result = yield call(
+      UserAxiosApi.liveScoreSearchManager,
+      action.data,
+      action.competitionOrgId,
+      action.roleId,
+    );
 
     if (result) {
       if (result.status === 1) {
@@ -133,8 +143,8 @@ function* liveScoreManagerImportSaga(action) {
       });
 
       if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/matchDayManagerList");
-        message.success("Manager Imported Successfully.");
+        history.push('/matchDayManagerList');
+        message.success('Manager Imported Successfully.');
       } else {
         receiptImportResult(result.result);
       }

@@ -1,192 +1,203 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Button, message } from "antd";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Layout, Breadcrumb, Button, message } from 'antd';
 
-import AppConstants from "themes/appConstants";
-import ValidationConstants from "themes/validationConstant";
-import history from "util/history";
-import { getLiveScoreCompetiton } from "util/sessionStorage";
-import { showInvalidData } from "util/showImportResult";
+import AppConstants from 'themes/appConstants';
+import ValidationConstants from 'themes/validationConstant';
+import history from 'util/history';
+import { getLiveScoreCompetiton } from 'util/sessionStorage';
+import { showInvalidData } from 'util/showImportResult';
 import {
-    liveScoreUmpireImportAction,
-    liveScoreUmpireResetImportResultAction
-} from "store/actions/LiveScoreAction/livescoreUmpiresAction";
-import Loader from "customComponents/loader";
-import InnerHorizontalMenu from "pages/innerHorizontalMenu";
-import DashboardLayout from "pages/dashboardLayout";
+  liveScoreUmpireImportAction,
+  liveScoreUmpireResetImportResultAction,
+} from 'store/actions/LiveScoreAction/livescoreUmpiresAction';
+import Loader from 'customComponents/loader';
+import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
+import DashboardLayout from 'pages/dashboardLayout';
 
 // import "./umpire.css";
 
 const { Content, Header, Footer } = Layout;
 
 const columns = [
-    {
-        title: AppConstants.firstName,
-        dataIndex: "First Name",
-        key: "First Name",
-    },
-    {
-        title: AppConstants.lastName,
-        dataIndex: "Last Name",
-        key: "Last Name",
-    },
-    {
-        title: AppConstants.email,
-        dataIndex: "Email",
-        key: "Email",
-    },
-    {
-        title: AppConstants.contact_No,
-        dataIndex: "Contact No",
-        key: "Contact No",
-    },
-    {
-        title: AppConstants.organisation,
-        dataIndex: "Organisation",
-        key: "Organisation",
-    },
+  {
+    title: AppConstants.firstName,
+    dataIndex: 'First Name',
+    key: 'First Name',
+  },
+  {
+    title: AppConstants.lastName,
+    dataIndex: 'Last Name',
+    key: 'Last Name',
+  },
+  {
+    title: AppConstants.email,
+    dataIndex: 'Email',
+    key: 'Email',
+  },
+  {
+    title: AppConstants.contact_No,
+    dataIndex: 'Contact No',
+    key: 'Contact No',
+  },
+  {
+    title: AppConstants.organisation,
+    dataIndex: 'Organisation',
+    key: 'Organisation',
+  },
 ];
 
 class LiveScoreUmpireImport extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            csvData: null,
-            screenName: (props.location && props.location.state && props.location.state.screenName) ? props.location.state.screenName : null,
-        };
-    }
-
-    componentDidMount() {
-        this.props.liveScoreUmpireResetImportResultAction();
-    }
-
-    headerView = () => (
-        <div className="header-view">
-            <Header className="form-header-view d-flex align-items-center bg-transparent">
-                <div className="row">
-                    <div className="col-sm d-flex align-content-center">
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.importUmpire}</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                </div>
-            </Header>
-        </div>
-    );
-
-    handleForce = data => {
-        this.setState({ csvData: data.target.files[0] });
+    this.state = {
+      csvData: null,
+      screenName:
+        props.location && props.location.state && props.location.state.screenName
+          ? props.location.state.screenName
+          : null,
     };
+  }
 
-    onUploadBtn = () => {
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        if (this.state.csvData) {
-            this.props.liveScoreUmpireImportAction({
-                id,
-                csvFile: this.state.csvData,
-                screenName: "liveScoreUmpireList",
-            });
+  componentDidMount() {
+    this.props.liveScoreUmpireResetImportResultAction();
+  }
 
-            this.setState({
-                csvData: null,
-            }, () => {
-                this.filesInput.value = null;
-            });
-        } else {
-            message.config({ duration: 0.9, maxCount: 1 });
-            message.error(ValidationConstants.csvField);
-        }
-    };
-
-    contentView = () => (
-        <div className="content-view pt-4">
-            <span className="user-contact-heading">{AppConstants.fileInput}</span>
-
-            <div className="col-sm">
-                <div className="row">
-                    <label>
-                        <input
-                            className="pt-2 pb-2 pointer"
-                            type="file"
-                            ref={(input) => {
-                                this.filesInput = input
-                            }}
-                            name="file"
-                            // icon="file text outline"
-                            // iconPosition="left"
-                            // label="Upload CSV"
-                            // labelPosition="right"
-                            placeholder="UploadCSV..."
-                            onChange={this.handleForce}
-                            accept=".csv"
-                        />
-                    </label>
-                </div>
-            </div>
-
-            <div className="col-sm mt-10">
-                <div className="row">
-                    <div className="reg-add-save-button">
-                        {this.state.screenName === "umpireRoster" ? (
-                            <Button type="primary" className="primary-add-comp-form">
-                                {AppConstants.upload}
-                            </Button>
-                        ) : (
-                            <Button type="primary" className="primary-add-comp-form" onClick={this.onUploadBtn}>
-                                {AppConstants.upload}
-                            </Button>
-                        )}
-                    </div>
-                </div>
-            </div>
+  headerView = () => (
+    <div className="header-view">
+      <Header className="form-header-view d-flex align-items-center bg-transparent">
+        <div className="row">
+          <div className="col-sm d-flex align-content-center">
+            <Breadcrumb separator=" > ">
+              <Breadcrumb.Item className="breadcrumb-add">
+                {AppConstants.importUmpire}
+              </Breadcrumb.Item>
+            </Breadcrumb>
+          </div>
         </div>
-    );
+      </Header>
+    </div>
+  );
 
-    render() {
-        const { liveScoreUmpiresState: { importResult, onLoad } } = this.props;
-        return (
-            <div className="fluid-width default-bg">
-                <DashboardLayout
-                    menuHeading={AppConstants.matchDay}
-                    menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./matchDayCompetitions")}
-                />
+  handleForce = data => {
+    this.setState({ csvData: data.target.files[0] });
+  };
 
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="6" />
+  onUploadBtn = () => {
+    const { id } = JSON.parse(getLiveScoreCompetiton());
+    if (this.state.csvData) {
+      this.props.liveScoreUmpireImportAction({
+        id,
+        csvFile: this.state.csvData,
+        screenName: 'liveScoreUmpireList',
+      });
 
-                <Loader visible={onLoad} />
-
-                <Layout>
-                    {this.headerView()}
-
-                    <Content>
-                        <div className="formView">
-                            {this.contentView()}
-                        </div>
-
-                        {showInvalidData(columns, importResult)}
-                    </Content>
-
-                    <Footer />
-                </Layout>
-            </div>
-        );
+      this.setState(
+        {
+          csvData: null,
+        },
+        () => {
+          this.filesInput.value = null;
+        },
+      );
+    } else {
+      message.config({ duration: 0.9, maxCount: 1 });
+      message.error(ValidationConstants.csvField);
     }
+  };
+
+  contentView = () => (
+    <div className="content-view pt-4">
+      <span className="user-contact-heading">{AppConstants.fileInput}</span>
+
+      <div className="col-sm">
+        <div className="row">
+          <label>
+            <input
+              className="pt-2 pb-2 pointer"
+              type="file"
+              ref={input => {
+                this.filesInput = input;
+              }}
+              name="file"
+              // icon="file text outline"
+              // iconPosition="left"
+              // label="Upload CSV"
+              // labelPosition="right"
+              placeholder="UploadCSV..."
+              onChange={this.handleForce}
+              accept=".csv"
+            />
+          </label>
+        </div>
+      </div>
+
+      <div className="col-sm mt-10">
+        <div className="row">
+          <div className="reg-add-save-button">
+            {this.state.screenName === 'umpireRoster' ? (
+              <Button type="primary" className="primary-add-comp-form">
+                {AppConstants.upload}
+              </Button>
+            ) : (
+              <Button type="primary" className="primary-add-comp-form" onClick={this.onUploadBtn}>
+                {AppConstants.upload}
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  render() {
+    const {
+      liveScoreUmpiresState: { importResult, onLoad },
+    } = this.props;
+    return (
+      <div className="fluid-width default-bg">
+        <DashboardLayout
+          menuHeading={AppConstants.matchDay}
+          menuName={AppConstants.liveScores}
+          onMenuHeadingClick={() => history.push('./matchDayCompetitions')}
+        />
+
+        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="6" />
+
+        <Loader visible={onLoad} />
+
+        <Layout>
+          {this.headerView()}
+
+          <Content>
+            <div className="formView">{this.contentView()}</div>
+
+            {showInvalidData(columns, importResult)}
+          </Content>
+
+          <Footer />
+        </Layout>
+      </div>
+    );
+  }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        liveScoreUmpireImportAction,
-        liveScoreUmpireResetImportResultAction,
-    }, dispatch);
+  return bindActionCreators(
+    {
+      liveScoreUmpireImportAction,
+      liveScoreUmpireResetImportResultAction,
+    },
+    dispatch,
+  );
 }
 
 function mapStateToProps(state) {
-    return {
-        liveScoreUmpiresState: state.LiveScoreUmpiresState,
-    };
+  return {
+    liveScoreUmpiresState: state.LiveScoreUmpiresState,
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreUmpireImport);

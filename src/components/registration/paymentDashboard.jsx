@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Layout,
   Table,
@@ -10,42 +10,38 @@ import {
   Tag,
   Input,
   Modal,
-} from "antd";
-import "./product.scss";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import {
-  getOrganisationData,
-  getGlobalYear,
-  setGlobalYear,
-} from "util/sessionStorage";
-import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
-import { isEmptyArray } from "formik";
-import moment from "moment";
-import { SearchOutlined } from "@ant-design/icons";
-import Loader from "customComponents/loader";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+} from 'antd';
+import './product.scss';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getOrganisationData, getGlobalYear, setGlobalYear } from 'util/sessionStorage';
+import { getAffiliateToOrganisationAction } from 'store/actions/userAction/userAction';
+import { isEmptyArray } from 'formik';
+import moment from 'moment';
+import { SearchOutlined } from '@ant-design/icons';
+import Loader from 'customComponents/loader';
+import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
+import DashboardLayout from '../../pages/dashboardLayout';
+import AppConstants from '../../themes/appConstants';
+import AppImages from '../../themes/appImages';
 import {
   getOnlyYearListAction,
   getFeeTypeAction,
   getPaymentOptionsListAction,
   getPaymentMethodsListAction,
   getDiscountMethodListAction,
-} from "../../store/actions/appAction";
-import { currencyFormat } from "../../util/currencyFormat";
+} from '../../store/actions/appAction';
+import { currencyFormat } from '../../util/currencyFormat';
 import {
   getPaymentList,
   exportPaymentDashboardApi,
   setDashboardPageSizeAction,
   partialRefundAmountAction,
   setDashboardPageNumberAction,
-} from "../../store/actions/stripeAction/stripeAction";
-import { endUserRegDashboardListAction } from "../../store/actions/registrationAction/endUserRegistrationAction";
-import InputWithHead from "../../customComponents/InputWithHead";
+} from '../../store/actions/stripeAction/stripeAction';
+import { endUserRegDashboardListAction } from '../../store/actions/registrationAction/endUserRegistrationAction';
+import InputWithHead from '../../customComponents/InputWithHead';
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -53,7 +49,7 @@ const { SubMenu } = Menu;
 let this_Obj = null;
 
 // listeners for sorting
-const listeners = (key) => ({
+const listeners = key => ({
   onClick: () => tableSort(key),
 });
 
@@ -62,16 +58,10 @@ function tableSort(key) {
   let sortBy = key;
   let sortOrder = null;
   if (this_Obj.state.sortBy !== key) {
-    sortOrder = "ASC";
-  } else if (
-    this_Obj.state.sortBy === key &&
-    this_Obj.state.sortOrder === "ASC"
-  ) {
-    sortOrder = "DESC";
-  } else if (
-    this_Obj.state.sortBy === key &&
-    this_Obj.state.sortOrder === "DESC"
-  ) {
+    sortOrder = 'ASC';
+  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+    sortOrder = 'DESC';
+  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
     sortBy = sortOrder = null;
   }
   let { paymentListPageSize } = this_Obj.props.paymentState;
@@ -83,31 +73,31 @@ function tableSort(key) {
     sortBy,
     sortOrder,
     -1,
-    "-1",
+    '-1',
     this_Obj.state.yearRefId,
     this_Obj.state.competitionUniqueKey,
     this_Obj.state.filterOrganisation,
     this_Obj.state.dateFrom,
     this_Obj.state.dateTo,
-    this_Obj.state.searchText
+    this_Obj.state.searchText,
   );
 }
 
 const columns = [
   {
     title: AppConstants.name,
-    dataIndex: "userFirstName",
-    key: "userFirstName",
+    dataIndex: 'userFirstName',
+    key: 'userFirstName',
     sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners("name"),
+    onHeaderCell: ({ dataIndex }) => listeners('name'),
     render: (userFirstName, record) => (
       <NavLink
         to={{
           pathname: `/userPersonal`,
           state: {
             userId: record.userId,
-            screenKey: "paymentDashboard",
-            screen: "/paymentDashboard",
+            screenKey: 'paymentDashboard',
+            screen: '/paymentDashboard',
           },
         }}
       >
@@ -117,112 +107,106 @@ const columns = [
   },
   {
     title: AppConstants.date,
-    dataIndex: "createdOn",
-    key: "createdOn",
+    dataIndex: 'createdOn',
+    key: 'createdOn',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    render: (createdOn) => (
-      <span>{moment(createdOn).format("DD/MM/YYYY HH:mm")}</span>
-    ),
+    render: createdOn => <span>{moment(createdOn).format('DD/MM/YYYY HH:mm')}</span>,
   },
   {
     title: AppConstants.paidBy,
-    dataIndex: "paidBy",
-    key: "paidBy",
+    dataIndex: 'paidBy',
+    key: 'paidBy',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.organisation,
-    dataIndex: "affiliateName",
-    key: "affiliateName",
+    dataIndex: 'affiliateName',
+    key: 'affiliateName',
     sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners("affiliate"),
-    render: (affiliateName) => (
-      <span>
-        {affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}
-      </span>
+    onHeaderCell: ({ dataIndex }) => listeners('affiliate'),
+    render: affiliateName => (
+      <span>{affiliateName === null || affiliateName === '' ? 'N/A' : affiliateName}</span>
     ),
   },
   {
     title: AppConstants.competition,
-    dataIndex: "competitionName",
-    key: "competitionName",
+    dataIndex: 'competitionName',
+    key: 'competitionName',
     sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners("competition"),
-    render: (competitionName) => <span>{competitionName}</span>,
+    onHeaderCell: ({ dataIndex }) => listeners('competition'),
+    render: competitionName => <span>{competitionName}</span>,
   },
   {
     title: AppConstants.feeType,
-    dataIndex: "feeType",
-    key: "feeType",
+    dataIndex: 'feeType',
+    key: 'feeType',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.paymentType,
-    dataIndex: "paymentType",
-    key: "paymentType",
+    dataIndex: 'paymentType',
+    key: 'paymentType',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.membershipType,
-    dataIndex: "membershipTypeName",
-    key: "membershipTypeName",
+    dataIndex: 'membershipTypeName',
+    key: 'membershipTypeName',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.totalFeeIncGst,
-    dataIndex: "invoiceTotal",
-    key: "invoiceTotal",
+    dataIndex: 'invoiceTotal',
+    key: 'invoiceTotal',
     render: (invoiceTotal, record) => currencyFormat(invoiceTotal),
     sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners("totalFee"),
+    onHeaderCell: ({ dataIndex }) => listeners('totalFee'),
   },
   {
     title: AppConstants.portion,
-    dataIndex: "affiliatePortion",
-    key: "affiliatePortion",
+    dataIndex: 'affiliatePortion',
+    key: 'affiliatePortion',
     render: (affiliatePortion, record) =>
       affiliatePortion < 0 ? (
-        <span style={{ color: "red" }}>{`(${currencyFormat(
-          affiliatePortion * -1
-        )})`}</span>
+        <span style={{ color: 'red' }}>{`(${currencyFormat(affiliatePortion * -1)})`}</span>
       ) : (
         <span>{currencyFormat(affiliatePortion)}</span>
       ),
     sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
+    onHeaderCell: ({ dataIndex }) => listeners('ourPortion'),
   },
   {
     title: AppConstants.fee,
-    dataIndex: "paidFee",
-    key: "paidFee",
+    dataIndex: 'paidFee',
+    key: 'paidFee',
     render: (paidFee, record) => currencyFormat(paidFee),
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.discount,
-    dataIndex: "discount",
-    key: "discount",
+    dataIndex: 'discount',
+    key: 'discount',
     render: (discount, record) => currencyFormat(discount),
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: AppConstants.governmentVoucher,
-    dataIndex: "governmentVoucherAmount",
-    key: "governmentVoucherAmount",
+    dataIndex: 'governmentVoucherAmount',
+    key: 'governmentVoucherAmount',
     render: (governmentVoucherAmount, record) => {
       return (
         <div
           className={
             record.governmentVoucherStatusRefId != 2 &&
             parseFloat(governmentVoucherAmount) > 0 &&
-            "government-voucher-grey-text"
+            'government-voucher-grey-text'
           }
         >
           {currencyFormat(governmentVoucherAmount)}
@@ -234,42 +218,40 @@ const columns = [
   },
   {
     title: AppConstants.governmentVoucherStatus,
-    dataIndex: "governmentVoucherStatus",
-    key: "governmentVoucherStatus",
+    dataIndex: 'governmentVoucherStatus',
+    key: 'governmentVoucherStatus',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-    render: (governmentVoucherStatus, record) => (
-      <span>{governmentVoucherStatus}</span>
-    ),
+    render: (governmentVoucherStatus, record) => <span>{governmentVoucherStatus}</span>,
   },
   {
     title: AppConstants.feeStatus,
-    dataIndex: "paymentStatus",
-    key: "paymentStatus",
+    dataIndex: 'paymentStatus',
+    key: 'paymentStatus',
     sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners("status"),
-    render: (paymentStatus) => (
+    onHeaderCell: ({ dataIndex }) => listeners('status'),
+    render: paymentStatus => (
       // <span>{paymentStatus === "pending" ? "Not Paid" : "Paid"}</span>
       <span>{paymentStatus}</span>
     ),
   },
   {
     title: AppConstants.action,
-    dataIndex: "isUsed",
-    key: "isUsed",
+    dataIndex: 'isUsed',
+    key: 'isUsed',
     render: (isUsed, record) => {
       return (
         <div>
-          {record.canPartialRefund == 1 && record.paymentType != "Invoice" ? (
+          {record.canPartialRefund == 1 && record.paymentType != 'Invoice' ? (
             <Menu
               className="action-triple-dot-submenu "
               theme="light"
               mode="horizontal"
-              style={{ lineHeight: "25px" }}
+              style={{ lineHeight: '25px' }}
             >
               <SubMenu
                 key="sub1"
-                style={{ borderBottomStyle: "solid", borderBottom: 0 }}
+                style={{ borderBottomStyle: 'solid', borderBottom: 0 }}
                 title={
                   <img
                     className="dot-image"
@@ -307,13 +289,13 @@ class PaymentDashboard extends Component {
         : null,
       deleteLoading: false,
       yearRefId: null,
-      competitionUniqueKey: "-1",
+      competitionUniqueKey: '-1',
       filterOrganisation: -1,
       loadingSave: false,
       offset: 0,
       userInfo: null,
       userId: -1,
-      registrationId: "-1",
+      registrationId: '-1',
       sortBy: null,
       sortOrder: null,
       dateFrom: null,
@@ -323,7 +305,7 @@ class PaymentDashboard extends Component {
       paymentOption: -1,
       paymentMethod: -1,
       status: -1,
-      searchText: "",
+      searchText: '',
       membershipType: -1,
       paymentStatus: -1,
       showRefundModalVisible: false,
@@ -348,15 +330,11 @@ class PaymentDashboard extends Component {
       sortOrder = paymentDashboardListAction.sortOrder;
       const registrationId =
         paymentDashboardListAction.registrationId == null
-          ? "-1"
+          ? '-1'
           : paymentDashboardListAction.registrationId;
       const userId =
-        paymentDashboardListAction.userId == null
-          ? -1
-          : paymentDashboardListAction.userId;
-      const yearRefId = getGlobalYear()
-        ? getGlobalYear()
-        : paymentDashboardListAction.yearId;
+        paymentDashboardListAction.userId == null ? -1 : paymentDashboardListAction.userId;
+      const yearRefId = getGlobalYear() ? getGlobalYear() : paymentDashboardListAction.yearId;
       const competitionUniqueKey = paymentDashboardListAction.competitionKey;
       const { dateFrom } = paymentDashboardListAction;
       const { dateTo } = paymentDashboardListAction;
@@ -378,17 +356,10 @@ class PaymentDashboard extends Component {
       paymentListPageSize = paymentListPageSize ? paymentListPageSize : 10;
       page = Math.floor(offset / paymentListPageSize) + 1;
 
-      this.handlePaymentTableList(
-        page,
-        userId,
-        registrationId,
-        this.state.searchText
-      );
+      this.handlePaymentTableList(page, userId, registrationId, this.state.searchText);
     } else {
-      const yearRefId = getGlobalYear() ? getGlobalYear() : "-1";
-      const userInfo = this.props.location.state
-        ? this.props.location.state.personal
-        : null;
+      const yearRefId = getGlobalYear() ? getGlobalYear() : '-1';
+      const userInfo = this.props.location.state ? this.props.location.state.personal : null;
       const registrationId = this.props.location.state
         ? this.props.location.state.registrationId
         : null;
@@ -398,7 +369,7 @@ class PaymentDashboard extends Component {
         yearRefId: JSON.parse(yearRefId),
       });
       const userId = userInfo != null ? userInfo.userId : -1;
-      const regId = registrationId != null ? registrationId : "-1";
+      const regId = registrationId != null ? registrationId : '-1';
 
       this.handlePaymentTableList(1, userId, regId, this.state.searchText);
     }
@@ -410,17 +381,12 @@ class PaymentDashboard extends Component {
       this.props.paymentState.refundAmountLoad == false &&
       this.props.paymentState.status == 1
     ) {
-      this.handlePaymentTableList(
-        1,
-        this.state.userId,
-        this.state.regId,
-        this.state.searchText
-      );
+      this.handlePaymentTableList(1, this.state.userId, this.state.regId, this.state.searchText);
       this.setState({ onLoad: false });
     }
   }
 
-  referenceCalls = (organisationId) => {
+  referenceCalls = organisationId => {
     this.props.getAffiliateToOrganisationAction(organisationId);
     this.props.getOnlyYearListAction();
     this.props.getFeeTypeAction();
@@ -431,27 +397,27 @@ class PaymentDashboard extends Component {
       {
         organisationUniqueKey: this.state.organisationUniqueKey,
         yearRefId: 1,
-        competitionUniqueKey: "-1",
-        dobFrom: "-1",
-        dobTo: "-1",
+        competitionUniqueKey: '-1',
+        dobFrom: '-1',
+        dobTo: '-1',
         membershipProductTypeId: -1,
         genderRefId: -1,
-        postalCode: "-1",
+        postalCode: '-1',
         affiliate: -1,
         membershipProductId: -1,
         paymentId: -1,
         paymentStatusRefId: -1,
-        searchText: "",
+        searchText: '',
         teamId: -1,
-        regFrom: "-1",
-        regTo: "-1",
+        regFrom: '-1',
+        regTo: '-1',
         paging: {
           limit: 10,
           offset: 0,
         },
       },
       null,
-      null
+      null,
     );
   };
 
@@ -472,14 +438,14 @@ class PaymentDashboard extends Component {
       offset,
       discountMethod,
     } = this.state;
-    const year = getGlobalYear() ? getGlobalYear() : "-1";
+    const year = getGlobalYear() ? getGlobalYear() : '-1';
 
     this.props.exportPaymentDashboardApi(
       offset,
       sortBy,
       sortOrder,
       this.state.userId !== null ? this.state.userId : -1,
-      "-1",
+      '-1',
       this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(year),
       competitionUniqueKey,
       filterOrganisation,
@@ -490,51 +456,46 @@ class PaymentDashboard extends Component {
       paymentOption,
       paymentMethod,
       membershipType,
-      discountMethod
+      discountMethod,
     );
   }
 
   clearFilterByUserId = () => {
     this.setState({ userInfo: null });
-    this.handlePaymentTableList(
-      this.state.offset,
-      -1,
-      "-1",
-      this.state.searchText
-    );
+    this.handlePaymentTableList(this.state.offset, -1, '-1', this.state.searchText);
   };
 
   // on change search text
-  onChangeSearchText = (e) => {
+  onChangeSearchText = e => {
     this.setState({ searchText: e.target.value, offset: 0 });
-    if (e.target.value === null || e.target.value === "") {
+    if (e.target.value === null || e.target.value === '') {
       this.handlePaymentTableList(
         1,
         this.state.userId !== null ? this.state.userId : -1,
-        this.state.registrationId !== null ? this.state.registrationId : "-1",
+        this.state.registrationId !== null ? this.state.registrationId : '-1',
         e.target.value,
         this.state.feeType,
         this.state.paymentOption,
         this.state.paymentMethod,
         this.state.membershipType,
-        this.state.discountMethod
+        this.state.discountMethod,
       );
     }
   };
 
-  onKeyEnterSearchText = (e) => {
+  onKeyEnterSearchText = e => {
     const code = e.keyCode || e.which;
     if (code === 13) {
       // 13 is the enter keycode
       this.handlePaymentTableList(
         1,
         this.state.userId !== null ? this.state.userId : -1,
-        this.state.registrationId !== null ? this.state.registrationId : "-1",
+        this.state.registrationId !== null ? this.state.registrationId : '-1',
         this.state.searchText,
         this.state.feeType,
         this.state.paymentType,
         this.state.paymentMethod,
-        this.state.discountMethod
+        this.state.discountMethod,
       );
     }
   };
@@ -544,17 +505,17 @@ class PaymentDashboard extends Component {
       this.handlePaymentTableList(
         1,
         this.state.userId !== null ? this.state.userId : -1,
-        this.state.registrationId !== null ? this.state.registrationId : "-1",
+        this.state.registrationId !== null ? this.state.registrationId : '-1',
         this.state.searchText,
         this.state.feeType,
         this.state.paymentType,
         this.state.paymentMethod,
-        this.state.discountMethod
+        this.state.discountMethod,
       );
     }
   };
 
-  refundPopUp = (record) => {
+  refundPopUp = record => {
     this.setState({ showRefundModalVisible: true, refundRecord: record });
   };
 
@@ -592,7 +553,7 @@ class PaymentDashboard extends Component {
       <Modal
         title={AppConstants.warning}
         visible={this.state.showValidAmountVisible}
-        cancelButtonProps={{ style: { display: "none" } }}
+        cancelButtonProps={{ style: { display: 'none' } }}
         onCancel={() => this.setState({ showValidAmountVisible: false })}
         onOk={() => this.setState({ showValidAmountVisible: false })}
       >
@@ -606,7 +567,7 @@ class PaymentDashboard extends Component {
       <Modal
         title={AppConstants.warning}
         visible={this.state.showMaximumAmountPopup}
-        cancelButtonProps={{ style: { display: "none" } }}
+        cancelButtonProps={{ style: { display: 'none' } }}
         onCancel={() => this.setState({ showMaximumAmountPopup: false })}
         onOk={() => this.setState({ showMaximumAmountPopup: false })}
       >
@@ -620,15 +581,13 @@ class PaymentDashboard extends Component {
       <Modal
         title={AppConstants.partialRefund}
         visible={this.state.showRefundModalVisible}
-        onCancel={() =>
-          this.setState({ showRefundModalVisible: false, refundRecord: null })
-        }
+        onCancel={() => this.setState({ showRefundModalVisible: false, refundRecord: null })}
         onOk={() => this.refundAmountCall()}
       >
         <InputWithHead
-          style={{ width: "30%" }}
+          style={{ width: '30%' }}
           value={this.state.refundAmount}
-          onChange={(e) => this.setState({ refundAmount: e.target.value })}
+          onChange={e => this.setState({ refundAmount: e.target.value })}
           heading={AppConstants.enterRefundAmount}
           placeholder={AppConstants.enterAmount}
         />
@@ -676,7 +635,7 @@ class PaymentDashboard extends Component {
                       prefix={
                         <SearchOutlined
                           style={{
-                            color: "rgba(0,0,0,.25)",
+                            color: 'rgba(0,0,0,.25)',
                             height: 16,
                             width: 16,
                           }}
@@ -697,11 +656,7 @@ class PaymentDashboard extends Component {
                     >
                       <div className="row">
                         <div className="col-sm">
-                          <img
-                            src={AppImages.export}
-                            alt=""
-                            className="export-image"
-                          />
+                          <img src={AppImages.export} alt="" className="export-image" />
                           {AppConstants.export}
                         </div>
                       </div>
@@ -744,7 +699,7 @@ class PaymentDashboard extends Component {
       discountMethod,
     } = this.state;
     let offset = page ? paymentListPageSize * (page - 1) : 0;
-    let year = getGlobalYear() ? getGlobalYear() : "-1";
+    let year = getGlobalYear() ? getGlobalYear() : '-1';
     this.setState({
       offset,
       userId,
@@ -757,7 +712,7 @@ class PaymentDashboard extends Component {
       sortBy,
       sortOrder,
       userId,
-      "-1",
+      '-1',
       this.state.yearRefId == -1 ? this.state.yearRefId : JSON.parse(year),
       competitionUniqueKey,
       filterOrganisation,
@@ -769,55 +724,51 @@ class PaymentDashboard extends Component {
       paymentMethod,
       membershipType,
       paymentStatus,
-      discountMethod
+      discountMethod,
     );
   };
 
   onChangeDropDownValue = async (value, key) => {
-    if (key === "yearRefId") {
+    if (key === 'yearRefId') {
       await this.setState({ yearRefId: value });
       if (value != -1) {
         setGlobalYear(value);
       }
       this.handlePaymentTableList(1, -1, null, this.state.searchText);
-    } else if (key === "competitionId") {
+    } else if (key === 'competitionId') {
       await this.setState({ competitionUniqueKey: value });
       this.handlePaymentTableList(1, -1, null, this.state.searchText);
-    } else if (key === "filterOrganisation") {
+    } else if (key === 'filterOrganisation') {
       await this.setState({ filterOrganisation: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key === "dateFrom") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key === 'dateFrom') {
       await this.setState({
-        dateFrom: value
-          ? moment(value).startOf("day").format("YYYY-MM-DD HH:mm:ss")
-          : value,
+        dateFrom: value ? moment(value).startOf('day').format('YYYY-MM-DD HH:mm:ss') : value,
       });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key === "dateTo") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key === 'dateTo') {
       await this.setState({
-        dateTo: value
-          ? moment(value).endOf("day").format("YYYY-MM-DD HH:mm:ss")
-          : value,
+        dateTo: value ? moment(value).endOf('day').format('YYYY-MM-DD HH:mm:ss') : value,
       });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key === "feeType") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key === 'feeType') {
       await this.setState({ feeType: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key === "paymentOption") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key === 'paymentOption') {
       await this.setState({ paymentOption: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key === "paymentMethod") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key === 'paymentMethod') {
       await this.setState({ paymentMethod: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key === "membershipType") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key === 'membershipType') {
       await this.setState({ membershipType: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if (key == "paymentStatus") {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if (key == 'paymentStatus') {
       await this.setState({ paymentStatus: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
-    } else if ((key = "discountMethod")) {
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
+    } else if ((key = 'discountMethod')) {
       await this.setState({ discountMethod: value });
-      this.handlePaymentTableList(1, -1, "-1", this.state.searchText);
+      this.handlePaymentTableList(1, -1, '-1', this.state.searchText);
     }
   };
 
@@ -832,16 +783,12 @@ class PaymentDashboard extends Component {
 
     if (affiliateToData.affiliatedTo !== undefined) {
       const obj = {
-        organisationId: getOrganisationData()
-          ? getOrganisationData().organisationUniqueKey
-          : null,
+        organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         name: getOrganisationData() ? getOrganisationData().name : null,
       };
       uniqueValues.push(obj);
       const arr = [
-        ...new Map(
-          affiliateToData.affiliatedTo.map((obj) => [obj.organisationId, obj])
-        ).values(),
+        ...new Map(affiliateToData.affiliatedTo.map(obj => [obj.organisationId, obj])).values(),
       ];
       if (isEmptyArray) {
         uniqueValues = [...uniqueValues, ...arr];
@@ -861,15 +808,13 @@ class PaymentDashboard extends Component {
                 maxHeight: 60,
                 minHeight: 44,
               }}
-              onChange={(yearRefId) =>
-                this.onChangeDropDownValue(yearRefId, "yearRefId")
-              }
+              onChange={yearRefId => this.onChangeDropDownValue(yearRefId, 'yearRefId')}
               value={this.state.yearRefId}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.appState.yearList.map((item) => (
+              {this.props.appState.yearList.map(item => (
                 <Option key={`year_${item.id}`} value={item.id}>
                   {item.description}
                 </Option>
@@ -883,15 +828,13 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(competitionId) =>
-                this.onChangeDropDownValue(competitionId, "competitionId")
-              }
+              onChange={competitionId => this.onChangeDropDownValue(competitionId, 'competitionId')}
               value={this.state.competitionUniqueKey}
             >
               <Option key={-1} value="-1">
                 {AppConstants.all}
               </Option>
-              {(paymentCompetitionList || []).map((item) => (
+              {(paymentCompetitionList || []).map(item => (
                 <Option
                   // key={'competition_' + item.competitionUniquekey}
                   key={item.competitionUniquekey}
@@ -909,19 +852,14 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(e) =>
-                this.onChangeDropDownValue(e, "filterOrganisation")
-              }
+              onChange={e => this.onChangeDropDownValue(e, 'filterOrganisation')}
               value={this.state.filterOrganisation}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {(uniqueValues || []).map((org) => (
-                <Option
-                  key={`organisation_${org.organisationId}`}
-                  value={org.organisationId}
-                >
+              {(uniqueValues || []).map(org => (
+                <Option key={`organisation_${org.organisationId}`} value={org.organisationId}>
                   {org.name}
                 </Option>
               ))}
@@ -936,11 +874,8 @@ class PaymentDashboard extends Component {
               format="DD-MM-YYYY"
               showTime={false}
               placeholder="dd-mm-yyyy"
-              onChange={(e) => this.onChangeDropDownValue(e, "dateFrom")}
-              value={
-                this.state.dateFrom !== null &&
-                moment(this.state.dateFrom, "YYYY-MM-DD")
-              }
+              onChange={e => this.onChangeDropDownValue(e, 'dateFrom')}
+              value={this.state.dateFrom !== null && moment(this.state.dateFrom, 'YYYY-MM-DD')}
             />
           </div>
           <div className="col-sm">
@@ -952,11 +887,8 @@ class PaymentDashboard extends Component {
               format="DD-MM-YYYY"
               showTime={false}
               placeholder="dd-mm-yyyy"
-              onChange={(e) => this.onChangeDropDownValue(e, "dateTo")}
-              value={
-                this.state.dateTo !== null &&
-                moment(this.state.dateTo, "YYYY-MM-DD")
-              }
+              onChange={e => this.onChangeDropDownValue(e, 'dateTo')}
+              value={this.state.dateTo !== null && moment(this.state.dateTo, 'YYYY-MM-DD')}
             />
           </div>
         </div>
@@ -968,7 +900,7 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(type) => this.setState({ type })}
+              onChange={type => this.setState({ type })}
               value={this.state.type}
             >
               <Option key={-1} value={-1}>
@@ -998,7 +930,7 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(status) => this.setState({ status })}
+              onChange={status => this.setState({ status })}
               value={this.state.status}
             >
               <Option key={-1} value={-1}>
@@ -1031,16 +963,12 @@ class PaymentDashboard extends Component {
 
     if (affiliateToData.affiliatedTo !== undefined) {
       const obj = {
-        organisationId: getOrganisationData()
-          ? getOrganisationData().organisationUniqueKey
-          : null,
+        organisationId: getOrganisationData() ? getOrganisationData().organisationUniqueKey : null,
         name: getOrganisationData() ? getOrganisationData().name : null,
       };
       uniqueValues.push(obj);
       const arr = [
-        ...new Map(
-          affiliateToData.affiliatedTo.map((obj) => [obj.organisationId, obj])
-        ).values(),
+        ...new Map(affiliateToData.affiliatedTo.map(obj => [obj.organisationId, obj])).values(),
       ];
       if (isEmptyArray) {
         uniqueValues = [...uniqueValues, ...arr];
@@ -1060,15 +988,13 @@ class PaymentDashboard extends Component {
                 maxHeight: 60,
                 minHeight: 44,
               }}
-              onChange={(yearRefId) =>
-                this.onChangeDropDownValue(yearRefId, "yearRefId")
-              }
+              onChange={yearRefId => this.onChangeDropDownValue(yearRefId, 'yearRefId')}
               value={this.state.yearRefId}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.appState.yearList.map((item) => (
+              {this.props.appState.yearList.map(item => (
                 <Option key={`year_${item.id}`} value={item.id}>
                   {item.description}
                 </Option>
@@ -1082,15 +1008,13 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(competitionId) =>
-                this.onChangeDropDownValue(competitionId, "competitionId")
-              }
+              onChange={competitionId => this.onChangeDropDownValue(competitionId, 'competitionId')}
               value={this.state.competitionUniqueKey}
             >
               <Option key={-1} value="-1">
                 {AppConstants.all}
               </Option>
-              {(paymentCompetitionList || []).map((item) => (
+              {(paymentCompetitionList || []).map(item => (
                 <Option
                   // key={'competition_' + item.competitionUniquekey}
                   key={item.competitionUniquekey}
@@ -1108,19 +1032,14 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(e) =>
-                this.onChangeDropDownValue(e, "filterOrganisation")
-              }
+              onChange={e => this.onChangeDropDownValue(e, 'filterOrganisation')}
               value={this.state.filterOrganisation}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {(uniqueValues || []).map((org) => (
-                <Option
-                  key={`organisation_${org.organisationId}`}
-                  value={org.organisationId}
-                >
+              {(uniqueValues || []).map(org => (
+                <Option key={`organisation_${org.organisationId}`} value={org.organisationId}>
                   {org.name}
                 </Option>
               ))}
@@ -1133,9 +1052,7 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(status) =>
-                this.onChangeDropDownValue(status, "paymentStatus")
-              }
+              onChange={status => this.onChangeDropDownValue(status, 'paymentStatus')}
               value={this.state.paymentStatus}
             >
               <Option key={-1} value={-1}>
@@ -1162,15 +1079,13 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(feeType) =>
-                this.onChangeDropDownValue(feeType, "feeType")
-              }
+              onChange={feeType => this.onChangeDropDownValue(feeType, 'feeType')}
               value={this.state.feeType}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.appState.feeTypes.map((feeType) => (
+              {this.props.appState.feeTypes.map(feeType => (
                 <Option key={`feeType_${feeType.id}`} value={feeType.id}>
                   {feeType.description}
                 </Option>
@@ -1184,80 +1099,59 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(paymentOption) =>
-                this.onChangeDropDownValue(paymentOption, "paymentOption")
-              }
+              onChange={paymentOption => this.onChangeDropDownValue(paymentOption, 'paymentOption')}
               value={this.state.paymentOption}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.appState.paymentOptions.map((paymentOption) => (
-                <Option
-                  key={`paymentOption_${paymentOption.id}`}
-                  value={paymentOption.id}
-                >
+              {this.props.appState.paymentOptions.map(paymentOption => (
+                <Option key={`paymentOption_${paymentOption.id}`} value={paymentOption.id}>
                   {paymentOption.description}
                 </Option>
               ))}
             </Select>
           </div>
           <div className="col-sm-3">
-            <InputWithHead
-              required="pt-0"
-              heading={AppConstants.paymentMethod}
-            />
+            <InputWithHead required="pt-0" heading={AppConstants.paymentMethod} />
             <Select
               showSearch
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(paymentMethod) =>
-                this.onChangeDropDownValue(paymentMethod, "paymentMethod")
-              }
+              onChange={paymentMethod => this.onChangeDropDownValue(paymentMethod, 'paymentMethod')}
               value={this.state.paymentMethod}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.appState.paymentMethods.map((paymentMethod) => (
-                <Option
-                  key={`paymentMethod_${paymentMethod.id}`}
-                  value={paymentMethod.name}
-                >
+              {this.props.appState.paymentMethods.map(paymentMethod => (
+                <Option key={`paymentMethod_${paymentMethod.id}`} value={paymentMethod.name}>
                   {paymentMethod.description}
                 </Option>
               ))}
             </Select>
           </div>
           <div className="col-sm-3">
-            <InputWithHead
-              required="pt-0"
-              heading={AppConstants.membershipType}
-            />
+            <InputWithHead required="pt-0" heading={AppConstants.membershipType} />
             <Select
               showSearch
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(membershipType) =>
-                this.onChangeDropDownValue(membershipType, "membershipType")
+              onChange={membershipType =>
+                this.onChangeDropDownValue(membershipType, 'membershipType')
               }
               value={this.state.membershipType}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.userRegistrationState.membershipProductTypes.map(
-                (mt) => (
-                  <Option
-                    key={`mt_${mt.id}`}
-                    value={mt.membershipProductTypeId}
-                  >
-                    {mt.membershipProductTypeName}
-                  </Option>
-                )
-              )}
+              {this.props.userRegistrationState.membershipProductTypes.map(mt => (
+                <Option key={`mt_${mt.id}`} value={mt.membershipProductTypeId}>
+                  {mt.membershipProductTypeName}
+                </Option>
+              ))}
             </Select>
           </div>
         </div>
@@ -1270,19 +1164,16 @@ class PaymentDashboard extends Component {
               optionFilterProp="children"
               className="reg-payment-select w-100"
               style={{ paddingRight: 1, minWidth: 160 }}
-              onChange={(discountMethod) =>
-                this.onChangeDropDownValue(discountMethod, "discountMethod")
+              onChange={discountMethod =>
+                this.onChangeDropDownValue(discountMethod, 'discountMethod')
               }
               value={this.state.discountMethod}
             >
               <Option key={-1} value={-1}>
                 {AppConstants.all}
               </Option>
-              {this.props.appState.discountMethod.map((discountMethod) => (
-                <Option
-                  key={`discountMethod_${discountMethod.id}`}
-                  value={discountMethod.id}
-                >
+              {this.props.appState.discountMethod.map(discountMethod => (
+                <Option key={`discountMethod_${discountMethod.id}`} value={discountMethod.id}>
                   {discountMethod.description}
                 </Option>
               ))}
@@ -1297,11 +1188,8 @@ class PaymentDashboard extends Component {
               format="DD-MM-YYYY"
               showTime={false}
               placeholder="dd-mm-yyyy"
-              onChange={(e) => this.onChangeDropDownValue(e, "dateFrom")}
-              value={
-                this.state.dateFrom !== null &&
-                moment(this.state.dateFrom, "YYYY-MM-DD")
-              }
+              onChange={e => this.onChangeDropDownValue(e, 'dateFrom')}
+              value={this.state.dateFrom !== null && moment(this.state.dateFrom, 'YYYY-MM-DD')}
             />
           </div>
           <div className="col-sm-3 pt-2">
@@ -1313,11 +1201,8 @@ class PaymentDashboard extends Component {
               format="DD-MM-YYYY"
               showTime={false}
               placeholder="dd-mm-yyyy"
-              onChange={(e) => this.onChangeDropDownValue(e, "dateTo")}
-              value={
-                this.state.dateTo !== null &&
-                moment(this.state.dateTo, "YYYY-MM-DD")
-              }
+              onChange={e => this.onChangeDropDownValue(e, 'dateTo')}
+              value={this.state.dateTo !== null && moment(this.state.dateTo, 'YYYY-MM-DD')}
             />
           </div>
         </div>
@@ -1326,10 +1211,8 @@ class PaymentDashboard extends Component {
   };
 
   contentView = () => {
-    const userId =
-      this.state.userInfo != null ? this.state.userInfo.userId : -1;
-    const regId =
-      this.state.registrationId != null ? this.state.registrationId : "-1";
+    const userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
+    const regId = this.state.registrationId != null ? this.state.registrationId : '-1';
     const {
       paymentListTotalCount,
       paymentListData,
@@ -1358,13 +1241,8 @@ class PaymentDashboard extends Component {
             current={paymentListPage}
             defaultCurrent={paymentListPage}
             defaultPageSize={paymentListPageSize}
-            onChange={(page) =>
-              this.handlePaymentTableList(
-                page,
-                userId,
-                regId,
-                this.state.searchText
-              )
+            onChange={page =>
+              this.handlePaymentTableList(page, userId, regId, this.state.searchText)
             }
             onShowSizeChange={this.handleShowSizeChange}
           />
@@ -1376,10 +1254,7 @@ class PaymentDashboard extends Component {
   render() {
     return (
       <div className="fluid-width default-bg">
-        <DashboardLayout
-          menuHeading={AppConstants.finance}
-          menuName={AppConstants.finance}
-        />
+        <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
         <InnerHorizontalMenu menu="finance" finSelectedKey="1" />
         <Loader visible={this.props.paymentState.onExportLoad} />
         <Layout>
@@ -1410,7 +1285,7 @@ function mapDispatchToProps(dispatch) {
       partialRefundAmountAction,
       getDiscountMethodListAction,
     },
-    dispatch
+    dispatch,
   );
 }
 

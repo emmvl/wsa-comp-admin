@@ -1,4 +1,4 @@
-@import "../themes/colorVariables.css";
+@import '../themes/colorVariables.css';
 
 /* antd input override styles */
 .ant-btn-danger {
@@ -164,7 +164,7 @@
   -ms-transform: translate(-50%, -50%) scale(1);
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
-  content: " ";
+  content: ' ';
 }
 
 /* antd calender override styles */
@@ -195,10 +195,22 @@
 
 /* antd table override styles */
 
-.fees-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.fees-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.fees-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.fees-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.fees-table
+  .ant-table-thead
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.fees-table
+  .ant-table-tbody
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.fees-table
+  .ant-table-thead
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.fees-table
+  .ant-table-tbody
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td {
   background: var(--app-f1c2a2);
 }
 
@@ -324,7 +336,6 @@ textarea.ant-input {
   margin: 0 !important;
 }
 
-
 .add-membership-type-modal .ant-btn-primary {
   background-color: var(--app-color);
   border-color: var(--app-color);
@@ -356,6 +367,7 @@ textarea.ant-input {
   background-color: transparent !important;
 }
 
-.ant-menu-item-selected a, .ant-menu-item-selected a:hover {
-    color: var(--app-color);
+.ant-menu-item-selected a,
+.ant-menu-item-selected a:hover {
+  color: var(--app-color);
 }

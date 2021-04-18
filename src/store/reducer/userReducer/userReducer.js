@@ -1,6 +1,6 @@
-import ApiConstants from "themes/apiConstants";
-import AppConstants from "themes/appConstants";
-import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from "util/helpers";
+import ApiConstants from 'themes/apiConstants';
+import AppConstants from 'themes/appConstants';
+import { isArrayNotEmpty, deepCopyFunction, feeIsNull, formatValue } from 'util/helpers';
 import { setImpersonation } from 'util/sessionStorage';
 
 const teamMemberObj = {
@@ -190,7 +190,7 @@ const affiliate = {
   affiliateOrgId: 0,
   organisationTypeRefId: 0,
   affiliatedToOrgId: 0,
-  organisationId: "",
+  organisationId: '',
   name: '',
   street1: '',
   street2: '',
@@ -379,7 +379,7 @@ const initialState = {
   isPersonalUserLoading: false,
   isDocumentLoading: false,
   isCompUserLoading: false,
-  cancelDeRegistrationLoad: false
+  cancelDeRegistrationLoad: false,
 };
 
 function getUpdatedTeamMemberObj(competition) {
@@ -387,7 +387,7 @@ function getUpdatedTeamMemberObj(competition) {
     const teamMemberTemp = deepCopyFunction(teamMemberObj);
     teamMemberTemp.membershipProductTypes = [];
     const filteredTeamMembershipProducts = competition.membershipProducts.filter(
-      (x) => x.isTeamRegistration === 1 && x.allowTeamRegistrationTypeRefId === 1,
+      x => x.isTeamRegistration === 1 && x.allowTeamRegistrationTypeRefId === 1,
     );
     for (let product of filteredTeamMembershipProducts) {
       const obj = {
@@ -410,7 +410,8 @@ function updateTeamMembersSave(state) {
     const membershipProducts = state.membershipProductInfo;
     const organisation = membershipProducts[0];
     const competition = organisation.competitions[0];
-    state.teamMembersSave.registrationRestrictionTypeRefId = competition.registrationRestrictionTypeRefId;
+    state.teamMembersSave.registrationRestrictionTypeRefId =
+      competition.registrationRestrictionTypeRefId;
     state.teamMembersSave.teamMembers.push(getUpdatedTeamMemberObj(competition));
   } catch (ex) {
     console.log(`Error in updateTeamMemberSave::${ex}`);
@@ -432,7 +433,7 @@ function userReducer(state = initialState, action) {
         umpireActivityOnLoad: false,
         onMedicalLoad: false,
         possibleMatchesOnLoad: false,
-        cancelDeRegistrationLoad: false
+        cancelDeRegistrationLoad: false,
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -448,7 +449,7 @@ function userReducer(state = initialState, action) {
         umpireActivityOnLoad: false,
         onMedicalLoad: false,
         possibleMatchesOnLoad: false,
-        cancelDeRegistrationLoad: false
+        cancelDeRegistrationLoad: false,
       };
 
     // get Role Entity List for current user
@@ -573,14 +574,14 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.UPDATE_ORGANISATION_CHARITY_ROUND_UP:
       if (action.key === 'charityRoundUp') {
-        state.affiliateOurOrg.charityRoundUp[action.index].isSelected = action.value
+        state.affiliateOurOrg.charityRoundUp[action.index].isSelected = action.value;
       }
 
-      if (action.key === "name") {
-        state.affiliateOurOrg.charity[action.index][action.key] = action.value
+      if (action.key === 'name') {
+        state.affiliateOurOrg.charity[action.index][action.key] = action.value;
       }
-      if (action.key === "description") {
-        state.affiliateOurOrg.charity[action.index][action.key] = action.value
+      if (action.key === 'description') {
+        state.affiliateOurOrg.charity[action.index][action.key] = action.value;
       }
 
       return { ...state };
@@ -595,7 +596,7 @@ function userReducer(state = initialState, action) {
           affiliateOrgId: 0,
           organisationTypeRefId: 0,
           affiliatedToOrgId: 0,
-          organisationId: "",
+          organisationId: '',
           name: '',
           street1: '',
           street2: '',
@@ -608,14 +609,15 @@ function userReducer(state = initialState, action) {
           contacts: [],
           email: '',
           charityRoundUp: [],
-          charity: []
+          charity: [],
         };
       } else {
         oldAffiliateData[key] = updatedVal;
       }
 
       return {
-        ...state, error: null
+        ...state,
+        error: null,
       };
 
     //Get organisation for add venue
@@ -628,7 +630,7 @@ function userReducer(state = initialState, action) {
         venueOrganisation: action.result,
         onLoad: false,
         error: null,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_BANNER_COUNT_LOAD:
@@ -640,7 +642,7 @@ function userReducer(state = initialState, action) {
         bannerCount: action.result,
         onLoad: false,
         error: null,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_UPDATE_BANNER_COUNT_LOAD:
@@ -652,7 +654,7 @@ function userReducer(state = initialState, action) {
         bannerCount: action.result,
         onLoad: false,
         error: null,
-        status: action.status
+        status: action.status,
       };
 
     //////delete the Affiliate
@@ -664,7 +666,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     /////get particular user organisation
@@ -679,14 +681,14 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         error: null,
-        status: action.status
+        status: action.status,
       };
 
     ////onchange user organisation data
     case ApiConstants.ONCHANGE_USER_ORGANISATION:
       let allOrgData = JSON.parse(JSON.stringify(state.allUserOrganisationData));
       let organisationIndex = allOrgData.findIndex(
-        x => x.organisationUniqueKey === action.organisationData.organisationUniqueKey
+        x => x.organisationUniqueKey === action.organisationData.organisationUniqueKey,
       );
       if (organisationIndex > -1) {
         allOrgData.splice(organisationIndex, 1);
@@ -695,7 +697,7 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD:
@@ -711,19 +713,21 @@ function userReducer(state = initialState, action) {
         userDashboardTextualTotalCount: textualData.page.totalCount,
         competitions: isArrayNotEmpty(textualData.competitions) ? textualData.competitions : [],
         organisations: isArrayNotEmpty(textualData.organisations) ? textualData.organisations : [],
-        roles: isArrayNotEmpty(textualData.roles) ? textualData.roles.sort((a, b) => a.description > b.description  ? 1 : -1) : [],
+        roles: isArrayNotEmpty(textualData.roles)
+          ? textualData.roles.sort((a, b) => (a.description > b.description ? 1 : -1))
+          : [],
         userDashboardCounts: textualData.counts,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_LOAD:
-      return { ...state }
+      return { ...state };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SPECTATOR_COUNT_SUCCESS:
       return {
         ...state,
         userDashboardSpectatorCount: action.result.spectatorCount,
-      }
+      };
 
     case ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_LOAD:
       return { ...state, onLoad: true, isPersonalUserLoading: true };
@@ -776,8 +780,7 @@ function userReducer(state = initialState, action) {
       return { ...state, isDocumentLoading: false };
 
     case ApiConstants.API_USER_MODULE_REMOVE_DOCUMENT_SUCCESS:
-      return { ...state, isDocumentLoading: false};
-
+      return { ...state, isDocumentLoading: false };
 
     case ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD:
       return { ...state, onPersonLoad: true, isCompUserLoading: true };
@@ -805,7 +808,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onMedicalLoad: false,
         medicalData: medicalData,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_REGISTRATION_LOAD:
@@ -819,7 +822,7 @@ function userReducer(state = initialState, action) {
         userRegistrationList: userRegistrationData,
         // userRegistrationDataPage: userRegistrationData.page ? userRegistrationData.page.currentPage : 1,
         // userRegistrationDataTotalCount: userRegistrationData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_GET_USER_MODULE_TEAM_MEMBERS_LOAD:
@@ -831,7 +834,7 @@ function userReducer(state = initialState, action) {
         ...state,
         getTeamMembersOnLoad: false,
         teamMembersDetails: teamMembersDetailsData,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_TEAM_REGISTRATION_LOAD:
@@ -843,9 +846,11 @@ function userReducer(state = initialState, action) {
         ...state,
         userTeamRegistrationOnLoad: false,
         userTeamRegistrationList: userTeamRegistrationData.registrationTeamDetails,
-        userTeamRegistrationDataPage: userTeamRegistrationData.page ? userTeamRegistrationData.page.currentPage : 1,
+        userTeamRegistrationDataPage: userTeamRegistrationData.page
+          ? userTeamRegistrationData.page.currentPage
+          : 1,
         userTeamRegistrationDataTotalCount: userTeamRegistrationData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_OTHER_REGISTRATION_LOAD:
@@ -857,9 +862,11 @@ function userReducer(state = initialState, action) {
         ...state,
         userOtherRegistrationOnLoad: false,
         userOtherRegistrationList: userOtherRegistrationData.registrationYourDetails,
-        userOtherRegistrationDataPage: userOtherRegistrationData.page ? userOtherRegistrationData.page.currentPage : 1,
+        userOtherRegistrationDataPage: userOtherRegistrationData.page
+          ? userOtherRegistrationData.page.currentPage
+          : 1,
         userOtherRegistrationDataTotalCount: userOtherRegistrationData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_LOAD:
@@ -873,7 +880,7 @@ function userReducer(state = initialState, action) {
         activityPlayerList: activityPlayerData.activityPlayers,
         activityPlayerPage: activityPlayerData.page ? activityPlayerData.page.currentPage : 1,
         activityPlayerTotalCount: activityPlayerData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_LOAD:
@@ -887,7 +894,7 @@ function userReducer(state = initialState, action) {
         activityParentList: activityParentData.activityParents,
         activityParentPage: activityParentData.page ? activityParentData.page.currentPage : 1,
         activityParentTotalCount: activityParentData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_LOAD:
@@ -901,7 +908,7 @@ function userReducer(state = initialState, action) {
         activityScorerList: activityScorerData.activityScorer,
         activityScorerPage: activityScorerData.page ? activityScorerData.page.currentPage : 1,
         activityScorerTotalCount: activityScorerData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_LOAD:
@@ -915,7 +922,7 @@ function userReducer(state = initialState, action) {
         activityManagerList: activityManagerData.activityManager,
         activityManagerPage: activityManagerData.page ? activityManagerData.page.currentPage : 1,
         activityManagerTotalCount: activityManagerData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_FRIEND_LOAD:
@@ -927,13 +934,12 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         friendList: friendData ? friendData.friends : [],
-        friendPage: (friendData && friendData.page) ? friendData.page.currentPage : 1,
-        friendTotalCount: (friendData && friendData.page) ? friendData.page.totalCount : 1,
-        status: action.status
+        friendPage: friendData && friendData.page ? friendData.page.currentPage : 1,
+        friendTotalCount: friendData && friendData.page ? friendData.page.totalCount : 1,
+        status: action.status,
       };
 
     case ApiConstants.API_EXPORT_USER_FRIEND_LOAD:
-
       return { ...state, onExpUserFriendLoad: true };
 
     case ApiConstants.API_EXPORT_USER_FRIEND_SUCCESS:
@@ -941,7 +947,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onExpUserFriendLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_USER_REFER_FRIEND_LOAD:
@@ -953,13 +959,14 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         referFriendList: referFriendData ? referFriendData.referFriends : [],
-        referFriendPage: (referFriendData && referFriendData.page) ? referFriendData.page.currentPage : 1,
-        referFriendTotalCount: (referFriendData && referFriendData.page) ? referFriendData.page.totalCount : 1,
-        status: action.status
+        referFriendPage:
+          referFriendData && referFriendData.page ? referFriendData.page.currentPage : 1,
+        referFriendTotalCount:
+          referFriendData && referFriendData.page ? referFriendData.page.totalCount : 1,
+        status: action.status,
       };
 
     case ApiConstants.API_EXPORT_USER_REFER_FRIEND_LOAD:
-
       return { ...state, onExpUserFriendLoad: true };
 
     case ApiConstants.API_EXPORT_USER_REFER_FRIEND_SUCCESS:
@@ -967,7 +974,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onExpUserFriendLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_GET_ORG_PHOTO_LOAD:
@@ -979,7 +986,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         orgPhotosList: orgPhotoData ? orgPhotoData : [],
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_LOAD:
@@ -990,7 +997,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onSaveOrgPhotoLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_LOAD:
@@ -1001,7 +1008,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onDeleteOrgPhotoLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_DELETE_ORG_CONTACT_LOAD:
@@ -1012,7 +1019,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD:
@@ -1023,41 +1030,41 @@ function userReducer(state = initialState, action) {
         ...state,
         onExpOrgRegQuesLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
-      case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
-          return { ...state, onExpUserRegDataLoad: true };
+    case ApiConstants.API_EXPORT_USER_REG_DATA_LOAD:
+      return { ...state, onExpUserRegDataLoad: true };
 
-      case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
-          return {
-              ...state,
-              onExpUserRegDataLoad: false,
-              status: action.status,
-              error: null
-          };
+    case ApiConstants.API_EXPORT_USER_REG_DATA_SUCCESS:
+      return {
+        ...state,
+        onExpUserRegDataLoad: false,
+        status: action.status,
+        error: null,
+      };
 
-      case ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD:
-          return { ...state, onGetSubmittedRegDataLoad: true };
+    case ApiConstants.API_GET_SUBMITTED_REG_DATA_LOAD:
+      return { ...state, onGetSubmittedRegDataLoad: true };
 
-      case ApiConstants.API_GET_SUBMITTED_REG_DATA_SUCCESS:
-          return {
-              ...state,
-              userSubmittedRegData: action.result,
-              onGetSubmittedRegDataLoad: false,
-              status: action.status,
-              error: null
-          };
+    case ApiConstants.API_GET_SUBMITTED_REG_DATA_SUCCESS:
+      return {
+        ...state,
+        userSubmittedRegData: action.result,
+        onGetSubmittedRegDataLoad: false,
+        status: action.status,
+        error: null,
+      };
 
-      case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
-          return {...state, onTransferUserRegistrationLoad: true}
+    case ApiConstants.API_TRANSFER_USER_REGISTRATION_LOAD:
+      return { ...state, onTransferUserRegistrationLoad: true };
 
-      case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
-          return {
-              ...state,
-              onTransferUserRegistrationLoad: false,
-              status: action.status,
-          }
+    case ApiConstants.API_TRANSFER_USER_REGISTRATION_SUCCESS:
+      return {
+        ...state,
+        onTransferUserRegistrationLoad: false,
+        status: action.status,
+      };
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
       return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
@@ -1070,8 +1077,10 @@ function userReducer(state = initialState, action) {
         affiliateDirectoryList: affiliateDirData.affiliates,
         affiliateDirectoryPage: affiliateDirData.page ? affiliateDirData.page.currentPage : 1,
         affiliateDirectoryTotalCount: affiliateDirData.page.totalCount,
-        organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes) ? affiliateDirData.organisationTypes : [],
-        status: action.status
+        organisationTypes: isArrayNotEmpty(affiliateDirData.organisationTypes)
+          ? affiliateDirData.organisationTypes
+          : [],
+        status: action.status,
       };
 
     case ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD:
@@ -1082,7 +1091,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onExpAffiliateDirLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_USER_PROFILE_UPDATE_PLAYER:
@@ -1106,7 +1115,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onUpUpdateLoad: false,
         userProfileUpdate: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_MODULE_HISTORY_LOAD:
@@ -1120,7 +1129,7 @@ function userReducer(state = initialState, action) {
         userHistoryList: userHistoryData.userHistory,
         userHistoryPage: userHistoryData.page ? userHistoryData.page.currentPage : 1,
         userHistoryTotalCount: userHistoryData.page.totalCount,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_USER_PHOTO_UPDATE_LOAD:
@@ -1135,7 +1144,7 @@ function userReducer(state = initialState, action) {
         },
         userPhotoUpdate: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_USER_DETAIL_LOAD:
@@ -1148,7 +1157,7 @@ function userReducer(state = initialState, action) {
         userProfile: action.result,
         onLoad: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_USER_DETAIL_UPDATE_LOAD:
@@ -1163,7 +1172,7 @@ function userReducer(state = initialState, action) {
         },
         userDetailUpdate: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_USER_PASSWORD_UPDATE_LOAD:
@@ -1174,7 +1183,7 @@ function userReducer(state = initialState, action) {
         ...state,
         userPasswordUpdate: false,
         status: action.status,
-        error: null
+        error: null,
       };
 
     case ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD:
@@ -1186,13 +1195,13 @@ function userReducer(state = initialState, action) {
       let ourOrgData = state.affiliateOurOrg;
       let updatedCharityData = getCharityResult(state.defaultCharityRoundUp);
       let updatedCharity = checkSelectedCharity(charityRoundUpResponse, updatedCharityData);
-      ourOrgData["charityRoundUp"] = updatedCharity;
+      ourOrgData['charityRoundUp'] = updatedCharity;
       ourOrgData.charity = charityResponse;
       return {
         ...state,
         onLoad: false,
         status: action.status,
-        affiliateOurOrg: ourOrgData
+        affiliateOurOrg: ourOrgData,
       };
 
     case ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD:
@@ -1200,41 +1209,43 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_TERMS_AND_CONDITION_SUCCESS:
       let ourOrgTCData = state.affiliateOurOrg;
-      ourOrgTCData["termsAndConditions"] = action.result.organisation.termsAndConditions;
-      if (action.result.organisation.termsAndConditionsRefId == "2") {
-        ourOrgTCData["termsAndConditionsFile"] = action.result.organisation.termsAndConditions;
-        ourOrgTCData["termsAndConditionsLink"] = null;
+      ourOrgTCData['termsAndConditions'] = action.result.organisation.termsAndConditions;
+      if (action.result.organisation.termsAndConditionsRefId == '2') {
+        ourOrgTCData['termsAndConditionsFile'] = action.result.organisation.termsAndConditions;
+        ourOrgTCData['termsAndConditionsLink'] = null;
       } else {
-        ourOrgTCData["termsAndConditionsLink"] = action.result.organisation.termsAndConditions;
-        ourOrgTCData["termsAndConditionsFile"] = null;
+        ourOrgTCData['termsAndConditionsLink'] = action.result.organisation.termsAndConditions;
+        ourOrgTCData['termsAndConditionsFile'] = null;
       }
-      ourOrgTCData["stateTermsAndConditions"] = action.result.organisation.stateTermsAndConditions;
-      if (action.result.organisation.stateTermsAndConditionsRefId == "2") {
-        ourOrgTCData["stateTermsAndConditionsFile"] = action.result.organisation.stateTermsAndConditions;
-        ourOrgTCData["stateTermsAndConditionsLink"] = null;
+      ourOrgTCData['stateTermsAndConditions'] = action.result.organisation.stateTermsAndConditions;
+      if (action.result.organisation.stateTermsAndConditionsRefId == '2') {
+        ourOrgTCData['stateTermsAndConditionsFile'] =
+          action.result.organisation.stateTermsAndConditions;
+        ourOrgTCData['stateTermsAndConditionsLink'] = null;
       } else {
-        ourOrgTCData["stateTermsAndConditionsLink"] = action.result.organisation.stateTermsAndConditions;
-        ourOrgTCData["stateTermsAndConditionsFile"] = null;
+        ourOrgTCData['stateTermsAndConditionsLink'] =
+          action.result.organisation.stateTermsAndConditions;
+        ourOrgTCData['stateTermsAndConditionsFile'] = null;
       }
 
       return {
         ...state,
         onLoad: false,
         status: action.status,
-        affiliateOurOrg: ourOrgTCData
+        affiliateOurOrg: ourOrgTCData,
       };
 
     case ApiConstants.API_IMPERSONATION_LOAD:
       return { ...state, impersonationLoad: true };
 
     case ApiConstants.API_IMPERSONATION_SUCCESS:
-      setImpersonation(action.impersonationAccess)
+      setImpersonation(action.impersonationAccess);
       return {
         ...state,
         impersonationLoad: false,
         impersonation: action.result.success,
         status: action.status,
-        impersonationAccess: action.impersonationAccess
+        impersonationAccess: action.impersonationAccess,
       };
     case ApiConstants.API_USER_DELETE_LOAD:
       return {
@@ -1256,11 +1267,11 @@ function userReducer(state = initialState, action) {
         incidentDataLoad: false,
         userIncidentData: action.result.results,
         incidentCurrentPage: action.result.page.currentPage,
-        incidentTotalCount: action.result.page.totalCount
+        incidentTotalCount: action.result.page.totalCount,
       };
 
     case ApiConstants.API_GET_USER_ROLE_LOAD:
-      return { ...state, };
+      return { ...state };
 
     case ApiConstants.API_GET_USER_ROLE_SUCCESS:
       let userRole = getUserRole(action.result);
@@ -1317,7 +1328,9 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         umpireActivityOnLoad: false,
-        umpireActivityList: isArrayNotEmpty(umpireActivityData.results) ? umpireActivityData.results : [],
+        umpireActivityList: isArrayNotEmpty(umpireActivityData.results)
+          ? umpireActivityData.results
+          : [],
         umpireActivityCurrentPage: umpireActivityData.page.currentPage,
         umpireActivityTotalCount: umpireActivityData.page.totalCount,
       };
@@ -1340,9 +1353,10 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         spectatorList: spectatorData ? spectatorData.spectator : [],
-        spectatorPage: (spectatorData && spectatorData.page) ? spectatorData.page.currentPage : 1,
-        spectatorTotalCount: (spectatorData && spectatorData.page) ? spectatorData.page.totalCount : 1,
-        status: action.status
+        spectatorPage: spectatorData && spectatorData.page ? spectatorData.page.currentPage : 1,
+        spectatorTotalCount:
+          spectatorData && spectatorData.page ? spectatorData.page.totalCount : 1,
+        status: action.status,
       };
 
     case ApiConstants.API_REGISTRATION_RESEND_EMAIL_LOAD:
@@ -1352,26 +1366,26 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        status: action.status
-      }
+        status: action.status,
+      };
 
     ////Coach
     case ApiConstants.API_CLEAR_LIST_DATA:
-      state.affiliateTo = []
+      state.affiliateTo = [];
       return { ...state };
 
     case ApiConstants.Api_RESET_TFA_LOAD:
       return {
         ...state,
         onMedicalLoad: true,
-        status: null
-      }
+        status: null,
+      };
 
     case ApiConstants.Api_RESET_TFA_SUCCESS:
       return {
         ...state,
-        onMedicalLoad: false
-      }
+        onMedicalLoad: false,
+      };
 
     case ApiConstants.ADD_USERS_TO_BE_MERGED:
       state.usersToBeMerged = action.payload;
@@ -1388,8 +1402,8 @@ function userReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         netSetGoList: netSetGoData ? netSetGoData.netSetGo : [],
-        netSetGoPage: (netSetGoData && netSetGoData.page) ? netSetGoData.page.currentPage : 1,
-        netSetGoTotalCount: (netSetGoData && netSetGoData.page) ? netSetGoData.page.totalCount : 1,
+        netSetGoPage: netSetGoData && netSetGoData.page ? netSetGoData.page.currentPage : 1,
+        netSetGoTotalCount: netSetGoData && netSetGoData.page ? netSetGoData.page.totalCount : 1,
         status: action.status,
       };
 
@@ -1399,7 +1413,7 @@ function userReducer(state = initialState, action) {
     case ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_SUCCESS:
       state.membershipProductInfo = action.result;
       if (!state.teamMemberRegId) {
-        state.teamMembersSave = deepCopyFunction(teamMembersSaveTemp)
+        state.teamMembersSave = deepCopyFunction(teamMembersSaveTemp);
         updateTeamMembersSave(state);
       }
       return {
@@ -1409,9 +1423,9 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.TEAM_MEMBER_SAVE_UPDATE_ACTION:
-      if (action.key === "teamMembersSave") {
+      if (action.key === 'teamMembersSave') {
         state.teamMembersSave = action.data;
-      } else if (action.key === "teamMember") {
+      } else if (action.key === 'teamMember') {
         if (action.index === undefined) {
           updateTeamMembersSave(state);
           state.addTeamMember = true;
@@ -1419,16 +1433,17 @@ function userReducer(state = initialState, action) {
           state.teamMembersSave.teamMembers.splice(action.index, 1);
           state.teamMemberDeletion = true;
         }
-      } else if (action.key === "membershipProductTypes") {
-        state.teamMembersSave.teamMembers[action.index].membershipProductTypes[action.subIndex].isChecked = action.data;
-      } else if (action.key === "teamMemberRegId") {
+      } else if (action.key === 'membershipProductTypes') {
+        state.teamMembersSave.teamMembers[action.index].membershipProductTypes[
+          action.subIndex
+        ].isChecked = action.data;
+      } else if (action.key === 'teamMemberRegId') {
         state.teamMemberRegId = action.data;
-      } else if (action.key === "teamMemberDeletion") {
-        state.teamMemberDeletion = false
-      } else if (action.key === "addTeamMember") {
-        state.addTeamMember = false
-      }
-      else {
+      } else if (action.key === 'teamMemberDeletion') {
+        state.teamMemberDeletion = false;
+      } else if (action.key === 'addTeamMember') {
+        state.addTeamMember = false;
+      } else {
         state.teamMembersSave.teamMembers[action.index][action.key] = action.data;
       }
       return {
@@ -1440,15 +1455,15 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_TEAM_MEMBERS_SAVE_SUCCESS:
       state.teamMembersSaveErrorMsg = action.result.errorMsg ? action.result.errorMsg : null;
-      state.teamMemberRegId= action.result.id ? action.result.id : null;
-      state.teamMembersSaveOnLoad= false;
+      state.teamMemberRegId = action.result.id ? action.result.id : null;
+      state.teamMembersSaveOnLoad = false;
       return {
         ...state,
         status: action.status,
       };
 
     case ApiConstants.API_GET_TEAM_MEMBERS_LOAD:
-      return { ...state, getTeamMembersOnLoad: true }
+      return { ...state, getTeamMembersOnLoad: true };
 
     case ApiConstants.API_GET_TEAM_MEMBERS_SUCCESS:
       return {
@@ -1466,46 +1481,45 @@ function userReducer(state = initialState, action) {
         ...state,
         teamMemberRegReviewList: action.result,
         status: action.status,
-        getTeamMembersReviewOnLoad: false
+        getTeamMembersReviewOnLoad: false,
       };
 
     case ApiConstants.UPDATE_TEAM_MEMBER_REVIEW_INFO:
       try {
         let reviewData = state.teamMemberRegReviewList;
-        if (action.subkey == "total") {
+        if (action.subkey == 'total') {
           let type = action.key;
           let totalVal = reviewData.total.total;
           let transactionVal = 0;
           let targetVal = 0;
           if (action.value === 1) {
-            if (type === "International_CC") {
-              transactionVal = (totalVal * 3.0 / 100) + 0.30;
+            if (type === 'International_CC') {
+              transactionVal = (totalVal * 3.0) / 100 + 0.3;
             }
-            if (type === "International_AE") {
-              transactionVal = (totalVal * 2.7 / 100) + 0.30;
-            } else if (type === "DOMESTIC_CC") {
-              transactionVal = (totalVal * 2.25 / 100) + 0.30;
-            } else if (type === "direct_debit") {
-              transactionVal = (totalVal * 1.5 / 100) + 0.30;
-              if (transactionVal > 3.50) {
-                transactionVal = 3.50;
+            if (type === 'International_AE') {
+              transactionVal = (totalVal * 2.7) / 100 + 0.3;
+            } else if (type === 'DOMESTIC_CC') {
+              transactionVal = (totalVal * 2.25) / 100 + 0.3;
+            } else if (type === 'direct_debit') {
+              transactionVal = (totalVal * 1.5) / 100 + 0.3;
+              if (transactionVal > 3.5) {
+                transactionVal = 3.5;
               }
             }
             targetVal = feeIsNull(transactionVal) + feeIsNull(totalVal);
-            reviewData["total"]["targetValue"] = formatValue(targetVal);
-            reviewData["total"]["transactionFee"] = formatValue(transactionVal);
+            reviewData['total']['targetValue'] = formatValue(targetVal);
+            reviewData['total']['transactionFee'] = formatValue(transactionVal);
           } else {
-            reviewData["total"]["targetValue"] = "0.00";
-            reviewData["total"]["transactionFee"] = "0.00";
+            reviewData['total']['targetValue'] = '0.00';
+            reviewData['total']['transactionFee'] = '0.00';
           }
-
         }
         return {
           ...state,
-          error: null
-        }
+          error: null,
+        };
       } catch (ex) {
-        console.log("Error in UPDATE_TEAM_MEMBER_REVIEW_INFO::" + ex);
+        console.log('Error in UPDATE_TEAM_MEMBER_REVIEW_INFO::' + ex);
       }
       return { ...state };
 
@@ -1517,7 +1531,7 @@ function userReducer(state = initialState, action) {
         ...state,
         onTeamUpdateLoad: false,
         teamMemberUpdate: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_FILTER_USERS_LOAD:
@@ -1525,130 +1539,129 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_FILTER_USERS_SUCCESS:
       return {
-          ...state,
-          onLoad: false,
-          organisationUsersList: action.result,
+        ...state,
+        onLoad: false,
+        organisationUsersList: action.result,
       };
     case ApiConstants.API_GET_USERS_BY_IDS_LOAD:
       return { ...state, onLoad: true };
     case ApiConstants.API_GET_USERS_BY_IDS_SUCCESS:
       return {
-          ...state,
-          onLoad: false,
-          usersByIdsList: action.result,
+        ...state,
+        onLoad: false,
+        usersByIdsList: action.result,
       };
     case ApiConstants.API_GET_USER_PARENT_DATA_LOAD:
-        return { ...state, getUserParentDataOnLoad: true }
+      return { ...state, getUserParentDataOnLoad: true };
 
     case ApiConstants.API_GET_USER_PARENT_DATA_SUCCESS:
+      let parentData = action.result.userData;
+      const nonAvailableParent = {
+        id: -1,
+        firstName: AppConstants.parentDetails,
+        lastName: AppConstants.unavailable,
+      };
+      parentData.push(nonAvailableParent);
 
-        let parentData = action.result.userData;
-        const nonAvailableParent = {
-            id: -1,
-            firstName: AppConstants.parentDetails,
-            lastName: AppConstants.unavailable,
-        }
-        parentData.push(nonAvailableParent);
-
-        return {
-            ...state,
-            parentData,
-            status: action.status,
-            getUserParentDataOnLoad: false
-        }
+      return {
+        ...state,
+        parentData,
+        status: action.status,
+        getUserParentDataOnLoad: false,
+      };
     case ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_SIZE:
       return {
         ...state,
         affiliateDirectoryPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_AFFILIATE_DIRECTORY_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         affiliateDirectoryPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.SET_NETSETGO_LIST_PAGE_SIZE:
       return {
         ...state,
         netSetGoPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_NETSETGO_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         netSetGoPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_SIZE:
       return {
         ...state,
         friendPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_PLAY_WITH_FRIEND_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         friendPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_SIZE:
       return {
         ...state,
         referFriendPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_REFER_FRIEND_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         referFriendPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.SET_SPECTATOR_LIST_PAGE_SIZE:
       return {
         ...state,
         spectatorPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_SPECTATOR_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         spectatorPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_SIZE:
       return {
         ...state,
         affiliateListPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_USER_AFFILIATES_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         affiliateListPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_SIZE:
       return {
         ...state,
         userDashboardTextualPageSize: action.pageSize,
-      }
+      };
 
     case ApiConstants.SET_USER_TEXTUAL_LIST_PAGE_CURRENT_NUMBER:
       return {
         ...state,
         userDashboardTextualPage: action.pageNum,
-      }
+      };
 
     case ApiConstants.API_CANCEL_DEREGISTRATION_LOAD:
-        return {...state, cancelDeRegistrationLoad: true}
+      return { ...state, cancelDeRegistrationLoad: true };
 
     case ApiConstants.API_CANCEL_DEREGISTRATION_SUCCESS:
-        return {
-            ...state,
-            cancelDeRegistrationLoad: false,
-            status: action.status,
-        }
+      return {
+        ...state,
+        cancelDeRegistrationLoad: false,
+        status: action.status,
+      };
 
     default:
       return state;
@@ -1661,12 +1674,11 @@ function getUserRole(userRoleData) {
 
   for (let i in userRoleData) {
     if (userRoleData[i].roleId === 15 || userRoleData[i].roleId === 20) {
-
       userRole = true;
       break;
     }
   }
-  return userRole
+  return userRole;
 }
 
 // get charity result
@@ -1674,7 +1686,7 @@ function getCharityResult(data) {
   let newCharityResult = [];
   if (isArrayNotEmpty(data)) {
     for (let i in data) {
-      data[i]["isSelected"] = false;
+      data[i]['isSelected'] = false;
     }
     newCharityResult = data;
   }
