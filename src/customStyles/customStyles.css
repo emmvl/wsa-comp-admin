@@ -38,10 +38,22 @@
   /* padding-left: 21px; */
 }
 
-.home-dashboard-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.home-dashboard-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.home-dashboard-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.home-dashboard-table
+  .ant-table-thead
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.home-dashboard-table
+  .ant-table-tbody
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.home-dashboard-table
+  .ant-table-thead
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.home-dashboard-table
+  .ant-table-tbody
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td {
   background: var(--app-f1c2a2) !important;
 }
 
@@ -76,12 +88,12 @@
 }
 
 .input-heading__optional {
-    display: inline-block;
-    vertical-align: middle;
-    color: var(--app-bbbbc6);
-    font-weight: 500;
-    margin-left: 4px;
-    font-style: normal;
+  display: inline-block;
+  vertical-align: middle;
+  color: var(--app-bbbbc6);
+  font-weight: 500;
+  margin-left: 4px;
+  font-style: normal;
 }
 
 .comment-heading {
@@ -143,10 +155,22 @@
   background-color: transparent;
 }
 
-.time-slot-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.time-slot-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.time-slot-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.time-slot-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.time-slot-table
+  .ant-table-thead
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.time-slot-table
+  .ant-table-tbody
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.time-slot-table
+  .ant-table-thead
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.time-slot-table
+  .ant-table-tbody
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td {
   background: transparent;
 }
 
@@ -242,7 +266,7 @@
 }
 
 .search-prefix-icon-style {
-  color: rgba(0, 0, 0, .25);
+  color: rgba(0, 0, 0, 0.25);
   height: 16px;
   width: 16px;
 }
@@ -280,7 +304,7 @@
   .button-with-search {
     padding-left: 18px;
     padding-top: 10px;
-    align-items: center
+    align-items: center;
   }
 
   .form-footer-button-wrapper {
@@ -309,43 +333,55 @@
   text-align: center;
 }
 
-.refund-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.refund-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.refund-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
-.home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.refund-table
+  .ant-table-thead
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.refund-table
+  .ant-table-tbody
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.refund-table
+  .ant-table-thead
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.home-dashboard-table
+  .ant-table-tbody
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td {
   background: var(--app-f1c2a2) !important;
 }
 
-.offlineAlert { 
+.offlineAlert {
   width: 100%;
   position: sticky;
-  z-index: 100;  
+  z-index: 100;
   top: 0;
 }
 
 .confirmation-modal {
-    text-align: center;
+  text-align: center;
 }
 
 .confirmation-modal a {
-    display: block;
-    color: #000;
-    margin: 15px;
-    text-decoration: underline;
+  display: block;
+  color: #000;
+  margin: 15px;
+  text-decoration: underline;
 }
 
 .confirmation-modal .ant-checkbox-wrapper {
-    color: #4f534f;
+  color: #4f534f;
 }
 
 .confirmation-modal .ant-modal-title {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .terms-and-conditions-checkbox {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 
 .terms-and-conditions-checkbox span {
-    font-weight: normal;
+  font-weight: normal;
 }

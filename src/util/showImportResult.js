@@ -33,91 +33,86 @@ const { success } = Modal;
 //     );
 // };
 
-export const receiptImportResult = (result) => {
-    const resData = result.data.data;
-    const resMsg = result.data.message;
-    const resErr = result.data.error;
+export const receiptImportResult = result => {
+  const resData = result.data.data;
+  const resMsg = result.data.message;
+  const resErr = result.data.error;
 
-    success({
-        title: resMsg,
-        // content: showContent(resErr),
-        type: Object.keys(resErr).length === 0
-            ? 'success'
-            : (resData.length === 0 ? 'error' : 'warning'),
-        okText: AppConstants.ok,
-        okType: AppConstants.primary,
-        okButtonProps: { className: 'ant-btn primary-add-comp-form ant-btn-primary' },
-        cancelButtonProps: { className: 'hide' },
-        onOk() {
-        },
-    });
+  success({
+    title: resMsg,
+    // content: showContent(resErr),
+    type: Object.keys(resErr).length === 0 ? 'success' : resData.length === 0 ? 'error' : 'warning',
+    okText: AppConstants.ok,
+    okType: AppConstants.primary,
+    okButtonProps: { className: 'ant-btn primary-add-comp-form ant-btn-primary' },
+    cancelButtonProps: { className: 'hide' },
+    onOk() {},
+  });
 };
 
 export const showInvalidData = (cols, importResult) => {
-    const columns = [
-        {
-            title: AppConstants.line,
-            dataIndex: 'index',
-            key: 'index',
-        },
-        ...cols,
-        {
-            title: AppConstants.errorMessage,
-            dataIndex: 'message',
-            key: 'message',
-            className: 'error-message-column',
-            align: 'center',
-            render: (mes) => (
-                <>
-                    {mes.map((m, index) => (
-                        <p
-                            key={`message_${index}`}
-                            style={{
-                                marginBottom: 0,
-                                color: 'red',
-                            }}
-                        >
-                            {m}
-                        </p>
-                    ))}
-                </>
-            ),
-        },
-    ];
+  const columns = [
+    {
+      title: AppConstants.line,
+      dataIndex: 'index',
+      key: 'index',
+    },
+    ...cols,
+    {
+      title: AppConstants.errorMessage,
+      dataIndex: 'message',
+      key: 'message',
+      className: 'error-message-column',
+      align: 'center',
+      render: mes => (
+        <>
+          {mes.map((m, index) => (
+            <p
+              key={`message_${index}`}
+              style={{
+                marginBottom: 0,
+                color: 'red',
+              }}
+            >
+              {m}
+            </p>
+          ))}
+        </>
+      ),
+    },
+  ];
 
-    const importRes = importResult && Object.keys(importResult.rawData).length > 0
-        ? importResult.rawData
-        : [];
+  const importRes =
+    importResult && Object.keys(importResult.rawData).length > 0 ? importResult.rawData : [];
 
-    if (importRes.length === 0) {
-        return <></>;
-    }
+  if (importRes.length === 0) {
+    return <></>;
+  }
 
-    const errorMes = importResult && Object.keys(importResult.error).length > 0
-        ? importResult.error
-        : {};
+  const errorMes =
+    importResult && Object.keys(importResult.error).length > 0 ? importResult.error : {};
 
-    return (
-        <div className="formView mt-3">
-            <div className="content-view">
-                <span className="input-heading">{AppConstants.invalidRecords}</span>
+  return (
+    <div className="formView mt-3">
+      <div className="content-view">
+        <span className="input-heading">{AppConstants.invalidRecords}</span>
 
-                <div className="table-responsive home-dash-table-view">
-                    <Table
-                        className="home-dashboard-table"
-                        columns={columns}
-                        dataSource={Object.keys(errorMes).map((key) => {
-                            const rowNum = key.split(' ')[1];
-                            return {
-                                ...importRes[rowNum - 2],
-                                index: rowNum,
-                                message: errorMes[key].message,
-                            };
-                        })}
-                        rowKey={(record) => record.index}
-                    />
-                </div>
-            </div>
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={columns}
+            dataSource={Object.keys(errorMes).map(key => {
+              const rowNum = key.split(' ')[1];
+              return {
+                ...importRes[rowNum - 2],
+                index: rowNum,
+                message: errorMes[key].message,
+              };
+            })}
+            rowKey={record => record.index}
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 };

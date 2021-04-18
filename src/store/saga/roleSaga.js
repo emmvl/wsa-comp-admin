@@ -1,7 +1,7 @@
-import { put, call } from "redux-saga/effects";
+import { put, call } from 'redux-saga/effects';
 
-import ApiConstants from "themes/apiConstants";
-import AxiosApi from "store/http/axiosApi";
+import ApiConstants from 'themes/apiConstants';
+import AxiosApi from 'store/http/axiosApi';
 
 function* roleSaga(action) {
   try {
@@ -22,7 +22,7 @@ function* roleSaga(action) {
     yield put({
       type: ApiConstants.API_ROLE_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -48,11 +48,9 @@ function* ureSaga(action) {
     yield put({
       type: ApiConstants.API_URE_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
-export default function* rootRoleSaga() {
-
-}
+export default function* rootRoleSaga() {}

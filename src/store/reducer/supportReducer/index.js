@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 const initialState = {
   onLoad: false,
@@ -14,7 +14,7 @@ function supportReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_SUPPORT_ERROR:
@@ -22,7 +22,7 @@ function supportReducer(state = initialState, action) {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_SUPPORT_CONTENT_LOAD:
@@ -34,7 +34,7 @@ function supportReducer(state = initialState, action) {
         onLoad: false,
         result: action.result,
         status: action.status,
-        error: null
+        error: null,
       };
 
     default:

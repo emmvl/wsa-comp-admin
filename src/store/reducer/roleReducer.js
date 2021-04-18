@@ -1,13 +1,13 @@
-import ApiConstants from "../../themes/apiConstants";
-import { Encrypt, Decrypt } from "../../util/encryption";
-import { JwtEncrypt, JwtDecrypt } from "../../util/jwt";
-import history from "../../util/history";
+import ApiConstants from '../../themes/apiConstants';
+import { Encrypt, Decrypt } from '../../util/encryption';
+import { JwtEncrypt, JwtDecrypt } from '../../util/jwt';
+import history from '../../util/history';
 
 const initialState = {
   onLoad: false,
   error: null,
   result: null,
-  status: 0
+  status: 0,
 };
 
 function role(state = initialState, action) {
@@ -21,7 +21,7 @@ function role(state = initialState, action) {
         ...state,
         onLoad: false,
         result: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_ROLE_FAIL:
@@ -29,7 +29,7 @@ function role(state = initialState, action) {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_ROLE_ERROR:
@@ -37,7 +37,7 @@ function role(state = initialState, action) {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
 
     // User Role Entity List for current  user
@@ -49,7 +49,7 @@ function role(state = initialState, action) {
         ...state,
         onLoad: false,
         result: action.result,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_URE_FAIL:
@@ -57,7 +57,7 @@ function role(state = initialState, action) {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
 
     case ApiConstants.API_URE_ERROR:
@@ -65,7 +65,7 @@ function role(state = initialState, action) {
         ...state,
         onLoad: false,
         error: action.error,
-        status: action.status
+        status: action.status,
       };
 
     default:

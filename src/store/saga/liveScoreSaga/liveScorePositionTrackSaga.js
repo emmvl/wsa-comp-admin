@@ -26,7 +26,7 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    message.error(error && error.error ? error.error : AppConstants.somethingWentWrong);
   } else {
     message.config({
       duration: 1.5,

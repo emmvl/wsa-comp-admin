@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 // function liveScoreLaddersDivisionAction(competitionID) {
 //     const action = {
@@ -10,51 +10,51 @@ import ApiConstants from "../../../themes/apiConstants";
 // }
 
 function liveScoreLaddersListAction(competitionID, divisionID, compKey) {
-    const action = {
-        type: ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD,
+  const action = {
+    type: ApiConstants.API_LIVE_SCORE_LADDERS_LIST_LOAD,
 
-        competitionID: competitionID,
-        divisionID: divisionID,
-        compKey: compKey
-    };
-    return action;
+    competitionID: competitionID,
+    divisionID: divisionID,
+    compKey: compKey,
+  };
+  return action;
 }
 
 function updateLadderSetting(data) {
-    const action = {
-        type: ApiConstants.UPDATE_LADDER_ADJUSTMENT,
-        data
-    };
-    return action;
+  const action = {
+    type: ApiConstants.UPDATE_LADDER_ADJUSTMENT,
+    data,
+  };
+  return action;
 }
 
 function ladderAdjustmentPostData(data) {
-    const action = {
-        type: ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD,
-        data
-    };
-    return action;
+  const action = {
+    type: ApiConstants.API_LADDER_ADJUSTMENT_POST_LOAD,
+    data,
+  };
+  return action;
 }
 
 function ladderAdjustmentGetData(data) {
-    const action = {
-        type: ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD,
-        data
-    };
-    return action;
+  const action = {
+    type: ApiConstants.API_LADDER_ADJUSTMENT_GET_LOAD,
+    data,
+  };
+  return action;
 }
 
 function resetLadderAction(payload) {
-    return {
-        type: ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD,
-        payload:payload
-    }
+  return {
+    type: ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD,
+    payload: payload,
+  };
 }
 
 export {
-    liveScoreLaddersListAction,
-    updateLadderSetting,
-    ladderAdjustmentPostData,
-    ladderAdjustmentGetData,
-    resetLadderAction
-}
+  liveScoreLaddersListAction,
+  updateLadderSetting,
+  ladderAdjustmentPostData,
+  ladderAdjustmentGetData,
+  resetLadderAction,
+};

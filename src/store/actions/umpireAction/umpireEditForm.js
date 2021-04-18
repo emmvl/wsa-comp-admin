@@ -1,13 +1,11 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 function getUmpireTeams(data) {
-    const action = {
-        type: ApiConstants.GET_UMPIRE_TEAMS_LOAD,
-        data,
-    };
-    return action;
+  const action = {
+    type: ApiConstants.GET_UMPIRE_TEAMS_LOAD,
+    data,
+  };
+  return action;
 }
 
-export {
-    getUmpireTeams,
-}
+export { getUmpireTeams };

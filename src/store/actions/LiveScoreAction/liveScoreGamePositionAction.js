@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 function getLiveScoreGamePositionsList() {
   const action = {
@@ -8,6 +8,4 @@ function getLiveScoreGamePositionsList() {
   return action;
 }
 
-export {
-  getLiveScoreGamePositionsList,
-}
+export { getLiveScoreGamePositionsList };

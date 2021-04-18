@@ -1,12 +1,12 @@
-import supportHttp from "./supportHttp";
+import supportHttp from './supportHttp';
 
 let supportHttpApi = {
   // Get Help and Support content
   getSupportContent() {
-    const url = "help-and-supports";
+    const url = 'help-and-supports';
     return Method.dataGet(url);
   },
-}
+};
 
 let Method = {
   // Method to GET response
@@ -16,22 +16,22 @@ let Method = {
       supportHttp
         .get(url, {
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
           } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
           } else {
             if (result) {
@@ -42,7 +42,7 @@ let Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -52,7 +52,7 @@ let Method = {
 
           return reject({
             status: 5,
-            error: err
+            error: err,
           });
         });
     });

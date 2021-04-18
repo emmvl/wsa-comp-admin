@@ -1,12 +1,12 @@
-import { put, call, takeEvery } from "redux-saga/effects"
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "themes/appConstants";
-import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
-import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
-import UserAxiosApi from "store/http/userHttp/userAxiosApi";
+import AppConstants from 'themes/appConstants';
+import ApiConstants from 'themes/apiConstants';
+import history from 'util/history';
+import { receiptImportResult } from 'util/showImportResult';
+import LiveScoreAxiosApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
+import UserAxiosApi from 'store/http/userHttp/userAxiosApi';
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_LIVE_SCORE_COACH_FAIL });
@@ -31,7 +31,7 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    message.error(error && error.error ? error.error : AppConstants.somethingWentWrong);
   } else {
     message.config({
       duration: 1.5,
@@ -53,7 +53,7 @@ function* liveScoreCoachSaga(action) {
       action.sortBy,
       action.sortOrder,
       action.isParent,
-      action.competitionId
+      action.competitionId,
     );
 
     if (result.status === 1) {
@@ -73,7 +73,14 @@ function* liveScoreCoachSaga(action) {
 
 function* liveScoreAddCoachSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.existingManagerId, action.compOrgId, action.isParent);
+    const result = yield call(
+      LiveScoreAxiosApi.liveScoreAddCoach,
+      action.data,
+      action.teamId,
+      action.existingManagerId,
+      action.compOrgId,
+      action.isParent,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -82,9 +89,9 @@ function* liveScoreAddCoachSaga(action) {
         status: result.status,
       });
 
-      message.success("Add Coach - Successfully Added");
+      message.success('Add Coach - Successfully Added');
 
-      history.push("/matchDayCoaches");
+      history.push('/matchDayCoaches');
     } else {
       yield call(failSaga, result);
     }
@@ -104,8 +111,8 @@ function* liveScoreCoachImportSaga(action) {
       });
 
       if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/matchDayCoaches");
-        message.success("Coach Imported Successfully.");
+        history.push('/matchDayCoaches');
+        message.success('Coach Imported Successfully.');
       } else {
         receiptImportResult(result.result);
       }
