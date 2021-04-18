@@ -1,23 +1,23 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import AxiosApi from "../../http/shopHttp/shopAxios";
-import commonAxiosApi from "../../http/commonHttp/commonAxiosApi"
+import AppConstants from '../../../themes/appConstants';
+import ApiConstants from '../../../themes/apiConstants';
+import AxiosApi from '../../http/shopHttp/shopAxios';
+import commonAxiosApi from '../../http/commonHttp/commonAxiosApi';
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_SHOP_ORDER_STATUS_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(result.result.data.message);
   }, 800);
 }
@@ -26,14 +26,14 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_SHOP_ORDER_STATUS_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(AppConstants.somethingWentWrong);
   }, 800);
 }
@@ -47,13 +47,13 @@ function* getOrderStatusListingSaga(action) {
       yield put({
         type: ApiConstants.API_GET_ORDER_STATUS_LISTING_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
@@ -66,13 +66,13 @@ function* updateOrderStatusSaga(action) {
       yield put({
         type: ApiConstants.API_UPDATE_ORDER_STATUS_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
@@ -85,13 +85,13 @@ function* getOrderDetailsSaga(action) {
       yield put({
         type: ApiConstants.API_GET_ORDER_DETAILS_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
@@ -104,13 +104,13 @@ function* getPurchasesListingSaga(action) {
       yield put({
         type: ApiConstants.API_GET_PURCHASES_LISTING_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
@@ -123,34 +123,33 @@ function* getOrderStatusReferenceSaga(action) {
       yield put({
         type: ApiConstants.API_GET_REFERENCE_ORDER_STATUS_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
-
 // export order status  API
 function* exportOrderStatusSaga(action) {
-    try {
-        const result = yield call(AxiosApi.exportOrderStatus, action.params);
+  try {
+    const result = yield call(AxiosApi.exportOrderStatus, action.params);
 
-        if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_GET_EXPORT_ORDER_STATUS_SUCCESS,
-                result: result.result.data,
-                status: result.status
-            });
-        } else {
-            yield call(failSaga, result)
-        }
-    } catch (error) {
-        yield call(errorSaga, error)
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_EXPORT_ORDER_STATUS_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
     }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
 }
 
 export default function* rootShopOrderStatusSaga() {

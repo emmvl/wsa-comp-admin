@@ -1,17 +1,17 @@
-import React from "react";
-import { Menu } from "antd";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { Menu } from 'antd';
+import { NavLink } from 'react-router-dom';
 
-import AppConstants from "../../themes/appConstants";
+import AppConstants from '../../themes/appConstants';
 
 function AccountMenu(props) {
   return (
     <Menu
       theme="light"
       mode="horizontal"
-      defaultSelectedKeys={[ "1" ]}
-      style={{ lineHeight: "64px" }}
-      selectedKeys={[ props.selectedKey ]}
+      defaultSelectedKeys={['1']}
+      style={{ lineHeight: '64px' }}
+      selectedKeys={[props.selectedKey]}
     >
       <Menu.Item key="1">
         <NavLink to="/account/profile">
@@ -25,7 +25,7 @@ function AccountMenu(props) {
         </NavLink>
       </Menu.Item>
     </Menu>
-  )
+  );
 }
 
 export default AccountMenu;

@@ -1,22 +1,22 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import AxiosApi from "../../http/shopHttp/shopAxios";
+import AppConstants from '../../../themes/appConstants';
+import ApiConstants from '../../../themes/apiConstants';
+import AxiosApi from '../../http/shopHttp/shopAxios';
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_SHOP_PRODUCT_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(result.result.data.message);
   }, 800);
 }
@@ -25,14 +25,14 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_SHOP_PRODUCT_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(AppConstants.somethingWentWrong);
   }, 800);
 }
@@ -40,13 +40,20 @@ function* errorSaga(error) {
 // Product listing get API
 function* getProductListingSaga(action) {
   try {
-    const result = yield call(AxiosApi.getProductListing, action.sorterBy, action.order, action.offset, action.filter, action.limit);
+    const result = yield call(
+      AxiosApi.getProductListing,
+      action.sorterBy,
+      action.order,
+      action.offset,
+      action.filter,
+      action.limit,
+    );
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_SHOP_PRODUCT_LISTING_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -65,7 +72,7 @@ function* addProductSaga(action) {
       yield put({
         type: ApiConstants.API_ADD_SHOP_PRODUCT_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       message.success(AppConstants.productAddedMessage);
@@ -86,7 +93,7 @@ function* getTypesOfProductSaga(/* action */) {
       yield put({
         type: ApiConstants.API_GET_TYPES_LIST_IN_ADD_PRODUCT_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -105,7 +112,7 @@ function* deleteProductSaga(action) {
       yield put({
         type: ApiConstants.API_DELETE_SHOP_PRODUCT_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       message.success(AppConstants.productDeletedMessage);
@@ -128,7 +135,7 @@ function* deleteProductVariantSaga(action) {
         result: result.result.data,
         status: result.status,
         index: action.index,
-        subIndex: action.subIndex
+        subIndex: action.subIndex,
       });
 
       message.success(AppConstants.variantDeletedMessage);

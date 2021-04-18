@@ -1,24 +1,21 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 function getUmpirePaymentSettings(data) {
-    const action = {
-        type: ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD,
-        data
-    };
+  const action = {
+    type: ApiConstants.API_GET_UMPIRE_PAYMENT_SETTINGS_LOAD,
+    data,
+  };
 
-    return action;
+  return action;
 }
 
 function saveUmpirePaymentSettings(data) {
-    const action = {
-        type: ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD,
-        data
-    };
+  const action = {
+    type: ApiConstants.API_SAVE_UMPIRE_PAYMENT_SETTINGS_LOAD,
+    data,
+  };
 
-    return action;
+  return action;
 }
 
-export {
-    getUmpirePaymentSettings,
-    saveUmpirePaymentSettings,
-} 
+export { getUmpirePaymentSettings, saveUmpirePaymentSettings };

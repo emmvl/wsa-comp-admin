@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 function liveScoreExportGameAttendanceAction(matchId, teamId, payload) {
   const action = {
@@ -21,7 +21,4 @@ function liveScoreGameAttendanceListAction(matchId, teamId = null) {
   return action;
 }
 
-export {
-  liveScoreExportGameAttendanceAction,
-  liveScoreGameAttendanceListAction,
-}
+export { liveScoreExportGameAttendanceAction, liveScoreGameAttendanceListAction };

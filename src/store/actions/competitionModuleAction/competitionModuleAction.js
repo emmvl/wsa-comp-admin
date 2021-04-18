@@ -1,23 +1,20 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 function getYearAction() {
-    const action = {
-        type: ApiConstants.API_GET_YEAR_LOAD,
-    };
+  const action = {
+    type: ApiConstants.API_GET_YEAR_LOAD,
+  };
 
-    return action;
+  return action;
 }
 
-function generateDrawAction(payload){
-    const action = {
-        type: ApiConstants.API_GENERATE_DRAW_LOAD,
-        payload
-    };
+function generateDrawAction(payload) {
+  const action = {
+    type: ApiConstants.API_GENERATE_DRAW_LOAD,
+    payload,
+  };
 
-    return action;
+  return action;
 }
 
-export {
-    getYearAction,
-    generateDrawAction
-}
+export { getYearAction, generateDrawAction };

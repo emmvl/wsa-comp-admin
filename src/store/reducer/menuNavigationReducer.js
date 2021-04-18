@@ -1,7 +1,7 @@
-import ApiConstants from "../../themes/apiConstants";
+import ApiConstants from '../../themes/apiConstants';
 
 const initialState = {
-  menuName: "Home"
+  menuName: 'Home',
 };
 
 function menuNavigation(state = initialState, action) {
@@ -9,7 +9,7 @@ function menuNavigation(state = initialState, action) {
     case ApiConstants.MENU_NAVIGATION_CHANGE:
       return {
         ...state,
-        menuName: action.menuName
+        menuName: action.menuName,
       };
 
     default:

@@ -1,10 +1,10 @@
-import { message } from "antd";
+import { message } from 'antd';
 import * as moment from 'moment';
 
-import userHttp from "./userHttp";
-import history from "../../../util/history";
-import ValidationConstants from "../../../themes/validationConstant";
-import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
+import userHttp from './userHttp';
+import history from '../../../util/history';
+import ValidationConstants from '../../../themes/validationConstant';
+import { getUserId, getAuthToken, getOrganisationData } from '../../../util/sessionStorage';
 
 let token = getAuthToken();
 let userId = getUserId();
@@ -13,39 +13,37 @@ let userId = getUserId();
 
 async function logout() {
   await localStorage.clear();
-  history.push("/");
+  history.push('/');
 }
 
 let userHttpApi = {
   Login(payload) {
-    const base64 = require("base-64");
-    const md5 = require("md5");
-    let authorization = base64.encode(
-      payload.userName + ":" + md5(payload.password)
-    );
-    const url = "/users/loginWithTfa";
+    const base64 = require('base-64');
+    const md5 = require('md5');
+    let authorization = base64.encode(payload.userName + ':' + md5(payload.password));
+    const url = '/users/loginWithTfa';
     return Method.dataGet(url, authorization);
   },
 
   QrCode(payload) {
-    const base64 = require("base-64");
-    const md5 = require("md5");
+    const base64 = require('base-64');
+    const md5 = require('md5');
     let authorization = base64.encode(
-      payload.userName + ":" + md5(payload.password) + ":" + payload.code
+      payload.userName + ':' + md5(payload.password) + ':' + payload.code,
     );
-    const url = "/users/confirmTfa";
+    const url = '/users/confirmTfa';
     return Method.dataGet(url, authorization);
   },
 
   //role Api
   role() {
-    const url = "/ref/roles";
+    const url = '/ref/roles';
     return Method.dataGet(url, token);
   },
 
   // User Role Entity Api
   ure() {
-    const url = "/ure";
+    const url = '/ure';
     return Method.dataGet(url, token);
   },
 
@@ -74,16 +72,15 @@ let userHttpApi = {
     let url;
     if (sortBy && sortOrder) {
       url = `api/affiliateslisting?userId=${userId}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
-    }
-    else {
-      url = `api/affiliateslisting?userId=${userId}`
+    } else {
+      url = `api/affiliateslisting?userId=${userId}`;
     }
     return Method.dataPost(url, token, payload);
   },
 
   async affiliateToOrganisation(organisationId, searchText) {
     let userId = await getUserId();
-    let url = null
+    let url = null;
     if (searchText) {
       url = `api/affiliatedtoorganisation/${organisationId}?userId=${userId}&search=${searchText}`;
     } else {
@@ -97,34 +94,54 @@ let userHttpApi = {
     let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
     let url = `api/organisation?userId=${userId}`;
     if (key) {
-      url += `&organisationUniqueKey=${organisationUniqueKey}`
+      url += `&organisationUniqueKey=${organisationUniqueKey}`;
     }
-    return Method.dataGet(url, token)
+    return Method.dataGet(url, token);
   },
 
-  liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder, compOrgId, isParent, limit) {
+  liveScoreManagerList(
+    roleId,
+    entityTypeId,
+    entityId,
+    searchText,
+    offset,
+    sortBy,
+    sortOrder,
+    compOrgId,
+    isParent,
+    limit,
+  ) {
     let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}&offset=${offset}&limit=${limit}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${
+          isParent ? 1 : entityTypeId
+        }&entityId=${
+          isParent ? entityId : compOrgId
+        }&userName=${searchText}&offset=${offset}&limit=${limit}`;
       } else {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${
+          isParent ? 1 : entityTypeId
+        }&entityId=${isParent ? entityId : compOrgId}&userName=${searchText}`;
       }
     } else {
       if (offset != null) {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}&offset=${offset}&limit=${limit}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${
+          isParent ? 1 : entityTypeId
+        }&entityId=${isParent ? entityId : compOrgId}&offset=${offset}&limit=${limit}`;
       } else {
-        url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : entityTypeId}&entityId=${isParent ? entityId : compOrgId}`;
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${
+          isParent ? 1 : entityTypeId
+        }&entityId=${isParent ? entityId : compOrgId}`;
       }
-
     }
 
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
     }
 
-    return Method.dataGet(url, token)
+    return Method.dataGet(url, token);
   },
 
   affiliateDelete(affiliateId) {
@@ -138,23 +155,22 @@ let userHttpApi = {
     const user_Id = await getUserId();
     const Auth_token = await getAuthToken();
     const url = `api/userorganisation?userId=${user_Id}`;
-    return Method.dataGet(url, Auth_token)
+    return Method.dataGet(url, Auth_token);
   },
 
   getUserDashboardTextualListing(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
-      url = `api/user/dashboard/textual?sortBy=${sortBy}&sortOrder=${sortOrder}`
-    }
-    else {
-      url = `api/user/dashboard/textual`
+      url = `api/user/dashboard/textual?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    } else {
+      url = `api/user/dashboard/textual`;
     }
 
     return Method.dataPost(url, token, payload);
   },
 
   getUserDashboardTextualSpectatorCount(payload) {
-    const url = `api/user/dashboard/textual/spectatorCount`
+    const url = `api/user/dashboard/textual/spectatorCount`;
     return Method.dataPost(url, token, payload);
   },
 
@@ -215,7 +231,6 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-
   getUserModuleActivityPlayer(payload) {
     const url = `api/user/activity/player`;
     return Method.dataPost(url, token, payload);
@@ -237,7 +252,7 @@ let userHttpApi = {
   },
 
   liveScoreSearchManager(data, competitionOrgId, roleId) {
-    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
+    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
     if (data) {
       const url = `users/byRole?roleId=5&entityTypeId=1&entityId=${id}&userName=${data}`;
       return Method.dataGet(url, token);
@@ -251,16 +266,15 @@ let userHttpApi = {
     //   return Method.dataGet(url, token)
     // }
     const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`;
-    return Method.dataGet(url, token)
+    return Method.dataGet(url, token);
   },
 
   getUserFriendList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
-      url = `users/dashboard/friend?sortBy=${sortBy}&sortOrder=${sortOrder}`
-    }
-    else {
-      url = `users/dashboard/friend`
+      url = `users/dashboard/friend?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    } else {
+      url = `users/dashboard/friend`;
     }
     return Method.dataPost(url, token, payload);
   },
@@ -274,9 +288,8 @@ let userHttpApi = {
   getUserReferFriendList(payload, sortBy, sortOrder) {
     let url;
     if (sortBy && sortOrder) {
-      url = `users/dashboard/referfriend?sortBy=${sortBy}&sortOrder=${sortOrder}`
-    }
-    else {
+      url = `users/dashboard/referfriend?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    } else {
       url = `users/dashboard/referfriend`;
     }
     return Method.dataPost(url, token, payload);
@@ -314,13 +327,27 @@ let userHttpApi = {
   },
 
   //liveScore coaches list
-  liveScoreCoachesList(roleId, entityId, search, offset, limit, sortBy, sortOrder, isParent, competitionId) {
+  liveScoreCoachesList(
+    roleId,
+    entityId,
+    search,
+    offset,
+    limit,
+    sortBy,
+    sortOrder,
+    isParent,
+    competitionId,
+  ) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url;
     if (offset != null) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}&offset=${offset}&limit=${limit}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${
+        isParent ? competitionId : entityId
+      }&userName=${search}&offset=${offset}&limit=${limit}`;
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${isParent ? competitionId : entityId}&userName=${search}`
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${isParent ? 1 : 6}&entityId=${
+        isParent ? competitionId : entityId
+      }&userName=${search}`;
     }
 
     if (sortBy && sortOrder) {
@@ -343,7 +370,7 @@ let userHttpApi = {
 
   exportUserRegData(payload) {
     const url = `api/export/registration/data`;
-    return Method.dataPostDownload(url, token, payload, "UserRegistrationData");
+    return Method.dataPostDownload(url, token, payload, 'UserRegistrationData');
   },
 
   transferUserRegistration(payload) {
@@ -361,9 +388,8 @@ let userHttpApi = {
 
     if (sortBy && sortOrder) {
       url = `api/affiliatedirectory?sortBy=${sortBy}&sortOrder=${sortOrder}`;
-    }
-    else {
-      url = `api/affiliatedirectory`
+    } else {
+      url = `api/affiliatedirectory`;
     }
     return Method.dataPost(url, token, payload);
   },
@@ -378,21 +404,43 @@ let userHttpApi = {
     let url = null;
     if (data.entityTypes === 6) {
       if (data.userName) {
-        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${
+          data.compOrgId
+        }&userName=${data.userName}&offset=${
+          data.offset
+        }&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${
+          data.compId
+        }`;
       } else if (data.offset != null) {
-        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`
-      }
-      else {
-        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${
+          data.compOrgId
+        }&offset=${
+          data.offset
+        }&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${
+          data.compId
+        }`;
+      } else {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${
+          data.compOrgId
+        }&needUREs=${true}&individualLinkedEntityRequired=${true}&competitionId=${data.compId}`;
       }
     } else {
       if (data.userName) {
-        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${
+          data.compId
+        }&userName=${data.userName}&offset=${
+          data.offset
+        }&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`;
       } else if (data.offset != null) {
-        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
-      }
-      else {
-        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${
+          data.compId
+        }&offset=${
+          data.offset
+        }&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`;
+      } else {
+        url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${
+          data.compId
+        }&needUREs=${true}&individualLinkedEntityRequired=${true}`;
       }
     }
     if (data.sortBy && data.sortOrder) {
@@ -406,9 +454,8 @@ let userHttpApi = {
     let url = null;
     if (data.isCompParent !== true) {
       url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compOrgId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`;
-    }
-    else {
-      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`
+    } else {
+      url = `/users/umpiresAvailable?entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=true&individualLinkedEntityRequired=true&matchStartTime=${data.matchStartTime}&matchEndTime=${data.matchEndTime}`;
     }
     return Method.dataGet(url, localStorage.token);
   },
@@ -427,7 +474,7 @@ let userHttpApi = {
   async getBannerCount(orgId) {
     const { organisationId } = getOrganisationData();
     const url = `api/bannerCount?organisationId=${organisationId}`;
-    return Method.dataGet(url, token)
+    return Method.dataGet(url, token);
   },
 
   userExportFiles(url, userType) {
@@ -501,13 +548,23 @@ let userHttpApi = {
 
   umpireList_Data(data) {
     let url = null;
-    let entity_Id = data.entityTypes === 6 ? data.competitionOrgId : data.compId
+    let entity_Id = data.entityTypes === 6 ? data.competitionOrgId : data.compId;
     if (data.userName) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&userName=${data.userName}&offset=${data.offset}&limit=${data.limit}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${
+        data.entityTypes
+      }&entityId=${entity_Id}&userName=${data.userName}&offset=${data.offset}&limit=${
+        data.limit
+      }&needUREs=${true}&individualLinkedEntityRequired=${true}`;
     } else if (data.offset != null) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&offset=${data.offset}&limit=${data.limit}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${
+        data.entityTypes
+      }&entityId=${entity_Id}&offset=${data.offset}&limit=${
+        data.limit
+      }&needUREs=${true}&individualLinkedEntityRequired=${true}`;
     } else {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${entity_Id}&needUREs=${true}&individualLinkedEntityRequired=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${
+        data.entityTypes
+      }&entityId=${entity_Id}&needUREs=${true}&individualLinkedEntityRequired=${true}`;
     }
 
     if (data.sortBy && data.sortOrder) {
@@ -568,7 +625,7 @@ let userHttpApi = {
 
   async getUserParentData(userId) {
     var url = `api/parents?userId=${userId || 0}`;
-    return Method.dataGet(url, token)
+    return Method.dataGet(url, token);
   },
 };
 
@@ -579,22 +636,22 @@ let Method = {
       userHttp
         .post(url, body, {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "BWSA " + authorization,
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: 'BWSA ' + authorization,
+            SourceSystem: 'WebAdmin',
+          },
         })
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
           } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
           } else {
             if (result) {
@@ -605,7 +662,7 @@ let Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -622,14 +679,14 @@ let Method = {
               } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
+                  error: err,
+                });
               }
             }
           } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
           }
         });
@@ -642,22 +699,22 @@ let Method = {
       userHttp
         .post(url, body, {
           headers: {
-            "Content-Type": "multipart/form-data",
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "BWSA " + authorization,
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'multipart/form-data',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: 'BWSA ' + authorization,
+            SourceSystem: 'WebAdmin',
+          },
         })
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
           } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
           } else {
             if (result) {
@@ -668,7 +725,7 @@ let Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -685,14 +742,14 @@ let Method = {
               } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
+                  error: err,
+                });
               }
             }
           } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
           }
         });
@@ -706,12 +763,12 @@ let Method = {
         .post(url, body, {
           responseType: 'arraybuffer',
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Accept: "application/csv",
-            Authorization: "BWSA " + authorization,
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Accept: 'application/csv',
+            Authorization: 'BWSA ' + authorization,
+            SourceSystem: 'WebAdmin',
+          },
         })
         .then(result => {
           if (result.status === 200) {
@@ -723,12 +780,12 @@ let Method = {
             link.click();
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
           } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
           } else {
             if (result) {
@@ -739,215 +796,7 @@ let Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
-              });
-            }
-          }
-        })
-        .catch(err => {
-          if (err.response) {
-            if (err.response.status !== null && err.response.status !== undefined) {
-              if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status;
-                if (unauthorizedStatus === 401) {
-                  logout();
-                  message.error(ValidationConstants.messageStatus401)
-                }
-              } else {
-                return reject({
-                  status: 5,
-                  error: err
-                })
-              }
-            }
-          } else {
-            return reject({
-              status: 5,
-              error: err
-            });
-          }
-        });
-    });
-  },
-
-  async dataPatch(newUrl, authorization, body) {
-    const url = newUrl;
-    return await new Promise((resolve, reject) => {
-      userHttp
-        .patch(url, body, {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "BWSA " + authorization,
-            "SourceSystem": "WebAdmin"
-          }
-        })
-        .then(result => {
-          if (result.status === 200) {
-            return resolve({
-              status: 1,
-              result: result
-            });
-          } else if (result.status === 212) {
-            return resolve({
-              status: 4,
-              result: result
-            });
-          } else {
-            if (result) {
-              return reject({
-                status: 3,
-                error: result.data.message,
-              });
-            } else {
-              return reject({
-                status: 4,
-                error: "Something went wrong."
-              });
-            }
-          }
-        })
-        .catch(err => {
-          if (err.response) {
-            if (err.response.status !== null || err.response.status !== undefined) {
-              if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status;
-                if (unauthorizedStatus === 401) {
-                  logout();
-                  message.error(ValidationConstants.messageStatus401)
-                }
-              } else if (err.response.status === 400) {
-                message.config({
-                  duration: 1.5,
-                  maxCount: 1,
-                });
-                message.error(err.response.data.message);
-                return reject({
-                  status: 5,
-                  error: err.response.data.message
-                });
-              } else {
-                return reject({
-                  status: 5,
-                  error: err.response && err.response.data.message
-                });
-              }
-            }
-          } else {
-            return reject({
-              status: 5,
-              error: err.response && err.response.data.message
-            });
-          }
-        });
-    });
-  },
-
-  // Method to GET response
-  async dataGet(newUrl, authorization) {
-    const url = newUrl;
-    return await new Promise((resolve, reject) => {
-      userHttp
-        .get(url, {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
-        })
-        .then(result => {
-          if (result.status === 200) {
-            return resolve({
-              status: 1,
-              result: result
-            });
-          } else if (result.status === 212) {
-            return resolve({
-              status: 4,
-              result: result
-            });
-          } else {
-            if (result) {
-              return reject({
-                status: 3,
-                error: result.data.message,
-              });
-            } else {
-              return reject({
-                status: 4,
-                error: "Something went wrong."
-              });
-            }
-          }
-        })
-        .catch(err => {
-          if (err.response) {
-            if (err.response.status !== null && err.response.status !== undefined) {
-              if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status;
-                if (unauthorizedStatus === 401) {
-                  logout();
-                  message.error(ValidationConstants.messageStatus401)
-                }
-              } else if (err.response.status === 404) {
-                return reject({
-                  status: 6,
-                  error: err
-                })
-              } else {
-                return reject({
-                  status: 5,
-                  error: err
-                })
-
-              }
-            }
-          } else {
-            return reject({
-              status: 5,
-              error: err
-            });
-          }
-        });
-    });
-  },
-
-  async dataDelete(newUrl, authorization) {
-    const url = newUrl;
-    return await new Promise((resolve, reject) => {
-      userHttp
-        .delete(url, {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
-        })
-        .then(result => {
-          if (result.status === 200) {
-            return resolve({
-              status: 1,
-              result: result
-            });
-          } else if (result.status === 212) {
-            return resolve({
-              status: 4,
-              result: result
-            });
-          } else {
-            if (result) {
-              return reject({
-                status: 3,
-                error: result.data.message,
-              });
-            } else {
-              return reject({
-                status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -964,14 +813,221 @@ let Method = {
               } else {
                 return reject({
                   status: 5,
-                  error: err
+                  error: err,
                 });
               }
             }
           } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
+            });
+          }
+        });
+    });
+  },
+
+  async dataPatch(newUrl, authorization, body) {
+    const url = newUrl;
+    return await new Promise((resolve, reject) => {
+      userHttp
+        .patch(url, body, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: 'BWSA ' + authorization,
+            SourceSystem: 'WebAdmin',
+          },
+        })
+        .then(result => {
+          if (result.status === 200) {
+            return resolve({
+              status: 1,
+              result: result,
+            });
+          } else if (result.status === 212) {
+            return resolve({
+              status: 4,
+              result: result,
+            });
+          } else {
+            if (result) {
+              return reject({
+                status: 3,
+                error: result.data.message,
+              });
+            } else {
+              return reject({
+                status: 4,
+                error: 'Something went wrong.',
+              });
+            }
+          }
+        })
+        .catch(err => {
+          if (err.response) {
+            if (err.response.status !== null || err.response.status !== undefined) {
+              if (err.response.status === 401) {
+                let unauthorizedStatus = err.response.status;
+                if (unauthorizedStatus === 401) {
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
+                }
+              } else if (err.response.status === 400) {
+                message.config({
+                  duration: 1.5,
+                  maxCount: 1,
+                });
+                message.error(err.response.data.message);
+                return reject({
+                  status: 5,
+                  error: err.response.data.message,
+                });
+              } else {
+                return reject({
+                  status: 5,
+                  error: err.response && err.response.data.message,
+                });
+              }
+            }
+          } else {
+            return reject({
+              status: 5,
+              error: err.response && err.response.data.message,
+            });
+          }
+        });
+    });
+  },
+
+  // Method to GET response
+  async dataGet(newUrl, authorization) {
+    const url = newUrl;
+    return await new Promise((resolve, reject) => {
+      userHttp
+        .get(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
+        })
+        .then(result => {
+          if (result.status === 200) {
+            return resolve({
+              status: 1,
+              result: result,
+            });
+          } else if (result.status === 212) {
+            return resolve({
+              status: 4,
+              result: result,
+            });
+          } else {
+            if (result) {
+              return reject({
+                status: 3,
+                error: result.data.message,
+              });
+            } else {
+              return reject({
+                status: 4,
+                error: 'Something went wrong.',
+              });
+            }
+          }
+        })
+        .catch(err => {
+          if (err.response) {
+            if (err.response.status !== null && err.response.status !== undefined) {
+              if (err.response.status === 401) {
+                let unauthorizedStatus = err.response.status;
+                if (unauthorizedStatus === 401) {
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
+                }
+              } else if (err.response.status === 404) {
+                return reject({
+                  status: 6,
+                  error: err,
+                });
+              } else {
+                return reject({
+                  status: 5,
+                  error: err,
+                });
+              }
+            }
+          } else {
+            return reject({
+              status: 5,
+              error: err,
+            });
+          }
+        });
+    });
+  },
+
+  async dataDelete(newUrl, authorization) {
+    const url = newUrl;
+    return await new Promise((resolve, reject) => {
+      userHttp
+        .delete(url, {
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
+        })
+        .then(result => {
+          if (result.status === 200) {
+            return resolve({
+              status: 1,
+              result: result,
+            });
+          } else if (result.status === 212) {
+            return resolve({
+              status: 4,
+              result: result,
+            });
+          } else {
+            if (result) {
+              return reject({
+                status: 3,
+                error: result.data.message,
+              });
+            } else {
+              return reject({
+                status: 4,
+                error: 'Something went wrong.',
+              });
+            }
+          }
+        })
+        .catch(err => {
+          if (err.response) {
+            if (err.response.status !== null && err.response.status !== undefined) {
+              if (err.response.status === 401) {
+                let unauthorizedStatus = err.response.status;
+                if (unauthorizedStatus === 401) {
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
+                }
+              } else {
+                return reject({
+                  status: 5,
+                  error: err,
+                });
+              }
+            }
+          } else {
+            return reject({
+              status: 5,
+              error: err,
             });
           }
         });
@@ -985,12 +1041,12 @@ let Method = {
         .get(url, {
           responseType: 'arraybuffer',
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/csv",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/csv',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
         .then(result => {
           if (result.status === 200) {
@@ -998,7 +1054,7 @@ let Method = {
             const link = document.createElement('a');
             link.href = url;
             let _now = moment().utc().format('Y-MM-DD');
-            let fileName = "filecsv";
+            let fileName = 'filecsv';
             if (userType === 'manager') {
               fileName = `matchDayManagerList-${_now}`;
             } else if (userType === 'coach') {
@@ -1011,12 +1067,12 @@ let Method = {
             link.click();
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
           } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
           } else {
             if (result) {
@@ -1027,7 +1083,7 @@ let Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -1039,19 +1095,19 @@ let Method = {
                 let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
                   logout();
-                  message.error(ValidationConstants.messageStatus401)
+                  message.error(ValidationConstants.messageStatus401);
                 }
               } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
+                  error: err,
+                });
               }
             }
           } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
           }
         });

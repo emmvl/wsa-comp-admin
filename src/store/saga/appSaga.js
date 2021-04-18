@@ -1,29 +1,31 @@
-import { put, call, takeEvery } from "redux-saga/effects";
+import { put, call, takeEvery } from 'redux-saga/effects';
 
-import AppConstants from "themes/appConstants";
-import ApiConstants from "themes/apiConstants";
-import { isArrayNotEmpty } from "util/helpers";
-import AxiosApi from "store/http/axiosApi";
-import LiveScoreApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
-import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi";
-import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
-import UserAxiosApi from "store/http/userHttp/userAxiosApi.js";
-import { getCurrentYear } from "util/permissions";
-import { setGlobalYear, } from "util/sessionStorage";
+import AppConstants from 'themes/appConstants';
+import ApiConstants from 'themes/apiConstants';
+import { isArrayNotEmpty } from 'util/helpers';
+import AxiosApi from 'store/http/axiosApi';
+import LiveScoreApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
+import RegistrationAxiosApi from 'store/http/registrationHttp/registrationAxiosApi';
+import CommonAxiosApi from 'store/http/commonHttp/commonAxiosApi';
+import UserAxiosApi from 'store/http/userHttp/userAxiosApi.js';
+import { getCurrentYear } from 'util/permissions';
+import { setGlobalYear } from 'util/sessionStorage';
 
 // Get the common year list reference
 function* getOnlyYearListSaga(action) {
   try {
-    const result = isArrayNotEmpty(action.yearsArray) ? {
-      status: 1,
-      result: { data: action.yearsArray }
-    } : yield call(AxiosApi.getYearList, action);
+    const result = isArrayNotEmpty(action.yearsArray)
+      ? {
+          status: 1,
+          result: { data: action.yearsArray },
+        }
+      : yield call(AxiosApi.getYearList, action);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_ONLY_YEAR_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -36,7 +38,7 @@ function* getOnlyYearListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -46,10 +48,10 @@ function* getYearListSaga(action) {
   try {
     const result = yield call(AxiosApi.getYearList, action);
     if (result.status === 1) {
-      let getCurrentYearId = getCurrentYear(result.result.data)
+      let getCurrentYearId = getCurrentYear(result.result.data);
       const resultCompetition = yield call(
         RegistrationAxiosApi.getCompetitionTypeList,
-        getCurrentYearId
+        getCurrentYearId,
       );
 
       if (resultCompetition.status === 1) {
@@ -57,29 +59,30 @@ function* getYearListSaga(action) {
           type: ApiConstants.API_YEAR_LIST_SUCCESS,
           result: result.result.data,
           competetionListResult: resultCompetition.result.data,
-          status: result.status
+          status: result.status,
         });
 
         if (isArrayNotEmpty(resultCompetition.result.data)) {
           const resultMembershipProduct = yield call(
             RegistrationAxiosApi.getMembershipProductList,
-            resultCompetition.result.data[0].competitionId
+            resultCompetition.result.data[0].competitionId,
           );
 
           if (resultMembershipProduct.status === 1) {
-            let yearId = getCurrentYear(result.result.data)
+            let yearId = getCurrentYear(result.result.data);
             const getRegistrationFormData = yield call(
               RegistrationAxiosApi.getRegistrationForm,
               yearId,
-              resultCompetition.result.data[0].competitionId
+              resultCompetition.result.data[0].competitionId,
             );
 
             if (getRegistrationFormData.status === 1) {
               yield put({
                 type: ApiConstants.API_GET_REG_FORM_SUCCESS,
                 MembershipProductList: resultMembershipProduct.result.data,
-                result: getRegistrationFormData.status === 1 ? getRegistrationFormData.result.data : [],
-                status: result.status
+                result:
+                  getRegistrationFormData.status === 1 ? getRegistrationFormData.result.data : [],
+                status: result.status,
               });
             }
           }
@@ -96,7 +99,7 @@ function* getYearListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -110,7 +113,7 @@ function* getProductValidityListSaga(action) {
       yield put({
         type: ApiConstants.API_PRODUCT_VALIDITY_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -123,7 +126,7 @@ function* getProductValidityListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -137,20 +140,20 @@ function* getCompetitionTypeListSaga(action) {
       yield put({
         type: ApiConstants.API_COMPETITION_TYPE_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       if (isArrayNotEmpty(result.result.data)) {
         const resultMembershipProduct = yield call(
           RegistrationAxiosApi.getMembershipProductList,
-          result.result.data[0].competitionId
+          result.result.data[0].competitionId,
         );
 
         if (resultMembershipProduct.status === 1) {
           const getRegistrationFormData = yield call(
             RegistrationAxiosApi.getRegistrationForm,
             action.year,
-            result.result.data[0].competitionId
+            result.result.data[0].competitionId,
           );
 
           // if (getRegistrationFormData.status === 1) {
@@ -158,7 +161,7 @@ function* getCompetitionTypeListSaga(action) {
             type: ApiConstants.API_GET_REG_FORM_SUCCESS,
             MembershipProductList: resultMembershipProduct.result.data,
             result: getRegistrationFormData.status === 1 ? getRegistrationFormData.result.data : [],
-            status: result.status
+            status: result.status,
           });
           // }
         }
@@ -174,7 +177,7 @@ function* getCompetitionTypeListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -187,7 +190,7 @@ function* getVenuesTypeSaga(action) {
       yield put({
         type: ApiConstants.API_REG_FORM_VENUE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -200,7 +203,7 @@ function* getVenuesTypeSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -213,7 +216,7 @@ function* getRegFormAdvSettingsSaga(action) {
       yield put({
         type: ApiConstants.API_REG_FORM_SETTINGS_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -226,7 +229,7 @@ function* getRegFormAdvSettingsSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -239,7 +242,7 @@ function* getRegFormMethodSaga(action) {
       yield put({
         type: ApiConstants.API_REG_FORM_METHOD_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -252,7 +255,7 @@ function* getRegFormMethodSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -266,7 +269,7 @@ function* getMembershipProductFeesTypeSaga(action) {
       yield put({
         type: ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -279,7 +282,7 @@ function* getMembershipProductFeesTypeSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -293,7 +296,7 @@ function* getCommonDiscountTypeTypeSaga(action) {
       yield put({
         type: ApiConstants.API_COMMON_DISCOUNT_TYPE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -306,7 +309,7 @@ function* getCommonDiscountTypeTypeSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -326,7 +329,7 @@ function* getCompetitionFeeInitSaga(action) {
         competitionFormat: competitionFormat.result.data,
         inviteesResult: inviteesResult.result.data,
         paymentOptionResult: paymentOptionResult.result.data,
-        status: competitionType.status
+        status: competitionType.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -339,7 +342,7 @@ function* getCompetitionFeeInitSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -352,7 +355,7 @@ function* getMatchTypesSaga(action) {
       yield put({
         type: ApiConstants.API_MATCH_TYPES_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -365,7 +368,7 @@ function* getMatchTypesSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -378,7 +381,7 @@ function* getCompetitionTypesSaga(action) {
       yield put({
         type: ApiConstants.API_COMPETITION_TYPES_SUCCESS,
         result: competitionType.result.data,
-        status: competitionType.status
+        status: competitionType.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -391,7 +394,7 @@ function* getCompetitionTypesSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -404,7 +407,7 @@ function* getCompetitionFormatTypesSaga(action) {
       yield put({
         type: ApiConstants.API_COMPETITION_FORMAT_TYPES_SUCCESS,
         result: competitionFormat.result.data,
-        status: competitionFormat.status
+        status: competitionFormat.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -417,20 +420,22 @@ function* getCompetitionFormatTypesSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getOnlyYearAndCompetitionListSaga(action) {
   try {
-    const result = isArrayNotEmpty(action.yearData) ? {
-      status: 1,
-      result: { data: action.yearData, key: "old" }
-    } : yield call(CommonAxiosApi.getYearList, action);
+    const result = isArrayNotEmpty(action.yearData)
+      ? {
+          status: 1,
+          result: { data: action.yearData, key: 'old' },
+        }
+      : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      let yearId = action.yearId == null ? -1 : action.yearId
+      let yearId = action.yearId == null ? -1 : action.yearId;
       const resultCompetition = yield call(RegistrationAxiosApi.getAllCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {
@@ -440,7 +445,7 @@ function* getOnlyYearAndCompetitionListSaga(action) {
           competetionListResult: resultCompetition.result.data,
           status: result.status,
           selectedYearId: yearId,
-          data: result.result.key ? result.result.key : "new"
+          data: result.result.key ? result.result.key : 'new',
         });
       }
     } else {
@@ -454,7 +459,7 @@ function* getOnlyYearAndCompetitionListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -462,14 +467,16 @@ function* getOnlyYearAndCompetitionListSaga(action) {
 // Get the OWN competition and year list reference
 function* getOwnYearAndCompetitionListSaga(action) {
   try {
-    const result = isArrayNotEmpty(action.yearData) ? {
-      status: 1,
-      result: { data: action.yearData }
-    } : yield call(CommonAxiosApi.getYearList, action);
+    const result = isArrayNotEmpty(action.yearData)
+      ? {
+          status: 1,
+          result: { data: action.yearData },
+        }
+      : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
-      setGlobalYear(yearId)
+      let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId;
+      setGlobalYear(yearId);
       const resultCompetition = yield call(RegistrationAxiosApi.getOwnCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {
@@ -491,7 +498,7 @@ function* getOwnYearAndCompetitionListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -499,15 +506,20 @@ function* getOwnYearAndCompetitionListSaga(action) {
 // Get the participate competition and year list reference
 function* getParticipateYearAndCompetitionListSaga(action) {
   try {
-    const result = isArrayNotEmpty(action.yearData) ? {
-      status: 1,
-      result: { data: action.yearData }
-    } : yield call(CommonAxiosApi.getYearList, action);
+    const result = isArrayNotEmpty(action.yearData)
+      ? {
+          status: 1,
+          result: { data: action.yearData },
+        }
+      : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
-      setGlobalYear(yearId)
-      const resultCompetition = yield call(RegistrationAxiosApi.getParticipateCompetitionList, yearId);
+      let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId;
+      setGlobalYear(yearId);
+      const resultCompetition = yield call(
+        RegistrationAxiosApi.getParticipateCompetitionList,
+        yearId,
+      );
 
       if (resultCompetition.status === 1) {
         yield put({
@@ -528,7 +540,7 @@ function* getParticipateYearAndCompetitionListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -541,7 +553,7 @@ function* getEnhancedRoundRobinTypesSaga(action) {
       yield put({
         type: ApiConstants.API_ENHANCED_ROUND_ROBIN_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -554,7 +566,7 @@ function* getEnhancedRoundRobinTypesSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -567,7 +579,7 @@ function* exportFilesSaga(action) {
       yield put({
         type: ApiConstants.API_EXPORT_FILES_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_EXPORT_FILES_FAIL });
@@ -580,7 +592,7 @@ function* exportFilesSaga(action) {
     yield put({
       type: ApiConstants.API_EXPORT_FILES_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -593,7 +605,7 @@ function* userExportFilesSaga(action) {
       yield put({
         type: ApiConstants.API_USER_EXPORT_FILES_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_EXPORT_FILES_FAIL });
@@ -606,23 +618,25 @@ function* userExportFilesSaga(action) {
     yield put({
       type: ApiConstants.API_EXPORT_FILES_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getRefBadgeSaga(action) {
   try {
-    const result = isArrayNotEmpty(action.data) ? {
-      status: 1,
-      result: { data: action.data }
-    } : yield call(AxiosApi.getRegBadgeData);
+    const result = isArrayNotEmpty(action.data)
+      ? {
+          status: 1,
+          result: { data: action.data },
+        }
+      : yield call(AxiosApi.getRegBadgeData);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_REF_BADGE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -635,7 +649,7 @@ function* getRefBadgeSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -649,7 +663,7 @@ function* getFeeTypeSaga(action) {
       yield put({
         type: ApiConstants.API_FEE_TYPE_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -662,7 +676,7 @@ function* getFeeTypeSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -676,7 +690,7 @@ function* getPaymentOptionsSaga(action) {
       yield put({
         type: ApiConstants.API_PAYMENT_OPTIONS_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -689,7 +703,7 @@ function* getPaymentOptionsSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -703,7 +717,7 @@ function* getPaymentMethodsSaga(action) {
       yield put({
         type: ApiConstants.API_PAYMENT_METHODS_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -716,7 +730,7 @@ function* getPaymentMethodsSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -729,7 +743,7 @@ function* getDiscountMethodListSaga(action) {
       yield put({
         type: ApiConstants.API_GET_DISCOUNT_METHOD_LIST_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -742,7 +756,7 @@ function* getDiscountMethodListSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -755,14 +769,20 @@ export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_REG_FORM_VENUE_LOAD, getVenuesTypeSaga);
   yield takeEvery(ApiConstants.API_REG_FORM_SETTINGS_LOAD, getRegFormAdvSettingsSaga);
   yield takeEvery(ApiConstants.API_REG_FORM_METHOD_LOAD, getRegFormMethodSaga);
-  yield takeEvery(ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_LOAD, getMembershipProductFeesTypeSaga);
+  yield takeEvery(
+    ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_LOAD,
+    getMembershipProductFeesTypeSaga,
+  );
   yield takeEvery(ApiConstants.API_COMMON_DISCOUNT_TYPE_LOAD, getCommonDiscountTypeTypeSaga);
   yield takeEvery(ApiConstants.API_REG_COMPETITION_FEE_INIT_LOAD, getCompetitionFeeInitSaga);
   yield takeEvery(ApiConstants.API_MATCH_TYPES_LOAD, getMatchTypesSaga);
   yield takeEvery(ApiConstants.API_COMPETITION_TYPES_LOAD, getCompetitionTypesSaga);
   yield takeEvery(ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD, getCompetitionFormatTypesSaga);
   yield takeEvery(ApiConstants.API_GET_YEAR_COMPETITION_LOAD, getOnlyYearAndCompetitionListSaga);
-  yield takeEvery(ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD, getParticipateYearAndCompetitionListSaga);
+  yield takeEvery(
+    ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD,
+    getParticipateYearAndCompetitionListSaga,
+  );
   yield takeEvery(ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD, getOwnYearAndCompetitionListSaga);
   yield takeEvery(ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD, getEnhancedRoundRobinTypesSaga);
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga);
