@@ -1,12 +1,11 @@
-import { put, call, takeEvery } from "redux-saga/effects"
-import ApiConstants from '../../../themes/apiConstants'
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import { message } from "antd";
-import AppConstants from "../../../themes/appConstants";
-import history from "../../../util/history";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import ApiConstants from '../../../themes/apiConstants';
+import LiveScoreAxiosApi from '../../http/liveScoreHttp/liveScoreAxiosApi';
+import { message } from 'antd';
+import AppConstants from '../../../themes/appConstants';
+import history from '../../../util/history';
 
 function* failSaga(result) {
-
   yield put({ type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_FAIL });
   let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
@@ -20,14 +19,14 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
   if (error.status === 400) {
     message.config({
       duration: 1.5,
       maxCount: 1,
     });
-    message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    message.error(error && error.error ? error.error : AppConstants.somethingWentWrong);
   } else {
     message.config({
       duration: 1.5,
@@ -40,13 +39,17 @@ function* errorSaga(error) {
 // Record player minute
 export function* liveScorePlayerMinuteRecordSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScorePlayerMinuteRecord, action.data, action.matchId);
+    const result = yield call(
+      LiveScoreAxiosApi.liveScorePlayerMinuteRecord,
+      action.data,
+      action.matchId,
+    );
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_SUCCESS,
         status: result.status,
       });
-      history.push('/matchDayMatches')
+      history.push('/matchDayMatches');
     } else {
       yield call(failSaga, result);
     }
@@ -73,8 +76,13 @@ export function* liveScorePlayerMinuteTrackingListSaga(action) {
   }
 }
 
-
 export default function* rootLiveScorePlayerMinuteTrackingSaga() {
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_LOAD, liveScorePlayerMinuteRecordSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_LIST_LOAD, liveScorePlayerMinuteTrackingListSaga);
+  yield takeEvery(
+    ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_LOAD,
+    liveScorePlayerMinuteRecordSaga,
+  );
+  yield takeEvery(
+    ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_LIST_LOAD,
+    liveScorePlayerMinuteTrackingListSaga,
+  );
 }

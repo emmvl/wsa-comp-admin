@@ -1,56 +1,56 @@
-import ApiConstants from "../../themes/apiConstants";
+import ApiConstants from '../../themes/apiConstants';
 
 // Get the common year list reference
 function getYearListAction() {
   return {
-    type: ApiConstants.API_YEAR_LIST_LOAD
+    type: ApiConstants.API_YEAR_LIST_LOAD,
   };
 }
 
 function getFeeTypeAction() {
   return {
-    type: ApiConstants.API_FEE_TYPE_LIST_LOAD
-  }
+    type: ApiConstants.API_FEE_TYPE_LIST_LOAD,
+  };
 }
 
 function getPaymentOptionsListAction() {
   return {
-    type: ApiConstants.API_PAYMENT_OPTIONS_LIST_LOAD
-  }
+    type: ApiConstants.API_PAYMENT_OPTIONS_LIST_LOAD,
+  };
 }
 
 function getPaymentMethodsListAction() {
   return {
-    type: ApiConstants.API_PAYMENT_METHODS_LIST_LOAD
-  }
+    type: ApiConstants.API_PAYMENT_METHODS_LIST_LOAD,
+  };
 }
 
 // Get the common year list reference
 function getOnlyYearListAction(yearsArray) {
   return {
     type: ApiConstants.API_ONLY_YEAR_LIST_LOAD,
-    yearsArray
+    yearsArray,
   };
 }
 
 // Get the common membership product validity type list reference
 function getProductValidityListAction() {
   return {
-    type: ApiConstants.API_PRODUCT_VALIDITY_LIST_LOAD
+    type: ApiConstants.API_PRODUCT_VALIDITY_LIST_LOAD,
   };
 }
 
 // Get the common Membership Product Fees Type
 function getMembershipProductFeesTypeAction() {
   return {
-    type: ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_LOAD
+    type: ApiConstants.API_COMMON_MEMBERSHIP_PRODUCT_FEES_TYPE_LOAD,
   };
 }
 
 // Get common reference discount type
 function getCommonDiscountTypeTypeAction() {
   return {
-    type: ApiConstants.API_COMMON_DISCOUNT_TYPE_LOAD
+    type: ApiConstants.API_COMMON_DISCOUNT_TYPE_LOAD,
   };
 }
 
@@ -58,26 +58,26 @@ function getCommonDiscountTypeTypeAction() {
 function getCompetitionTypeListAction(year) {
   return {
     type: ApiConstants.API_COMPETITION_TYPE_LIST_LOAD,
-    year
+    year,
   };
 }
 
 function getVenuesTypeAction(key) {
   return {
     type: ApiConstants.API_REG_FORM_VENUE_LOAD,
-    key
+    key,
   };
 }
 
 function getRegFormAdvSettings() {
   return {
-    type: ApiConstants.API_REG_FORM_SETTINGS_LOAD
+    type: ApiConstants.API_REG_FORM_SETTINGS_LOAD,
   };
 }
 
 function getRegistrationMethod() {
   return {
-    type: ApiConstants.API_REG_FORM_METHOD_LOAD
+    type: ApiConstants.API_REG_FORM_METHOD_LOAD,
   };
 }
 
@@ -85,19 +85,18 @@ function getRegistrationMethod() {
 function competitionFeeInit() {
   return {
     type: ApiConstants.API_REG_COMPETITION_FEE_INIT_LOAD,
-
   };
 }
 
 function getMatchTypesAction() {
   return {
-    type: ApiConstants.API_MATCH_TYPES_LOAD
+    type: ApiConstants.API_MATCH_TYPES_LOAD,
   };
 }
 
 function getCompetitionFormatTypesAction() {
   return {
-    type: ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD
+    type: ApiConstants.API_COMPETITION_FORMAT_TYPES_LOAD,
   };
 }
 
@@ -107,21 +106,21 @@ function getYearAndCompetitionAction(yearData, yearId, key) {
     type: ApiConstants.API_GET_YEAR_COMPETITION_LOAD,
     yearData,
     yearId,
-    key
+    key,
   };
 }
 
 // Get competition
 function getCompetitionTypesAction() {
   return {
-    type: ApiConstants.API_COMPETITION_TYPES_LOAD
+    type: ApiConstants.API_COMPETITION_TYPES_LOAD,
   };
 }
 
 // Clear year competition
 function clearYearCompetitionAction() {
   return {
-    type: ApiConstants.CLEAR_COMPETITION_DATA
+    type: ApiConstants.CLEAR_COMPETITION_DATA,
   };
 }
 
@@ -130,7 +129,7 @@ function getYearAndCompetitionOwnAction(yearData, yearId, key) {
     type: ApiConstants.API_GET_YEAR_OWN_COMPETITION_LOAD,
     yearData,
     yearId,
-    key
+    key,
   };
 }
 
@@ -139,14 +138,14 @@ function getYearAndCompetitionParticipateAction(yearData, yearId, key) {
     type: ApiConstants.API_GET_YEAR_Participate_COMPETITION_LOAD,
     yearData,
     yearId,
-    key
+    key,
   };
 }
 
 function searchVenueList(filterData) {
   return {
     type: ApiConstants.Search_Venue_updated_Competition,
-    filterData
+    filterData,
   };
 }
 
@@ -158,7 +157,7 @@ function clearFilter() {
 
 function getEnhancedRoundRobinAction() {
   return {
-    type: ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD
+    type: ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD,
   };
 }
 
@@ -169,11 +168,10 @@ function exportFilesAction(URL) {
   };
 }
 
-
 function CLEAR_OWN_COMPETITION_DATA(key) {
   return {
     type: ApiConstants.CLEAR_OWN_COMPETITION_DATA,
-    key
+    key,
   };
 }
 
@@ -181,14 +179,14 @@ function userExportFilesAction(URL, userType) {
   return {
     type: ApiConstants.API_USER_EXPORT_FILES_LOAD,
     URL,
-    userType
+    userType,
   };
 }
 
 function getRefBadgeData(data) {
   return {
     type: ApiConstants.API_GET_REF_BADGE_LOAD,
-    data
+    data,
   };
 }
 
@@ -226,5 +224,5 @@ export {
   getFeeTypeAction,
   getPaymentOptionsListAction,
   getPaymentMethodsListAction,
-  getDiscountMethodListAction
+  getDiscountMethodListAction,
 };

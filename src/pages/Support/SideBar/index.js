@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import React, { Component } from 'react';
+import { Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 
-import TreeLeaf from "./TreeLeaf";
+import TreeLeaf from './TreeLeaf';
 
 class SideBar extends Component {
   constructor(props) {
@@ -12,8 +12,8 @@ class SideBar extends Component {
     this.searchedArticleArray = [];
 
     this.state = {
-      searchContent: "",
-      searchApply: "",
+      searchContent: '',
+      searchApply: '',
     };
   }
 
@@ -23,7 +23,7 @@ class SideBar extends Component {
     }
   }
 
-  onChangeSearchText = (e) => {
+  onChangeSearchText = e => {
     if (e.target.value.length === 0) {
       this.searchedTreeLeafArray = [];
       this.searchedArticleArray = [];
@@ -37,22 +37,27 @@ class SideBar extends Component {
     });
   };
 
-  onKeyEnterSearchText = (e) => {
+  onKeyEnterSearchText = e => {
     const code = e.keyCode || e.which;
-    if (code === 13) { // input enter
+    if (code === 13) {
+      // input enter
       this.onClickSearchIcon();
     }
   };
 
   onClickSearchIcon = () => {
     this.setState({ searchApply: `${this.state.searchContent}` });
-  }
+  };
 
   search = id => {
     if (id === -1) {
       this.searchedTreeLeafArray = [];
       for (let i = 0; i < this.props.content.length; i++) {
-        if (this.props.content[i].article.toLowerCase().search(this.state.searchApply.toLowerCase()) >= 0) {
+        if (
+          this.props.content[i].article
+            .toLowerCase()
+            .search(this.state.searchApply.toLowerCase()) >= 0
+        ) {
           this.searchedArticleArray.push(this.props.content[i].id);
           if (this.props.content[i].parentArticleId) {
             this.search(this.props.content[i].parentArticleId.id);
@@ -78,7 +83,7 @@ class SideBar extends Component {
 
     const tree = [];
     let leaves = [];
-    content.forEach((art) => {
+    content.forEach(art => {
       if (art.parentArticleId === null) {
         tree.push({ ...art });
       } else {
@@ -110,11 +115,14 @@ class SideBar extends Component {
 
         <div className="separator" />
 
-        {tree.map((cont) => {
+        {tree.map(cont => {
           if (
-            ((this.searchedTreeLeafArray.indexOf(-1) === 0 || this.searchedTreeLeafArray.length === 0) && this.searchedArticleArray.length === 0)
-            || this.searchedTreeLeafArray.indexOf(cont.id) > -1
-            || (this.searchedArticleArray.indexOf(cont.id) > -1 || this.searchedArticleArray.length === 0)
+            ((this.searchedTreeLeafArray.indexOf(-1) === 0 ||
+              this.searchedTreeLeafArray.length === 0) &&
+              this.searchedArticleArray.length === 0) ||
+            this.searchedTreeLeafArray.indexOf(cont.id) > -1 ||
+            this.searchedArticleArray.indexOf(cont.id) > -1 ||
+            this.searchedArticleArray.length === 0
           ) {
             return (
               <div key={cont.article}>

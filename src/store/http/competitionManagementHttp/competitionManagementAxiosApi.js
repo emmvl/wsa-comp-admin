@@ -1,54 +1,53 @@
-import competitionManagementHttp from "./competitionManagementHttp";
-import history from "../../../util/history";
-import { message } from "antd";
-import ValidationConstants from "../../../themes/validationConstant";
-import { 
-  getUserId, 
-  getAuthToken, 
-  // getOrganisationData 
-} from "../../../util/sessionStorage"
+import competitionManagementHttp from './competitionManagementHttp';
+import history from '../../../util/history';
+import { message } from 'antd';
+import ValidationConstants from '../../../themes/validationConstant';
+import {
+  getUserId,
+  getAuthToken,
+  // getOrganisationData
+} from '../../../util/sessionStorage';
 
 async function logout() {
   await localStorage.clear();
-  history.push("/");
+  history.push('/');
 }
 
 let token = getAuthToken();
 // let userId = getUserId()
 
 let CompManagementAxiosApi = {
-
   async getCompetitionFormat(input) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     var url = `/api/competitionformat?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
 
   async saveCompetitionFormat(input) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     var url = `/api/competitionformat/save?userId=${userId}`;
     return Method.dataPost(url, token, input);
   },
 
   async getCompetitonFinals(input) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     var url = `/api/competitionfinals?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
 
   async saveCompetitionFinals(input) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     var url = `/api/competitionfinals/save?userId=${userId}`;
     return Method.dataPost(url, token, input);
   },
 
   async getLadderFormat(input) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     var url = `/api/ladderformat?userId=${userId}`;
     return Method.dataPost(url, token, input.payload);
   },
   async saveLadderFormat(input) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     var url = `/api/ladderformat/save?userId=${userId}`;
     return Method.dataPost(url, token, input);
   },
@@ -59,7 +58,6 @@ let CompManagementAxiosApi = {
   },
 };
 
-
 const Method = {
   async dataPost(newurl, authorization, body) {
     const url = newurl;
@@ -68,27 +66,25 @@ const Method = {
         .post(url, body, {
           timeout: 180000,
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "BWSA " + authorization,
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: 'BWSA ' + authorization,
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -97,7 +93,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -106,33 +102,27 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
   },
-
-
 
   // Method to GET response
 
@@ -143,28 +133,26 @@ const Method = {
         .get(url, {
           timeout: 180000,
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -173,7 +161,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -182,27 +170,23 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
@@ -215,12 +199,12 @@ const Method = {
         .get(url, {
           responseType: 'arraybuffer',
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/csv",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/csv',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
@@ -233,16 +217,14 @@ const Method = {
             link.click();
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -251,7 +233,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -260,27 +242,23 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
@@ -292,28 +270,26 @@ const Method = {
       competitionManagementHttp
         .delete(url, {
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -322,7 +298,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -331,32 +307,27 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
-  }
+  },
 };
-
 
 export default CompManagementAxiosApi;

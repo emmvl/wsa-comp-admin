@@ -1,28 +1,26 @@
 // import { DataManager } from './../../Components';
-import http from "../http/http";
+import http from '../http/http';
 import {
   // getUserId,
   getAuthToken,
-  getOrganisationData
-} from "../../util/sessionStorage"
-import history from "../../util/history";
-import { message } from "antd";
-import ValidationConstants from "../../themes/validationConstant";
+  getOrganisationData,
+} from '../../util/sessionStorage';
+import history from '../../util/history';
+import { message } from 'antd';
+import ValidationConstants from '../../themes/validationConstant';
 
 async function logout() {
   await localStorage.clear();
-  history.push("/");
+  history.push('/');
 }
 let token = getAuthToken();
 let AxiosApi = {
   // /login Api call
   Login(payload) {
-    var base64 = require("base-64");
-    var md5 = require("md5");
-    let authorization = base64.encode(
-      payload.userName + ":" + md5(payload.password)
-    );
-    var url = "/users/loginWithEmailPassword";
+    var base64 = require('base-64');
+    var md5 = require('md5');
+    let authorization = base64.encode(payload.userName + ':' + md5(payload.password));
+    var url = '/users/loginWithEmailPassword';
     return Method.dataGet(url, authorization);
   },
 
@@ -43,8 +41,8 @@ let AxiosApi = {
     let body = {
       paging: {
         offset,
-        limit: 10
-      }
+        limit: 10,
+      },
     };
     var url = `/api/competitionfee/listing/${yearRefId}`;
     return Method.dataPost(url, token, body);
@@ -55,8 +53,8 @@ let AxiosApi = {
     let body = {
       paging: {
         offset,
-        limit: 10
-      }
+        limit: 10,
+      },
     };
     var url = `/api/membershipproductfee/${yearRefId}`;
     return Method.dataPost(url, token, body);
@@ -81,7 +79,6 @@ let AxiosApi = {
   //   var url = `/api/membershipproduct/${productId}`;
   //   return Method.dataGet(url, token);
   // },
-
 
   //////get the membership  product details
   regGetMembershipProductDetails(payload) {
@@ -143,11 +140,11 @@ let AxiosApi = {
     return Method.dataGet(url, token);
   },
   getRegFormSetting() {
-    var url = "/common/reference/RegistrationSettings";
+    var url = '/common/reference/RegistrationSettings';
     return Method.dataGet(url, token);
   },
   getRegFormMethod() {
-    var url = "/common/reference/RegistrationMethod";
+    var url = '/common/reference/RegistrationMethod';
     return Method.dataGet(url, token);
   },
   getMembershipProductList(CompetitionId) {
@@ -157,9 +154,9 @@ let AxiosApi = {
   getRegistrationForm(year, CompetitionId) {
     let body = {
       yearRefId: year,
-      competitionUniqueKey: CompetitionId
+      competitionUniqueKey: CompetitionId,
     };
-    var url = "/api/orgregistration/details";
+    var url = '/api/orgregistration/details';
     return Method.dataPost(url, token, body);
   },
   ///////////get the default membership  product types in registartion membership fees
@@ -196,27 +193,27 @@ let AxiosApi = {
   },
 
   getRegistrationInvitees() {
-    var url = "/common/reference/RegistrationInvitees";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/RegistrationInvitees';
+    return Method.dataGet(url, token);
   },
 
   getCharityRoundUp() {
-    var url = "/common/reference/CharityRoundUp";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/CharityRoundUp';
+    return Method.dataGet(url, token);
   },
   getPaymentOption() {
-    var url = "/common/reference/PaymentOption";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/PaymentOption';
+    return Method.dataGet(url, token);
   },
 
   getGovtVouchers() {
     var url = '/common/reference/GovernmentVoucher';
-    return Method.dataGet(url, token)
+    return Method.dataGet(url, token);
   },
 
   ////get the competition fees all the data in one API
   async getAllCompetitionFeesDeatils(competitionId) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
     var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
     return Method.dataGet(url, token);
@@ -224,7 +221,7 @@ let AxiosApi = {
 
   ///////////save the competition fees deatils
   async saveCompetitionFeesDetails(payload) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
     var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}`;
     return Method.dataPost(url, token, payload);
@@ -232,7 +229,7 @@ let AxiosApi = {
 
   /////save the competition membership tab details
   async saveCompetitionFeesMembershipTab(payload, competitionId) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
     var url = `api/competitionfee/membership?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
     return Method.dataPost(url, token, payload);
@@ -248,51 +245,50 @@ let AxiosApi = {
 
   /////save the division table data  in the competition fees section
   async saveCompetitionFeesDivisionAction(payload, competitionId) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
     var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
     return Method.dataPost(url, token, payload);
   },
   //casual PaymentOption
   getCasualPayment() {
-    var url = "/common/reference/CasualPaymentOption";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/CasualPaymentOption';
+    return Method.dataGet(url, token);
   },
 
   //seasonal PaymentOption
   getSeasonalPayment() {
-    var url = "/common/reference/SeasonalPaymentOption";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/SeasonalPaymentOption';
+    return Method.dataGet(url, token);
   },
 
   //per match PaymentOption
   getPerMatchOption() {
-    var url = "/common/reference/PerMatchPaymentOption";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/PerMatchPaymentOption';
+    return Method.dataGet(url, token);
   },
 
   //post payment
   async postCompetitionPayment(payload, competitionId, organisationKey) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-    var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
-    return Method.dataPost(url, token, payload)
+    var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+    return Method.dataPost(url, token, payload);
   },
-
 
   // Post competition fee section
   async postCompetitionFeeSection(payload, competitionId, organisationKey) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-    var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
-    return Method.dataPost(url, token, payload)
+    var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+    return Method.dataPost(url, token, payload);
   },
   //post competition fee discount
   async postCompetitonFeeDiscount(payload, competitionId, organisationKey) {
-    let orgItem = await getOrganisationData()
+    let orgItem = await getOrganisationData();
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-    var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
-    return Method.dataPost(url, token, payload)
+    var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+    return Method.dataPost(url, token, payload);
   },
 
   /////get the membership product discount Types
@@ -302,19 +298,18 @@ let AxiosApi = {
   },
   //Payment Methods
   getPaymentMethods() {
-    var url = "/common/reference/PaymentMethod";
-    return Method.dataGet(url, token)
+    var url = '/common/reference/PaymentMethod';
+    return Method.dataGet(url, token);
   },
   getRegBadgeData() {
     var url = `/common/reference/AccreditationUmpire`;
     return Method.dataGet(url, token);
   },
-  
+
   getDiscountMethodList() {
     var url = `/common/reference/discountMethod`;
     return Method.dataGet(url, token);
   },
-
 };
 
 const Method = {
@@ -324,27 +319,25 @@ const Method = {
       http
         .post(url, body, {
           headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            Authorization: "BWSA " + authorization,
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            Authorization: 'BWSA ' + authorization,
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -353,7 +346,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -362,33 +355,27 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
   },
-
-
 
   // Method to GET response
 
@@ -398,28 +385,26 @@ const Method = {
       http
         .get(url, {
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -428,7 +413,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -437,27 +422,23 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
@@ -469,28 +450,26 @@ const Method = {
       http
         .delete(url, {
           headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: "BWSA " + authorization,
-            "Access-Control-Allow-Origin": "*",
-            "SourceSystem": "WebAdmin"
-          }
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            Authorization: 'BWSA ' + authorization,
+            'Access-Control-Allow-Origin': '*',
+            SourceSystem: 'WebAdmin',
+          },
         })
 
         .then(result => {
           if (result.status === 200) {
             return resolve({
               status: 1,
-              result: result
+              result: result,
             });
-          }
-          else if (result.status === 212) {
+          } else if (result.status === 212) {
             return resolve({
               status: 4,
-              result: result
+              result: result,
             });
-          }
-          else {
+          } else {
             if (result) {
               return reject({
                 status: 3,
@@ -499,7 +478,7 @@ const Method = {
             } else {
               return reject({
                 status: 4,
-                error: "Something went wrong."
+                error: 'Something went wrong.',
               });
             }
           }
@@ -508,31 +487,27 @@ const Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
-                  message.error(ValidationConstants.messageStatus401)
+                  logout();
+                  message.error(ValidationConstants.messageStatus401);
                 }
-              }
-              else {
+              } else {
                 return reject({
                   status: 5,
-                  error: err
-                })
-
+                  error: err,
+                });
               }
             }
-          }
-          else {
+          } else {
             return reject({
               status: 5,
-              error: err
+              error: err,
             });
-
           }
         });
     });
-  }
+  },
 };
 
 export default AxiosApi;

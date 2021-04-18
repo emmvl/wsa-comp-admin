@@ -1,10 +1,10 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "themes/appConstants";
-import ApiConstants from "themes/apiConstants";
-import ValidationConstants from "themes/validationConstant";
-import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
+import AppConstants from 'themes/appConstants';
+import ApiConstants from 'themes/apiConstants';
+import ValidationConstants from 'themes/validationConstant';
+import CommonAxiosApi from 'store/http/commonHttp/commonAxiosApi';
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -12,8 +12,8 @@ function* failSaga(result) {
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(result.message);
   }, 800);
 }
@@ -22,14 +22,14 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_COMMON_SAGA_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(AppConstants.somethingWentWrong);
   }, 800);
 }
@@ -42,7 +42,7 @@ function* getTimeSlotInitSaga(/* action */) {
       yield put({
         type: ApiConstants.API_TIME_SLOT_INIT_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -55,7 +55,7 @@ function* getTimeSlotInitSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -69,7 +69,7 @@ function* getCommonDataSaga(/* action */) {
       yield put({
         type: ApiConstants.API_GET_COMMON_REF_DATA_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -82,7 +82,7 @@ function* getCommonDataSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -96,12 +96,12 @@ function* addVenueSaga(action) {
     const result = yield call(CommonAxiosApi.addVenue, action.data);
     if (result.status === 1) {
       let venueData = result.result.data;
-      venueData["screenNavigationKey"] = screenNavigationKey;
+      venueData['screenNavigationKey'] = screenNavigationKey;
 
       yield put({
         type: ApiConstants.API_ADD_VENUE_SUCCESS,
         result: venueId === 0 ? venueData : null,
-        status: result.result.status
+        status: result.result.status,
       });
 
       // setTimeout(() => {
@@ -116,13 +116,13 @@ function* addVenueSaga(action) {
     }
   } catch (error) {
     setTimeout(() => {
-      message.error("Something went wrong!");
+      message.error('Something went wrong!');
     }, 800);
 
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -136,7 +136,7 @@ function* venueListSaga(action) {
       yield put({
         type: ApiConstants.API_VENUE_LIST_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -149,7 +149,7 @@ function* venueListSaga(action) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -176,7 +176,10 @@ export function* gradesReferenceListSaga(/* action */) {
 // Get the favourite Team
 function* favouriteTeamReferenceSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.favouriteTeamReference);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.favouriteTeamReference,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -214,7 +217,10 @@ function* firebirdPlayerReferenceSaga(/* action */) {
 // Get the Registration Other Info List
 function* registrationOtherInfoReferenceSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.registrationOtherInfo);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.registrationOtherInfo,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -327,13 +333,18 @@ function* playerPositionReferenceSaga(/* action */) {
 // Get the Venues list for User Module
 function* venuesListSaga(action) {
   try {
-    const result = yield call(CommonAxiosApi.getVenuesList, action.data,action.sortBy,action.sortOrder);
+    const result = yield call(
+      CommonAxiosApi.getVenuesList,
+      action.data,
+      action.sortBy,
+      action.sortOrder,
+    );
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_VENUES_LIST_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -346,7 +357,7 @@ function* venuesListSaga(action) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -359,7 +370,7 @@ function* venueByIdSaga(action) {
       yield put({
         type: ApiConstants.API_VENUE_BY_ID_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -372,7 +383,7 @@ function* venueByIdSaga(action) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -385,7 +396,7 @@ function* venueDeleteSaga(action) {
       yield put({
         type: ApiConstants.API_VENUE_DELETE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -398,7 +409,7 @@ function* venueDeleteSaga(action) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -411,7 +422,7 @@ function* getGenderSaga(/* action */) {
       yield put({
         type: ApiConstants.API_GET_GENDER_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -424,20 +435,20 @@ function* getGenderSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getPhotoTypeSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.photoType)
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.photoType);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_PHOTO_TYPE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -450,20 +461,20 @@ function* getPhotoTypeSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getApplyToSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.applyToRef)
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.applyToRef);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_APPY_TO_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -476,20 +487,20 @@ function* getApplyToSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getExtraTimeDrawSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.extraTimeDrawRef)
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.extraTimeDrawRef);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_EXTRA_TIME_DRAW_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -502,20 +513,23 @@ function* getExtraTimeDrawSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getFinalsFixtureTemplateSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.finalsFixtureTemplateRef);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.finalsFixtureTemplateRef,
+    );
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -528,7 +542,7 @@ function* getFinalsFixtureTemplateSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -536,13 +550,13 @@ function* getFinalsFixtureTemplateSaga(/* action */) {
 // Get the radio meta service for send invites to
 function* getSendInvitesSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.inviteTypeRef)
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.inviteTypeRef);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_INVITE_TYPE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -555,7 +569,7 @@ function* getSendInvitesSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -569,7 +583,7 @@ function* courtListSaga(action) {
       yield put({
         type: ApiConstants.API_COURT_LIST_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -582,20 +596,23 @@ function* courtListSaga(action) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getAllowTeamRegistrationTypeSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.allowTeamRegistrationTypeRefId);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.allowTeamRegistrationTypeRefId,
+    );
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -608,20 +625,23 @@ function* getAllowTeamRegistrationTypeSaga(/* action */) {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* RegistrationRestrictionTypeSaga() {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.RegistrationRestrictionType);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.RegistrationRestrictionType,
+    );
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_REGISTRATION_RESTRICTION_TYPE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -634,7 +654,7 @@ function* RegistrationRestrictionTypeSaga() {
     yield put({
       type: ApiConstants.API_COMMON_SAGA_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -698,7 +718,10 @@ function* getStateReferenceSaga(action) {
 // Get the Registration payment status
 function* getRegistrationPaymentStatusSaga(/* action */) {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.paymentStatusReference);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.paymentStatusReference,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -717,7 +740,10 @@ function* getRegistrationPaymentStatusSaga(/* action */) {
 // Get the match print template type
 function* getMatchPrintTemplateTypeSaga() {
   try {
-    const result = yield call(CommonAxiosApi.getMatchPrintTemplateType, AppConstants.matchPrintTemplateType);
+    const result = yield call(
+      CommonAxiosApi.getMatchPrintTemplateType,
+      AppConstants.matchPrintTemplateType,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -759,7 +785,10 @@ function* checkVenueAddressDuplicationSaga(action) {
 // Get the Reg Change Type Reference Saga
 function* registrationChangeSaga() {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.registrationChangeRef);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.registrationChangeRef,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -777,7 +806,10 @@ function* registrationChangeSaga() {
 
 function* getMembershipPaymentOptionsSaga() {
   try {
-    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.membershipPaymentOptions);
+    const result = yield call(
+      CommonAxiosApi.getCommonReference,
+      AppConstants.membershipPaymentOptions,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -803,10 +835,10 @@ export function* accreditationUmpireReferenceSaga(action) {
         status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
@@ -820,60 +852,60 @@ export function* accreditationUmpireCoachReferenceSaga() {
         status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
-export function* netSetGoTshirtSizeSaga(){
+export function* netSetGoTshirtSizeSaga() {
   try {
-      const result = yield call(CommonAxiosApi.getCommonReference,AppConstants.tShirtSizeList);
-      if (result.status === 1) {
-          yield put({
-              type: ApiConstants.API_NETSETGO_TSHIRT_SIZE_SUCCESS,
-              result: result.result.data,
-              status: result.status,
-          });
-      } else {
-          yield call(failSaga, result)
-      }
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.tShirtSizeList);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_NETSETGO_TSHIRT_SIZE_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
   } catch (error) {
-      yield call(errorSaga, error)
-  }
-}
-
-export function* getDocumentType(){
-  try {
-      const result = yield call(CommonAxiosApi.getDocumentType);
-      if (result.status === 1) {
-          yield put({
-              type: ApiConstants.API_GET_DOCUMENT_TYPE_SUCCESS,
-              result: result.result.data.DocumentType,
-              status: result.status,
-          });
-      } else {
-          yield call(failSaga, result)
-      }
-  } catch (error) {
-      yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
-export function* getRelationshipListSaga(){
+export function* getDocumentType() {
   try {
-      const result = yield call(CommonAxiosApi.getRelationshipList, AppConstants.accreditationCoach);
-      if (result.status === 1) {
-          yield put({
-              type: ApiConstants.API_RELATIONSHIP_LIST_SUCCESS,
-              result: result.result.data,
-              status: result.status,
-          });
-      } else {
-          yield call(failSaga, result)
-      }
+    const result = yield call(CommonAxiosApi.getDocumentType);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_DOCUMENT_TYPE_SUCCESS,
+        result: result.result.data.DocumentType,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
   } catch (error) {
-      yield call(errorSaga, error)
+    yield call(errorSaga, error);
+  }
+}
+
+export function* getRelationshipListSaga() {
+  try {
+    const result = yield call(CommonAxiosApi.getRelationshipList, AppConstants.accreditationCoach);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_RELATIONSHIP_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
   }
 }
 
@@ -885,7 +917,10 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_GRADES_REFERENCE_LIST_LOAD, gradesReferenceListSaga);
   yield takeEvery(ApiConstants.API_FAVOURITE_TEAM_REFERENCE_LOAD, favouriteTeamReferenceSaga);
   yield takeEvery(ApiConstants.API_FIREBIRD_PLAYER_REFERENCE_LOAD, firebirdPlayerReferenceSaga);
-  yield takeEvery(ApiConstants.API_REGISTRATION_OTHER_INFO_REFERENCE_LOAD, registrationOtherInfoReferenceSaga);
+  yield takeEvery(
+    ApiConstants.API_REGISTRATION_OTHER_INFO_REFERENCE_LOAD,
+    registrationOtherInfoReferenceSaga,
+  );
   yield takeEvery(ApiConstants.API_COUNTRY_REFERENCE_LOAD, countryReferenceSaga);
   yield takeEvery(ApiConstants.API_NATIONALITY_REFERENCE_LOAD, nationalityReferenceSaga);
   yield takeEvery(ApiConstants.API_DIVISION_FIELD_CONFIG_LOAD, getDivisionFieldConfigurationSaga);
@@ -902,18 +937,39 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_GET_FINAL_FIXTURE_TEMPLATE_LOAD, getFinalsFixtureTemplateSaga);
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga);
   yield takeEvery(ApiConstants.API_COURT_LIST_LOAD, courtListSaga);
-  yield takeEvery(ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD, getAllowTeamRegistrationTypeSaga);
-  yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTION_TYPE_LOAD, RegistrationRestrictionTypeSaga);
+  yield takeEvery(
+    ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD,
+    getAllowTeamRegistrationTypeSaga,
+  );
+  yield takeEvery(
+    ApiConstants.API_REGISTRATION_RESTRICTION_TYPE_LOAD,
+    RegistrationRestrictionTypeSaga,
+  );
   yield takeEvery(ApiConstants.API_DISABILITY_REFERENCE_LOAD, disabilityReferenceSaga);
   yield takeEvery(ApiConstants.API_GET_COMMON_INIT_LOAD, getCommonInitSaga);
   yield takeEvery(ApiConstants.API_GET_STATE_REFERENCE_DATA_LOAD, getStateReferenceSaga);
-  yield takeEvery(ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD, getRegistrationPaymentStatusSaga);
+  yield takeEvery(
+    ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD,
+    getRegistrationPaymentStatusSaga,
+  );
   yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga);
-  yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
+  yield takeEvery(
+    ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD,
+    checkVenueAddressDuplicationSaga,
+  );
   yield takeEvery(ApiConstants.API_REGISTRATION_CHANGE_TYPE_LOAD, registrationChangeSaga);
-  yield takeEvery(ApiConstants.API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD, getMembershipPaymentOptionsSaga);
-  yield takeEvery(ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD, accreditationUmpireReferenceSaga);
-  yield takeEvery(ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD, accreditationUmpireCoachReferenceSaga);
+  yield takeEvery(
+    ApiConstants.API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD,
+    getMembershipPaymentOptionsSaga,
+  );
+  yield takeEvery(
+    ApiConstants.API_ACCREDITATION_UMPIRE_REFERENCE_LOAD,
+    accreditationUmpireReferenceSaga,
+  );
+  yield takeEvery(
+    ApiConstants.API_ACCREDITATION_UMPIRE_COACH_COMBINED_REFERENCE_LOAD,
+    accreditationUmpireCoachReferenceSaga,
+  );
   yield takeEvery(ApiConstants.API_NETSETGO_TSHIRT_SIZE_LOAD, netSetGoTshirtSizeSaga);
   yield takeEvery(ApiConstants.API_RELATIONSHIP_LIST_LOAD, getRelationshipListSaga);
 }

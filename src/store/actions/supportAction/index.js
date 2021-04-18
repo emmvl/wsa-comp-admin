@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from '../../../themes/apiConstants';
 
 function getSupportContentAction() {
   return {
@@ -6,6 +6,4 @@ function getSupportContentAction() {
   };
 }
 
-export {
-  getSupportContentAction,
-}
+export { getSupportContentAction };

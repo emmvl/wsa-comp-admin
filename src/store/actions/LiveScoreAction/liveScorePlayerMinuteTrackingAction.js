@@ -1,4 +1,4 @@
-import ApiConstants from "themes/apiConstants";
+import ApiConstants from 'themes/apiConstants';
 
 function liveScorePlayerMinuteTrackingListAction(matchId, teamId, playerId) {
   return {
@@ -13,7 +13,7 @@ function liveScorePlayerMinuteRecordAction(data, matchId) {
   return {
     type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_LOAD,
     data,
-    matchId
+    matchId,
   };
 }
 
@@ -27,5 +27,5 @@ function liveScoreUpdatePlayerMinuteRecordAction(data) {
 export {
   liveScorePlayerMinuteRecordAction,
   liveScorePlayerMinuteTrackingListAction,
-  liveScoreUpdatePlayerMinuteRecordAction
+  liveScoreUpdatePlayerMinuteRecordAction,
 };

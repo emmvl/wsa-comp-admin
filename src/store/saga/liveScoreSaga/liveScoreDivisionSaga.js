@@ -1,11 +1,11 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "themes/appConstants";
-import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
-import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import AppConstants from 'themes/appConstants';
+import ApiConstants from 'themes/apiConstants';
+import history from 'util/history';
+import { receiptImportResult } from 'util/showImportResult';
+import LiveScoreAxiosApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
 
 function* failSaga(result) {
   yield put({
@@ -39,7 +39,15 @@ function* errorSaga(error) {
 // Get the Division list
 function* liveScoreDivisionSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.competitionID, action.compKey, action.sortBy, action.sortOrder ,action.isParent , action.compOrgId);
+    const result = yield call(
+      LiveScoreAxiosApi.liveScoreGetDivision,
+      action.competitionID,
+      action.compKey,
+      action.sortBy,
+      action.sortOrder,
+      action.isParent,
+      action.compOrgId,
+    );
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS,
@@ -75,9 +83,9 @@ function* liveScoreCreateDivisionSaga(action) {
         status: result.status,
       });
 
-      history.push("/matchDayDivisionList");
+      history.push('/matchDayDivisionList');
 
-      message.success("Division created successfully");
+      message.success('Division created successfully');
     } else {
       yield call(failSaga, result);
     }
@@ -97,9 +105,9 @@ function* liveScoreDeleteDivisionSaga(action) {
         status: result.status,
       });
 
-      history.push("/matchDayDivisionList");
+      history.push('/matchDayDivisionList');
 
-      message.success("Division Deleted Successfully.");
+      message.success('Division Deleted Successfully.');
     } else {
       yield call(failSaga, result);
     }
@@ -111,7 +119,7 @@ function* liveScoreDeleteDivisionSaga(action) {
 // Import Saga
 function* liveScoreDivisionImportSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreDivisionImport, action.payload)
+    const result = yield call(LiveScoreAxiosApi.liveScoreDivisionImport, action.payload);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_SUCCESS,
@@ -119,8 +127,8 @@ function* liveScoreDivisionImportSaga(action) {
       });
 
       if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/matchDayDivisionList");
-        message.success("Division Imported Successfully.");
+        history.push('/matchDayDivisionList');
+        message.success('Division Imported Successfully.');
       } else {
         receiptImportResult(result.result);
       }
@@ -135,7 +143,14 @@ function* liveScoreDivisionImportSaga(action) {
 // Main Division List
 function* liveScoreMainDivisionListSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreGetMainDivisionList, action.competitionID, action.offset, action.limit, action.sortBy, action.sortOrder);
+    const result = yield call(
+      LiveScoreAxiosApi.liveScoreGetMainDivisionList,
+      action.competitionID,
+      action.offset,
+      action.limit,
+      action.sortBy,
+      action.sortOrder,
+    );
 
     if (result.status === 1) {
       yield put({
@@ -153,8 +168,11 @@ function* liveScoreMainDivisionListSaga(action) {
 
 export default function* rootLiveScoreDivisionSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD, liveScoreDivisionSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD, liveScoreCreateDivisionSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD, liveScoreCreateDivisionSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_LOAD, liveScoreDeleteDivisionSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_LOAD, liveScoreDivisionImportSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListSaga);
+  yield takeEvery(
+    ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD,
+    liveScoreMainDivisionListSaga,
+  );
 }

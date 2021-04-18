@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import "./swappable.css"
+import './swappable.css';
 class Swappable extends Component {
   constructor() {
     super();
 
     this.state = {
-      customFunc: null
+      customFunc: null,
     };
   }
 
@@ -17,7 +17,7 @@ class Swappable extends Component {
     ev.dataTransfer.setData('src', ev.target.id);
 
     this.setState({
-      initialParentNode: ev.target.parentNode
+      initialParentNode: ev.target.parentNode,
     });
   }
 
@@ -29,13 +29,13 @@ class Swappable extends Component {
 
   drop(ev, dragableId, dropzoneId, customFunc = null, swappable = true) {
     if (swappable == false) {
-      return
+      return;
     }
     ev.preventDefault();
     ev.stopPropagation();
     let src = document.getElementById(ev.dataTransfer.getData('src'));
     if (src == null) {
-      return
+      return;
     }
     let srcParent = src.parentNode;
 
@@ -51,9 +51,9 @@ class Swappable extends Component {
     let sourceIndexArray = src.id.split(':');
     let targetIndexArray = target.id.split(':');
     let isCurrentSwappable = true;
-    if(this.props.isCurrentSwappable){
-      isCurrentSwappable=this.props.isCurrentSwappable(src.id, target.id);
-    }    
+    if (this.props.isCurrentSwappable) {
+      isCurrentSwappable = this.props.isCurrentSwappable(src.id, target.id);
+    }
     if (sourceIndexArray[2] === targetIndexArray[2] && isCurrentSwappable) {
       //target.replaceWith(src);
       //srcParent.appendChild(target);
@@ -85,7 +85,7 @@ class Swappable extends Component {
       id,
       // content,
       swappable,
-      customFunc
+      customFunc,
     } = this.props;
     const dropzoneId = 'drop' + id;
     // const dragableId = 'drag' + id;
@@ -93,11 +93,7 @@ class Swappable extends Component {
     return (
       <div
         id={dropzoneId}
-
-        onDrop={event =>
-
-          this.drop(event, dragableId, dropzoneId, customFunc, swappable)
-        }
+        onDrop={event => this.drop(event, dragableId, dropzoneId, customFunc, swappable)}
         onDragOver={event => this.allowDrop(event)}
         className={`dropzoneId ${this.props.duplicateDropzoneId}`}
       >

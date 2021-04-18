@@ -1,10 +1,10 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { Button } from "antd";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { Button } from 'antd';
 
-import AppImages from "../../themes/appImages";
-import AppConstants from "../../themes/appConstants";
-import InputWithHead from "../../customComponents/InputWithHead";
+import AppImages from '../../themes/appImages';
+import AppConstants from '../../themes/appConstants';
+import InputWithHead from '../../customComponents/InputWithHead';
 
 function ContentView(props) {
   const {
@@ -31,10 +31,12 @@ function ContentView(props) {
         <div>
           <InputWithHead heading={loginState.forgotPasswordMessage} />
 
-          {source !== "mobile" && (
+          {source !== 'mobile' && (
             <div className="forgot-password-success-button-div">
-              <NavLink to={{ pathname: "/login" }}>
-                <Button className="open-reg-button" type="primary">{AppConstants.returnToLogin}</Button>
+              <NavLink to={{ pathname: '/login' }}>
+                <Button className="open-reg-button" type="primary">
+                  {AppConstants.returnToLogin}
+                </Button>
               </NavLink>
             </div>
           )}
@@ -53,19 +55,19 @@ function ContentView(props) {
             <span className="form-err">{errors.userName}</span>
           )}
 
-          {resetType === "sms" && (
+          {resetType === 'sms' && (
             <p className="mt-3 mb-0">
-              We will send the SMS to your registered phone number.
-              Please confirm you would like to proceed.
+              We will send the SMS to your registered phone number. Please confirm you would like to
+              proceed.
             </p>
           )}
 
           <div className="row pt-5">
             <div className="col-sm">
               <div className="comp-finals-button-view d-flex justify-content-between">
-                {source !== "mobile" && (
+                {source !== 'mobile' && (
                   <div className="pr-5">
-                    <NavLink to={{ pathname: "/login" }}>
+                    <NavLink to={{ pathname: '/login' }}>
                       <Button
                         className="open-reg-button"
                         type="primary"

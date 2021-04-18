@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-const TreeLeaf = ({
-  searchedArray,
-  data,
-  content,
-  setContentPanel,
-}) => {
+const TreeLeaf = ({ searchedArray, data, content, setContentPanel }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const leaves = [];
-  data.forEach((art) => {
+  data.forEach(art => {
     if (art.id === content.id) {
       content.subArticles = art.subArticles;
     } else {
@@ -17,9 +12,9 @@ const TreeLeaf = ({
     }
   });
 
-  const onCollapse = (e) => setCollapsed(e ? true : !collapsed);
+  const onCollapse = e => setCollapsed(e ? true : !collapsed);
 
-  const onShow = (e) => {
+  const onShow = e => {
     setContentPanel(e);
     onCollapse();
   };
@@ -27,7 +22,11 @@ const TreeLeaf = ({
   useEffect(() => {
     if (!collapsed && searchedArray && searchedArray.indexOf(content.id) > -1) {
       setCollapsed(true);
-    } else if (collapsed && searchedArray.length === 0 && searchedArray.indexOf(content.id) === -1) {
+    } else if (
+      collapsed &&
+      searchedArray.length === 0 &&
+      searchedArray.indexOf(content.id) === -1
+    ) {
       setCollapsed(false);
     }
   }, [collapsed, searchedArray, content.id]);
@@ -35,25 +34,26 @@ const TreeLeaf = ({
   return (
     <div className="side-bar-item">
       <ul onClick={() => onShow(content.id)}>
-        {content.article === 'Home'
-          ? <i className="fa fa-home" />
-          : (
-            <i
-              className={`fa ${content.subArticles.length > 0
-                ? (collapsed
+        {content.article === 'Home' ? (
+          <i className="fa fa-home" />
+        ) : (
+          <i
+            className={`fa ${
+              content.subArticles.length > 0
+                ? collapsed
                   ? 'fa-angle-right fa-lg tree-collapse'
-                  : 'fa-angle-right fa-lg tree-not-collapse')
-                : 'fa-minus fa-sm'}
+                  : 'fa-angle-right fa-lg tree-not-collapse'
+                : 'fa-minus fa-sm'
+            }
               `}
-            />
-          )
-        }
+          />
+        )}
         {content.article}
       </ul>
 
-      <div className={`side-bar-child-item ${(collapsed ? 'tree-item-show' : 'tree-item-hide')}`}>
-        {content.subArticles && (
-          content.subArticles.map((leaf) => (
+      <div className={`side-bar-child-item ${collapsed ? 'tree-item-show' : 'tree-item-hide'}`}>
+        {content.subArticles &&
+          content.subArticles.map(leaf => (
             <TreeLeaf
               key={leaf.article}
               searchedArray={searchedArray}
@@ -61,8 +61,7 @@ const TreeLeaf = ({
               content={leaf}
               setContentPanel={setContentPanel}
             />
-          ))
-        )}
+          ))}
       </div>
     </div>
   );

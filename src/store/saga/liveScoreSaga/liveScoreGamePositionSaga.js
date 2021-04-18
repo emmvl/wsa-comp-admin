@@ -1,12 +1,12 @@
-import { put, call } from "redux-saga/effects"
-import ApiConstants from "../../../themes/apiConstants";
-import AppConstants from "../../../themes/appConstants";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import { message } from "antd";
+import { put, call } from 'redux-saga/effects';
+import ApiConstants from '../../../themes/apiConstants';
+import AppConstants from '../../../themes/appConstants';
+import LiveScoreAxiosApi from '../../http/liveScoreHttp/liveScoreAxiosApi';
+import { message } from 'antd';
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_FAIL });
-  const msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+  const msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
     duration: 1.5,
     maxCount: 1,
@@ -18,7 +18,7 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
   message.config({
     duration: 1.5,
@@ -27,11 +27,10 @@ function* errorSaga(error) {
   message.error(AppConstants.somethingWentWrong);
 }
 
-
 // Get liveScore game position list
 export function* liveScoreGamePositionSaga() {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreGamePositions)
+    const result = yield call(LiveScoreAxiosApi.liveScoreGamePositions);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_SUCCESS,
@@ -39,9 +38,9 @@ export function* liveScoreGamePositionSaga() {
         status: result.status,
       });
     } else {
-      yield call(failSaga, result)
-  }
+      yield call(failSaga, result);
+    }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }

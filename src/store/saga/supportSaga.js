@@ -1,8 +1,8 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import ApiConstants from "themes/apiConstants";
-import supportHttpApi from "store/http/supportHttp/supportHttpApi";
+import ApiConstants from 'themes/apiConstants';
+import supportHttpApi from 'store/http/supportHttp/supportHttpApi';
 
 function* failSaga(result) {
   yield put({
@@ -32,7 +32,7 @@ function* errorSaga(error) {
       duration: 1.5,
       maxCount: 1,
     });
-    message.error("Something went wrong.");
+    message.error('Something went wrong.');
   }, 800);
 }
 

@@ -13,10 +13,7 @@ function getRegistrationObject(data) {
     name: data.name,
     description: data.description,
     sortOrder: data.sortOrder,
-    subReferences:
-      data.subReferences === null
-        ? []
-        : getRegSubRefrenceData(data.subReferences)
+    subReferences: data.subReferences === null ? [] : getRegSubRefrenceData(data.subReferences),
   };
 }
 
@@ -35,7 +32,7 @@ function getRegSubRefrence(data) {
     name: data.name,
     description: data.description,
     sortOrder: data.sortOrder,
-    subReferences: data.subReferences ? data.subReferences : []
+    subReferences: data.subReferences ? data.subReferences : [],
   };
 }
 
