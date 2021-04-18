@@ -13,7 +13,7 @@ function getGoalListData(data) {
 function getGoalListObject(data) {
     return {
         matchId: data.matchId,
-        // startTime: data.startTime,
+        startTime: data.startTime,
         teamId: data.teamId,
         teamName: data.teamName,
         playerId: data.playerId,
@@ -42,7 +42,7 @@ function getGoalTypeAllData(data) {
 
 function getGoalTypeAllObject(data) {
     return {
-        
+
         teamId: data.teamId,
         teamName: data.teamName,
         playerId: data.playerId,
@@ -58,4 +58,4 @@ function getGoalTypeAllObject(data) {
 }
 
 
-module.exports = { getGoalListData, getGoalListObject,getGoalTypeAllData,getGoalTypeAllObject }
+module.exports = { getGoalListData, getGoalListObject, getGoalTypeAllData, getGoalTypeAllObject }
