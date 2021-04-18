@@ -427,7 +427,7 @@ class VenuesList extends Component {
   render() {
     return (
       <div className="fluid-width default-bg">
-        <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
+        <DashboardLayout menuHeading={AppConstants.home} menuName={AppConstants.home} />
 
         <InnerHorizontalMenu menu="home" userSelectedKey="2" />
 
