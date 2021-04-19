@@ -45,6 +45,21 @@ function tableSort(key, tableName) {
   );
 }
 
+function getRegistrationTypeFromInviteesRefId(invitees) {
+  const inviteesRegType = isArrayNotEmpty(invitees) ? invitees : [];
+  const registrationInviteesRefId = isArrayNotEmpty(inviteesRegType)
+    ? inviteesRegType[0].registrationInviteesRefId
+    : 0;
+
+  return checkRegistrationType(registrationInviteesRefId);
+}
+
+function tableSortByRegistrationType(a, b) {
+  return getRegistrationTypeFromInviteesRefId(a['invitees']).localeCompare(
+    getRegistrationTypeFromInviteesRefId(b['invitees']),
+  );
+}
+
 const columns = [
   {
     title: AppConstants.competitionName,
@@ -69,22 +84,16 @@ const columns = [
         </span>
       );
     },
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners('pregistrationDivisions', 'part'),
   },
   {
     title: AppConstants.registrationType,
     dataIndex: 'invitees',
     key: 'invitees',
     render: invitees => {
-      let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : [];
-      let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType)
-        ? inviteesRegType[0].registrationInviteesRefId
-        : 0;
-      return <span>{checkRegistrationType(registrationInviteesRefId)}</span>;
+      const registrationTypeName = getRegistrationTypeFromInviteesRefId(invitees);
+      return <span>{registrationTypeName}</span>;
     },
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners('pregistrationType', 'part'),
+    sorter: (a, b) => tableSortByRegistrationType(a, b),
   },
   {
     title: AppConstants.status,
@@ -119,22 +128,16 @@ const columnsOwned = [
         </span>
       );
     },
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners('oregistrationDivisions', 'own'),
   },
   {
     title: AppConstants.registrationType,
     dataIndex: 'invitees',
     key: 'invitees',
     render: invitees => {
-      let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : [];
-      let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType)
-        ? inviteesRegType[0].registrationInviteesRefId
-        : 0;
-      return <span>{checkRegistrationType(registrationInviteesRefId)}</span>;
+      const registrationTypeName = getRegistrationTypeFromInviteesRefId(invitees);
+      return <span>{registrationTypeName}</span>;
     },
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => listeners('oregistrationType', 'own'),
+    sorter: (a, b) => tableSortByRegistrationType(a, b),
   },
   {
     title: AppConstants.status,
