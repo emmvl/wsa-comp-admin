@@ -1751,6 +1751,7 @@ const AppConstants = {
   competitionId: 'Competition ID',
   instalmentRetryModalTxt: 'Please select the payment type to retry.',
   creditCardOnly: 'Credit Card',
+  available: "Available",
 };
 
 export default AppConstants;
