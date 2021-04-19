@@ -12,7 +12,7 @@ const AppConstants = {
   maintain: 'Maintain',
   RegTo: 'Reg. To',
   RegFrom: 'Reg. From',
-  venueAndCourts: 'Venues & Courts',
+  venueAndCourts: 'Venues & Fields',
   userProfile: 'User Profile',
   myProfile: 'My Profile',
   affiliates: 'Affiliates',
