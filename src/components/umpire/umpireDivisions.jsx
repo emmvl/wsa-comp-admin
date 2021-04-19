@@ -176,15 +176,18 @@ class UmpireDivisions extends Component {
 
   handleOkAlgorithm = e => {
     const { selectedRounds, selectedComp } = this.state;
-
+    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
     const body = {
       rounds: selectedRounds,
+      organisationId,
     };
 
-    this.props.applyUmpireAllocatioAlgorithm({
-      compId: selectedComp,
-      body,
-    });
+    if (organisationId && selectedComp && selectedRounds && selectedRounds.length) {
+      this.props.applyUmpireAllocatioAlgorithm({
+        compId: selectedComp,
+        body,
+      });
+    }
 
     this.setState({
       algorithmModalVisible: false,
