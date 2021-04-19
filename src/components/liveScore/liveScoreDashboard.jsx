@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Button, Table, message, Pagination, Menu } from 'antd';
+import { Layout, Button, Table, message, Pagination, Menu, Modal, Radio } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
@@ -755,6 +755,9 @@ class LiveScoreDashboard extends Component {
       page: 1,
       retryPaymentLoad: false,
       invoiceFailedLoad: false,
+      instalmentRetryModalVisible: false,
+      retryPaymentMethod: 1,
+      selectedRow: null
     };
     this_obj = this;
     this.props.initializeCompData();
@@ -795,6 +798,15 @@ class LiveScoreDashboard extends Component {
     ) {
       if (this.props.liveScoreDashboardState.retryPaymentSuccess) {
         message.success(this.props.liveScoreDashboardState.retryPaymentMessage);
+      }
+      if (this.props.liveScoreDashboardState.retryPaymenDetails) {
+        if (
+          this.props.liveScoreDashboardState.retryPaymenDetails.card == true ||
+          this.props.liveScoreDashboardState.retryPaymenDetails.directDebit == true
+        ) {
+          this.setState({ instalmentRetryModalVisible: true, retryPaymentLoad: false });
+          return;
+        }
       }
       this.getPlayersToPayList(this.state.page);
       this.setState({ retryPaymentLoad: false });
@@ -875,15 +887,31 @@ class LiveScoreDashboard extends Component {
 
   retryPayment = record => {
     const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
-    let payload = {
-      processTypeName: record.processTypeName,
-      registrationUniqueKey: record.registrationUniqueKey,
-      userId: record.userId,
-      divisionId: record.divisionId,
-      competitionId: uniqueKey,
-    };
-
-    this.setState({ retryPaymentLoad: true });
+    let paidByUserId = isArrayNotEmpty(record.paidByUsers)
+    ? record.paidByUsers[0].paidByUserId
+    : null;
+    let payload = {};
+    if(record.processTypeName == "instalment") {
+      payload = {
+        processTypeName: record.processTypeName,
+        registrationUniqueKey: record.registrationUniqueKey,
+        userId: record.userId,
+        divisionId: record.divisionId,
+        competitionId: uniqueKey,
+        paidByUserId: paidByUserId,
+        checkCardAvailability: 0
+      };
+    }
+    else{
+      payload = {
+        processTypeName: record.processTypeName,
+        registrationUniqueKey: record.registrationUniqueKey,
+        userId: record.userId,
+        divisionId: record.divisionId,
+        competitionId: uniqueKey,
+      };
+    }
+    this.setState({ retryPaymentLoad: true,  selectedRow: record});
     this.props.liveScorePlayersToPayRetryPaymentAction(payload);
   };
 
@@ -909,6 +937,29 @@ class LiveScoreDashboard extends Component {
     this.props.registrationFailedStatusUpdate(payload);
   };
 
+  handleinstalmentRetryModal = key => {
+    const { selectedRow } = this.state;
+    const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
+    let paidByUserId = isArrayNotEmpty(selectedRow.paidByUsers)
+      ? selectedRow.paidByUsers[0].paidByUserId
+      : null;
+    if (key == 'cancel') {
+      this.setState({ instalmentRetryModalVisible: false });
+    } else if (key == 'yes') {
+      let payload = {
+        processTypeName: 'instalment',
+        registrationUniqueKey: selectedRow.registrationUniqueKey,
+        userId: selectedRow.userId,
+        divisionId: selectedRow.divisionId,
+        competitionId: uniqueKey,
+        paidByUserId: paidByUserId,
+        checkCardAvailability: this.state.retryPaymentMethod,
+      };
+      this.props.liveScorePlayersToPayRetryPaymentAction(payload);
+      this.setState({ retryPaymentLoad: true, instalmentRetryModalVisible: false });
+    }
+  };
+
   ////////participatedView view for competition
   incidenceView = () => {
     const { dashboardIncidentList } = this.props.liveScoreDashboardState;
@@ -926,6 +977,45 @@ class LiveScoreDashboard extends Component {
           />
         </div>
       </div>
+    );
+  };
+
+  instalmentRetryModalView = () => {
+    let instalmentRetryDetails = this.props.liveScoreDashboardState.retryPaymenDetails;
+    return (
+      <Modal
+        title={AppConstants.failedInstalmentRetry}
+        visible={this.state.instalmentRetryModalVisible}
+        onCancel={() => this.handleinstalmentRetryModal('cancel')}
+        footer={[
+          <Button onClick={() => this.handleinstalmentRetryModal('cancel')}>
+            {AppConstants.cancel}
+          </Button>,
+          <Button
+            style={{ backgroundColor: '#ff8237', borderColor: '#ff8237', color: 'white' }}
+            onClick={() => this.handleinstalmentRetryModal('yes')}
+          >
+            {AppConstants.ok}
+          </Button>,
+        ]}
+        centered
+      >
+        <p style={{ marginLeft: '20px' }}>{AppConstants.instalmentRetryModalTxt}</p>
+        <Radio.Group
+          className={'reg-competition-radio'}
+          value={this.state.retryPaymentMethod}
+          onChange={e => this.setState({ retryPaymentMethod: e.target.value })}
+        >
+          {instalmentRetryDetails?.card && (
+            <Radio value={1}>
+              {AppConstants.creditCardOnly} {instalmentRetryDetails?.cardNumber}
+            </Radio>
+          )}
+          {instalmentRetryDetails?.directDebit && (
+            <Radio value={2}>{AppConstants.directDebit}</Radio>
+          )}
+        </Radio.Group>
+      </Modal>
     );
   };
 
@@ -1216,6 +1306,7 @@ class LiveScoreDashboard extends Component {
             {this.matchView()}
             {this.playersToPayView()}
             {this.incidenceView()}
+            {this.instalmentRetryModalView()}
           </Content>
         </Layout>
       </div>
