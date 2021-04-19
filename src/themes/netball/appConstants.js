@@ -1,4 +1,4 @@
 /* eslint-disable max-len */
-const AppConstants = { myProfile: "Netball Profile" };
+const AppConstants = {};
 
 export default AppConstants;
