@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 
-import AppConstants from "../../themes/appConstants";
-import { getSupportContentAction } from "../../store/actions/supportAction";
-import Loader from "../../customComponents/loader";
-import DashboardLayout from "../dashboardLayout";
-import SideBar from "./SideBar";
-import ContentPanel from "./ContentPanel";
+import AppConstants from '../../themes/appConstants';
+import { getSupportContentAction } from '../../store/actions/supportAction';
+import Loader from '../../customComponents/loader';
+import DashboardLayout from '../dashboardLayout';
+import SideBar from './SideBar';
+import ContentPanel from './ContentPanel';
 
-import "./style.scss";
+import './style.scss';
 
 function Support(props) {
   const { supportState, getSupportContent } = props;
@@ -22,7 +22,7 @@ function Support(props) {
   }, [getSupportContent]);
 
   let content = null;
-  result.forEach((article) => {
+  result.forEach(article => {
     if (article.id === currentArticle) {
       content = article.content;
     }
@@ -42,11 +42,11 @@ function Support(props) {
   );
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  getSupportContent: (email) => dispatch(getSupportContentAction(email)),
+const mapDispatchToProps = dispatch => ({
+  getSupportContent: email => dispatch(getSupportContentAction(email)),
 });
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   appState: state.AppState,
   supportState: state.SupportState,
 });

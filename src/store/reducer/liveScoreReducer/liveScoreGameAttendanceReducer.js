@@ -1,11 +1,11 @@
-import ApiConstants from '../../../themes/apiConstants'
+import ApiConstants from '../../../themes/apiConstants';
 
 const initialState = {
   onLoad: false,
   error: null,
   result: null,
   status: 0,
-  exported: false
+  exported: false,
 };
 
 function liveScoreGameAttendanceState(state = initialState, action) {
@@ -18,7 +18,6 @@ function liveScoreGameAttendanceState(state = initialState, action) {
       };
 
     case ApiConstants.API_LIVE_SCORE_EXPORT_ATTENDANCE_SUCCESS:
-
       return {
         ...state,
         onLoad: false,

@@ -1,152 +1,156 @@
 // import _ from "lodash";
 
-const isArrayNotEmpty = array => (array !== null && Array.isArray(array) && array.length > 0);
+const isArrayNotEmpty = array => array !== null && Array.isArray(array) && array.length > 0;
 
-const isNotNullOrEmptyString = word => (word !== null && word !== undefined && word.length > 0);
+const isNotNullOrEmptyString = word => word !== null && word !== undefined && word.length > 0;
 
-const getAge = (birthDate) => (Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10));
+const getAge = birthDate => Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e10);
 
-
-const isNotNullAndUndefined = (value) => {
-    return value !== undefined && value !== null
-}
+const isNotNullAndUndefined = value => {
+  return value !== undefined && value !== null;
+};
 
 const deepCopyFunction = inObject => {
-    let outObject, value, key;
+  let outObject, value, key;
 
-    if (typeof inObject !== "object" || inObject === null) {
-        return inObject; // Return the value if inObject is not an object
-    }
+  if (typeof inObject !== 'object' || inObject === null) {
+    return inObject; // Return the value if inObject is not an object
+  }
 
-    // Create an array or object to hold the values
-    outObject = Array.isArray(inObject) ? [] : {};
+  // Create an array or object to hold the values
+  outObject = Array.isArray(inObject) ? [] : {};
 
-    for (key in inObject) {
-        value = inObject[key];
+  for (key in inObject) {
+    value = inObject[key];
 
-        // Recursively (deep) copy for nested objects, including arrays
-        outObject[key] = (typeof value === "object" && value !== null) ? deepCopyFunction(value) : value;
-    }
+    // Recursively (deep) copy for nested objects, including arrays
+    outObject[key] = typeof value === 'object' && value !== null ? deepCopyFunction(value) : value;
+  }
 
-    return outObject;
+  return outObject;
 };
 
-const stringTONumber = (value) => {
-    if (value) {
-        return (typeof value === "string") ? Number(value) : value;
-    } else {
-        return 0;
-    }
+const stringTONumber = value => {
+  if (value) {
+    return typeof value === 'string' ? Number(value) : value;
+  } else {
+    return 0;
+  }
 };
 
-const captializedString = (value) => {
-    if (value) {
-        let capString = value.charAt(0).toUpperCase() + value.slice(1);
-        // let capString= value.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-        return capString;
-    }
+const captializedString = value => {
+  if (value) {
+    let capString = value.charAt(0).toUpperCase() + value.slice(1);
+    // let capString= value.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    return capString;
+  }
 };
 
-const removeFirstSpace = (value) => {
-    const result = value.trim();
-    if (result.length) {
-        return value;
-    }
+const removeFirstSpace = value => {
+  const result = value.trim();
+  if (result.length) {
+    return value;
+  }
 
-    return '';
-}
+  return '';
+};
 
-const teamListData = (value) => {
-    if (value == 1) {
-        return false;
-    } else {
-        return true;
-    }
+const teamListData = value => {
+  if (value == 1) {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 const teamListDataCheck = (value, isParent, data, compOrgId) => {
-    if (isParent) {
-        if (value == 1) {
-            return false;
-        } else {
-            return true;
-        }
+  if (isParent) {
+    if (value == 1) {
+      return false;
     } else {
-        if (value == 1) {
-            return false;
-        }
-        else if (data.competitionOrganisationId == compOrgId) {
-            return true
-        }
-        else {
-            return false
-        }
-
-
+      return true;
     }
-
-}
-
-const regexNumberExpression = (number) => {
-    if (number) {
-        return number.replace(/[^\d]/g, '');
+  } else {
+    if (value == 1) {
+      return false;
+    } else if (data.competitionOrganisationId == compOrgId) {
+      return true;
+    } else {
+      return false;
     }
+  }
+};
+
+const regexNumberExpression = number => {
+  if (number) {
+    return number.replace(/[^\d]/g, '');
+  }
 };
 
 const isImageFormatValid = value => {
-    let fileTypes = ['jpg', 'jpeg', 'png', 'webp'];
-    return (fileTypes.indexOf(value) > -1);
+  let fileTypes = ['jpg', 'jpeg', 'png', 'webp'];
+  return fileTypes.indexOf(value) > -1;
 };
 
 function randomKeyGen(keyLength) {
-    var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  var i,
+    key = '',
+    characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
-    var charactersLength = characters.length;
+  var charactersLength = characters.length;
 
-    for (i = 0; i < keyLength; i++) {
-        key += characters.substr(Math.floor((Math.random() * charactersLength) + 1), 1);
-    }
+  for (i = 0; i < keyLength; i++) {
+    key += characters.substr(Math.floor(Math.random() * charactersLength + 1), 1);
+  }
 
-    return key;
+  return key;
 }
 
 const isImageSizeValid = value => {
-    let maxImageSize = 2000000;
-    return value > maxImageSize ? false : true;
+  let maxImageSize = 2000000;
+  return value > maxImageSize ? false : true;
 };
 
-const stringTOFloatNumberReg = (checkString) => {
-    return typeof checkString === 'string' ? Number(Number(checkString).toFixed(2)) : Number(Number(checkString).toFixed(2));
-}
+const stringTOFloatNumberReg = checkString => {
+  return typeof checkString === 'string'
+    ? Number(Number(checkString).toFixed(2))
+    : Number(Number(checkString).toFixed(2));
+};
 
-const formatValue = (val) => {
-    return  val === null ? "0.00" : stringTOFloatNumberReg(val).toFixed(2)
-  }
+const formatValue = val => {
+  return val === null ? '0.00' : stringTOFloatNumberReg(val).toFixed(2);
+};
 
-const feeIsNull = (fee) => {
-    return ((fee === null||fee===undefined) ? 0 : (stringTOFloatNumberReg(fee)));
-}
+const feeIsNull = fee => {
+  return fee === null || fee === undefined ? 0 : stringTOFloatNumberReg(fee);
+};
 
-const  isNullOrUndefined = (e) => {
-    return (e === null || e === undefined) ? false : e;
-  }
+const isNullOrUndefined = e => {
+  return e === null || e === undefined ? false : e;
+};
 
+const arrayMove = (arr, fromIndex, toIndex) => {
+  var element = arr[fromIndex];
+  arr.splice(fromIndex, 1);
+  arr.splice(toIndex, 0, element);
+};
 module.exports = {
-    isArrayNotEmpty,
-    isNotNullOrEmptyString,
-    getAge,
-    deepCopyFunction,
-    stringTONumber,
-    captializedString,
-    teamListData,
-    regexNumberExpression,
-    isImageFormatValid,
-    isNotNullAndUndefined,
-    randomKeyGen,
-    teamListDataCheck,
-    isImageSizeValid,
-    formatValue,
-    feeIsNull,
-    isNullOrUndefined,
-    removeFirstSpace,
+  isArrayNotEmpty,
+  isNotNullOrEmptyString,
+  getAge,
+  deepCopyFunction,
+  stringTONumber,
+  captializedString,
+  teamListData,
+  regexNumberExpression,
+  isImageFormatValid,
+  isNotNullAndUndefined,
+  randomKeyGen,
+  teamListDataCheck,
+  isImageSizeValid,
+  formatValue,
+  feeIsNull,
+  isNullOrUndefined,
+  removeFirstSpace,
+  arrayMove,
 };

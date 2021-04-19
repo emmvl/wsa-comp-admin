@@ -1,118 +1,117 @@
-@import "~antd/dist/antd.css";
-@import "~bootstrap/dist/css/bootstrap.min.css";
-@import "./customStyles/customStyles.css";
+@import '~antd/dist/antd.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import './customStyles/customStyles.css';
 
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-        sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .default-bg {
-    background-color: #f7fafc;
+  background-color: #f7fafc;
 }
 
 .default-max-w-bg {
-    max-width: 180px !important;
+  max-width: 180px !important;
 }
 
 .w-ft {
-    width: fit-content;
+  width: fit-content;
 }
 
 .d-grid {
-    display: grid !important;
+  display: grid !important;
 }
 
 .mt-n10 {
-    margin-top: -10px;
+  margin-top: -10px;
 }
 
 .mt-n20 {
-    margin-top: -20px;
+  margin-top: -20px;
 }
 
 .mt-10 {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .ml-5 {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .ml-n15 {
-    margin-left: -15px;
+  margin-left: -15px;
 }
 
 .ml-n10 {
-    margin-left: -10px;
+  margin-left: -10px;
 }
 
 .ml-n20 {
-    margin-left: -20px;
+  margin-left: -20px;
 }
 
 .ml-n22 {
-    margin-left: -22px;
+  margin-left: -22px;
 }
 
 .mb-20 {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .width-50 {
-    width: 50px;
+  width: 50px;
 }
 
-.Tooltip_Wrapper__3AlJ0>svg>path:first-child {
-    fill: #ff8237;
+.Tooltip_Wrapper__3AlJ0 > svg > path:first-child {
+  fill: #ff8237;
 }
 
 .pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .ml-n95 {
-    margin-left: -95px;
+  margin-left: -95px;
 }
 
 .ml-n80 {
-    margin-left: -80px;
+  margin-left: -80px;
 }
 
 .ml-n25 {
-    margin-left: -25px;
+  margin-left: -25px;
 }
 
 .ml-n40 {
-    margin-left: -40px;
+  margin-left: -40px;
 }
 
 .ml-n35 {
-    margin-left: -35px;
+  margin-left: -35px;
 }
 
 .mr-15 {
-    margin-right: 15px;
+  margin-right: 15px;
 }
 
 .mr-22 {
-    margin-right: 22px;
+  margin-right: 22px;
 }
 
 .mr-n27 {
-    margin-right: -27px;
+  margin-right: -27px;
 }
 
 @media (max-width: 767px) {
-    .ml-n20 {
-        margin-left: -10px;
-    }
+  .ml-n20 {
+    margin-left: -10px;
+  }
 }

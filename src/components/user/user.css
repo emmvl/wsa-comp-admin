@@ -1,4 +1,4 @@
-@import "../../themes/colorVariables.css";
+@import '../../themes/colorVariables.css';
 
 .user-affilite-approve-reject-form-view {
   margin: 1% 4%;
@@ -30,13 +30,13 @@
 }
 
 .submit-reg-data-loading-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100%;
-    font-size: 29px;
-    color: orange;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  font-size: 29px;
+  color: orange;
 }
 
 .user-affiliate-contacts-text {
@@ -50,25 +50,25 @@
 }
 
 .transfer-modal-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 160px;
 }
 
 .transfer-modal-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 80%;
 }
 
 .transfer-modal-form:nth-child(1) {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .transfer-modal-form-input {
-    border-radius: 7px;
+  border-radius: 7px;
 }
 
 .user-remove-text {

@@ -1,4 +1,4 @@
-@import "../../themes/colorVariables.css";
+@import '../../themes/colorVariables.css';
 
 .live-score-player-profile-layout.ant-layout {
   background-color: var(--app-white);
@@ -20,7 +20,6 @@
   font-family: inter-medium, sans-serif;
   font-size: 11px;
   padding-top: 5px;
-
 }
 
 .heading-text {
@@ -95,7 +94,7 @@
   display: flex;
   background-color: var(--app-ff6c4f);
   border-color: var(--app-ff6c4f);
-  margin-Top: 10px
+  margin-top: 10px;
 }
 
 .live-score-edit {
@@ -136,7 +135,7 @@
 
 .match-details-rl-padding {
   padding-left: 1.5%;
-  padding-right: 1.5%
+  padding-right: 1.5%;
 }
 
 .export-image {
@@ -162,7 +161,7 @@
 }
 
 .side-bar-profile-data {
-  font-size: 15px
+  font-size: 15px;
 }
 
 .text-heading-large {
@@ -214,7 +213,8 @@
   box-shadow: 0 0 0 0px var(--app-color);
 }
 
-.ant-select-auto-complete.ant-select .ant-input:focus, .ant-select-auto-complete.ant-select .ant-input:hover {
+.ant-select-auto-complete.ant-select .ant-input:focus,
+.ant-select-auto-complete.ant-select .ant-input:hover {
   border-color: var(--app-color);
   border-right-width: 1px !important;
 }
@@ -229,14 +229,12 @@
   display: flex;
   align-self: center;
   align-items: center;
-
 }
 
 .table-live-score-table-fixture-style-main {
   height: 110px;
   /* background-color: red */
 }
-
 
 .livescore-seasonfixture-table .ant-table-thead > tr > th {
   font-weight: 500;
@@ -258,7 +256,22 @@
   padding: 0 !important;
 }
 
-.livescore-seasonfixture-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .livescore-seasonfixture-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .livescore-seasonfixture-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .livescore-seasonfixture-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.livescore-seasonfixture-table
+  .ant-table-thead
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.livescore-seasonfixture-table
+  .ant-table-tbody
+  > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.livescore-seasonfixture-table
+  .ant-table-thead
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td,
+.livescore-seasonfixture-table
+  .ant-table-tbody
+  > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)
+  > td {
   background: transparent;
 }
 
@@ -276,7 +289,7 @@
   font-weight: 200
 } */
 .tool-tip-display {
-  display: table !important
+  display: table !important;
 }
 
 .Content_Content__1CE8z * {
@@ -310,7 +323,6 @@
 
 .button-spacing-style {
   margin-bottom: 10px;
-
 }
 
 .disable-button-style {
@@ -418,12 +430,10 @@
 
 .ant-select-selection--multiple .ant-select-selection__choice__remove {
   right: 8px;
-
 }
 
 .ant-select-selection--multiple .ant-select-selection__choice {
   padding: 0 25px 0 10px;
-
 }
 
 .reset-ladder-font {
@@ -449,7 +459,6 @@
 
 .space .ant-form-item-control {
   line-height: 26px;
-
 }
 
 .ant-input-affix-wrapper .ant-input-prefix {
@@ -470,7 +479,6 @@
 
 .livefirst .ant-select-selection__placeholder {
   line-height: 24px;
-
 }
 
 .livefirst.one .ant-select-selection__placeholder {
@@ -494,7 +502,8 @@
   line-height: 23px;
 }
 
-.formView.addTeam .has-error .ant-form-explain, .formView.addTeam .has-error .ant-form-split {
+.formView.addTeam .has-error .ant-form-explain,
+.formView.addTeam .has-error .ant-form-split {
   color: #f5222d;
   margin-top: 2px;
 }
@@ -514,7 +523,7 @@
     width: 10px;
     /* background-color:seagreen; */
     justify-content: space-between;
-    align-items: center
+    align-items: center;
   }
 }
 
