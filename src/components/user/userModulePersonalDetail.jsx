@@ -155,6 +155,11 @@ const columns = [
             ? moment(expiryDate, 'YYYY-MM-DD').format('DD/MM/YYYY')
             : expiryDate
           : moment(record.competitionEndDate, 'YYYY-MM-DD').format('DD/MM/YYYY')}
+        {
+            expiryDate === 'Single Game' ? (" - " + record.numberOfMatches + " " + AppConstants.available)
+            :
+            ""
+        }
       </span>
     ),
   },
