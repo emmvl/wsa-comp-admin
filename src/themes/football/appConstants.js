@@ -273,7 +273,7 @@ const AppConstants = {
   addAnotherDivision: 'Add Another Age Group',
   ageRestrictions: 'Age Restrictions',
   mandateAgeRestrictions: 'Mandate Age Restrictions',
-  netSetGo: 'Miniroos',
+  netSetGo: 'MiniRoos Kick-off',
   dobFrom: 'DOB From',
   dobTo: 'DOB To',
   playerInEachTeam: 'Players in each team',
