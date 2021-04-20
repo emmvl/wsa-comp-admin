@@ -585,9 +585,9 @@ class Umpire extends Component {
 
     let compKey = compID.competitionUniqueKey;
 
-    if (compObj && selectedComp)
+    if (userOrganisationId && selectedComp)
       this.props.getUmpireList({
-        organisationId: compObj,
+        organisationId: userOrganisationId,
         competitionId: selectedComp,
         offset: 0,
         sortBy,

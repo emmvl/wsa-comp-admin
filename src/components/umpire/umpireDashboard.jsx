@@ -723,12 +723,8 @@ class UmpireDashboard extends Component {
       !prevUrl ||
       !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)
     ) {
-      const organisationData = getOrganisationData();
-      const parsedData = organisationData ? JSON.parse(organisationData) : {};
-      let organisationId = parsedData && parsedData.organisationId ? parsedData.organisationId : 0;
-      const orgData = getOrganisationData();
-      let orgId = orgData && orgData.organisationId ? orgData.organisationId : null;
-      this.setState({ loading: true, orgId });
+      const { organisationId } = getOrganisationData() || {};
+      this.setState({ loading: true, orgId: organisationId ? organisationId : null });
       if (organisationId)
         this.props.umpireCompetitionListAction(
           null,
