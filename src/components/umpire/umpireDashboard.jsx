@@ -20,11 +20,11 @@ import AppImages from 'themes/appImages';
 import { isArrayNotEmpty } from 'util/helpers';
 import history from 'util/history';
 import {
-  getUmpireCompetiton,
-  setUmpireCompition,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
   getOrganisationData,
-  setUmpireCompitionData,
-  getUmpireCompetitonData,
+  setUmpireCompetitionData,
+  getUmpireCompetitionData,
   getLiveScoreUmpireCompition,
   getLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompition,
@@ -757,7 +757,7 @@ class UmpireDashboard extends Component {
         let firstComp = compList && compList.length ? compList[0].id : null;
         let compData = compList && compList.length ? compList[0] : null;
         let tempJson;
-        const unparsed = getUmpireCompetiton();
+        const unparsed = getUmpireCompetitionId();
         const umpireCompetition = unparsed ? JSON.parse(unparsed) : null;
         if (umpireCompetition) {
           if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
@@ -766,17 +766,17 @@ class UmpireDashboard extends Component {
             firstComp = tempJson ? JSON.parse(tempJson) : null;
             tempJson = getLiveScoreUmpireCompitionData();
             compData = tempJson ? JSON.parse(tempJson) : null;
-            if (firstComp) setUmpireCompition(firstComp);
-            if (compData) setUmpireCompitionData(JSON.stringify(compData));
+            if (firstComp) setUmpireCompetitionId(firstComp);
+            if (compData) setUmpireCompetitionData(JSON.stringify(compData));
           } else {
             firstComp = umpireCompetition;
-            tempJson = getUmpireCompetitonData();
+            tempJson = getUmpireCompetitionData();
             compData = tempJson ? JSON.parse(tempJson) : null;
             this.setState({ org_Id: compData?.organisationId });
           }
         } else {
-          if (firstComp) setUmpireCompition(firstComp);
-          if (compData) setUmpireCompitionData(JSON.stringify(compData));
+          if (firstComp) setUmpireCompetitionId(firstComp);
+          if (compData) setUmpireCompetitionData(JSON.stringify(compData));
           this.setState({ org_Id: compData?.organisationId });
         }
 
@@ -989,11 +989,11 @@ class UmpireDashboard extends Component {
     const compObj = this.state.compArray.find(comp => comp?.id === compID?.comp) || null;
 
     if (selectedComp) {
-      setUmpireCompition(selectedComp);
+      setUmpireCompetitionId(selectedComp);
       setLiveScoreUmpireCompition(selectedComp);
     }
     if (compObj) {
-      setUmpireCompitionData(JSON.stringify(compObj));
+      setUmpireCompetitionData(JSON.stringify(compObj));
       setLiveScoreUmpireCompitionData(JSON.stringify(compObj));
     }
 

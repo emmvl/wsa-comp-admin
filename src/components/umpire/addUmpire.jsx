@@ -21,8 +21,8 @@ import InputWithHead from '../../customComponents/InputWithHead';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  getUmpireCompetiton,
-  getUmpireCompetitonData,
+  getUmpireCompetitionId,
+  getUmpireCompetitionData,
   getOrganisationData,
 } from '../../util/sessionStorage';
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
@@ -79,13 +79,13 @@ class AddUmpire extends Component {
   }
 
   async componentDidMount() {
-    let compId = getUmpireCompetiton() ? JSON.parse(getUmpireCompetiton()) : null;
+    let compId = getUmpireCompetitionId() ? JSON.parse(getUmpireCompetitionId()) : null;
     if (this.state.tableRecord) {
       this.props.updateAddUmpireData(this.props.location.state.tableRecord, 'isEditUmpire');
     }
     if (compId) {
       this.setState({ competition_Id: compId });
-      let compData = getUmpireCompetitonData() ? JSON.parse(getUmpireCompetitonData()) : null;
+      let compData = getUmpireCompetitionData() ? JSON.parse(getUmpireCompetitionData()) : null;
       let orgItem = getOrganisationData();
       let userOrganisationId = orgItem ? orgItem.organisationId : null;
       let compOrgId = compData ? compData?.organisationId : null;
@@ -119,7 +119,7 @@ class AddUmpire extends Component {
 
     if (!isEqual(this.props.umpireState.affilateList, nextProps.umpireState.affilateList)) {
       if (this.state.isUmpireAffiliate && !this.props.umpireState.onAffiliateLoad) {
-        let compId = JSON.parse(getUmpireCompetiton());
+        let compId = JSON.parse(getUmpireCompetitionId());
         if (this.state.isEdit === true) {
           this.props.updateAddUmpireData(this.state.tableRecord, 'isEditUmpire');
           this.setState({ loader: true });
@@ -181,7 +181,7 @@ class AddUmpire extends Component {
 
   setInitialFieldValue = () => {
     const { umpireData } = this.props.umpireState;
-    const compData = JSON.parse(getUmpireCompetitonData());
+    const compData = JSON.parse(getUmpireCompetitionData());
     const competitionOrgId =
       compData && compData.competitionOrganisation ? compData.competitionOrganisation.id : null;
     const affiliates =
@@ -305,7 +305,7 @@ class AddUmpire extends Component {
                   //     ? this.props.umpireSearchAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
                   //     : this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
 
-                  const compId = JSON.parse(getUmpireCompetiton());
+                  const compId = JSON.parse(getUmpireCompetitionId());
                   value && value.length > 2 && (!!this.state.competition_id || !!compId)
                     ? this.props.umpireSearchAction({
                         refRoleId: JSON.stringify(refRoleTypes('member')),

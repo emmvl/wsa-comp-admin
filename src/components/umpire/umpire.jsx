@@ -26,11 +26,11 @@ import ValidationConstants from 'themes/validationConstant';
 import { isArrayNotEmpty } from 'util/helpers';
 import history from 'util/history';
 import {
-  getUmpireCompetiton,
-  setUmpireCompition,
-  setUmpireCompitionData,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  setUmpireCompetitionData,
   getOrganisationData,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
 } from 'util/sessionStorage';
 import { userExportFilesAction } from 'store/actions/appAction';
 import {
@@ -420,9 +420,9 @@ class Umpire extends Component {
         let firstComp = compList && compList.length > 0 ? compList[0].id : null;
         let compData = compList && compList.length > 0 ? compList[0] : null;
 
-        let unparsedData = getUmpireCompetiton();
+        let unparsedData = getUmpireCompetitionId();
         let compId = unparsedData ? JSON.parse(unparsedData) : null;
-        unparsedData = getUmpireCompetitonData();
+        unparsedData = getUmpireCompetitionData();
         const storedCompData = unparsedData ? JSON.parse(unparsedData) : null;
         if (compId) {
           let index =
@@ -439,8 +439,8 @@ class Umpire extends Component {
           }
         }
 
-        if (firstComp && firstComp !== compId) setUmpireCompition(firstComp);
-        if (!isEqual(compData, storedCompData)) setUmpireCompitionData(JSON.stringify(compData));
+        if (firstComp && firstComp !== compId) setUmpireCompetitionId(firstComp);
+        if (!isEqual(compData, storedCompData)) setUmpireCompetitionData(JSON.stringify(compData));
 
         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
         let orgItem = await getOrganisationData();
@@ -458,7 +458,7 @@ class Umpire extends Component {
         unparsedData = localStorage.getItem('setOrganisationData');
         let parsedData = unparsedData ? JSON.parse(unparsedData) : null;
         const organisationId = parsedData?.organisationId;
-        unparsedData = getUmpireCompetiton();
+        unparsedData = getUmpireCompetitionId();
         parsedData = unparsedData ? JSON.parse(unparsedData) : null;
         const competitionId = parsedData;
         if (organisationId && competitionId) {
@@ -589,8 +589,8 @@ class Umpire extends Component {
     let isCompParent = userOrganisationId === compOrgId;
     this.setState({ isCompParent });
 
-    setUmpireCompition(selectedComp);
-    setUmpireCompitionData(JSON.stringify(compObj));
+    setUmpireCompetitionId(selectedComp);
+    setUmpireCompetitionData(JSON.stringify(compObj));
 
     let compKey = compID.competitionUniqueKey;
 

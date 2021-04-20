@@ -162,19 +162,19 @@ const getDraws_division_grade = () => {
   return localStorage.draws_division_grade;
 };
 
-const getUmpireCompetiton = () => {
+const getUmpireCompetitionId = () => {
   return localStorage.umpireCompetitionId;
 };
 
-const setUmpireCompition = umpireCompetitionId => {
+const setUmpireCompetitionId = umpireCompetitionId => {
   localStorage.setItem('umpireCompetitionId', umpireCompetitionId);
 };
 
-const getUmpireCompetitonData = () => {
+const getUmpireCompetitionData = () => {
   return localStorage.umpireCompetitionData;
 };
 
-const setUmpireCompitionData = umpireCompetitionData => {
+const setUmpireCompetitionData = umpireCompetitionData => {
   localStorage.setItem('umpireCompetitionData', umpireCompetitionData);
 };
 
@@ -325,10 +325,10 @@ export {
   getDraws_roundTime,
   setDraws_division_grade,
   getDraws_division_grade,
-  getUmpireCompetiton,
-  setUmpireCompition,
-  setUmpireCompitionData,
-  getUmpireCompetitonData,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  setUmpireCompetitionData,
+  getUmpireCompetitionData,
   getUmpireCompId,
   setUmpireCompId,
   clearUmpireStorage,

@@ -5,7 +5,7 @@ import { message } from 'antd';
 import history from '../../../util/history';
 import CommonAxiosApi from '../../http/commonHttp/commonAxiosApi';
 import {
-  setUmpireCompitionData,
+  setUmpireCompetitionData,
   getLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompition,
   setLiveScoreUmpireCompitionData,
@@ -36,14 +36,14 @@ export function* liveScorePostSaga({ payload }) {
     const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload);
 
     if (payload.screenName === 'umpireDashboard') {
-      setUmpireCompitionData(JSON.stringify(result.result.data));
+      setUmpireCompetitionData(JSON.stringify(result.result.data));
     } else {
       localStorage.setItem('LiveScoreCompetition', JSON.stringify(result.result.data));
       if (getLiveScoreUmpireCompitionData()) {
         const { id } = JSON.parse(getLiveScoreUmpireCompitionData());
         if (payload.competitionId === id) {
           setLiveScoreUmpireCompition(result.result.data.id);
-          setUmpireCompitionData(JSON.stringify(result.result.data));
+          setUmpireCompetitionData(JSON.stringify(result.result.data));
         }
       } else {
         setLiveScoreUmpireCompition(result.result.data.id);

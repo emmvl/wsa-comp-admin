@@ -28,10 +28,10 @@ import { getUmpireList } from '../../store/actions/umpireAction/umpireAction';
 import { getRefBadgeData } from '../../store/actions/appAction';
 
 import {
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
   getUmpireCompId,
   setUmpireCompId,
-  setUmpireCompitionData,
+  setUmpireCompetitionData,
 } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from '../../util/helpers';
 import history from 'util/history';

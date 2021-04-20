@@ -7,7 +7,7 @@ import { Layout, Breadcrumb, Button, message } from 'antd';
 import AppConstants from 'themes/appConstants';
 import ValidationConstants from 'themes/validationConstant';
 import { showInvalidData } from 'util/showImportResult';
-import { getUmpireCompetiton } from 'util/sessionStorage';
+import { getUmpireCompetitionId } from 'util/sessionStorage';
 import { exportFilesAction } from 'store/actions/appAction';
 import {
   umpireDashboardImportAction,
@@ -134,7 +134,7 @@ class UmpireImport extends Component {
 
   componentDidMount() {
     let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-    let compId = JSON.parse(getUmpireCompetiton());
+    let compId = JSON.parse(getUmpireCompetitionId());
     this.setState({ organisationId, competitionId: compId });
 
     this.props.umpireDashboardResetImportResultAction();
@@ -180,7 +180,7 @@ class UmpireImport extends Component {
   };
 
   onUploadBtn = () => {
-    let compId = JSON.parse(getUmpireCompetiton());
+    let compId = JSON.parse(getUmpireCompetitionId());
 
     if (this.state.csvData) {
       this.props.umpireDashboardImportAction({

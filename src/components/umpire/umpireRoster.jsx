@@ -18,10 +18,10 @@ import {
 import { umpireCompetitionListAction } from '../../store/actions/umpireAction/umpireCompetetionAction';
 // import { refRoleTypes } from '../../util/refRoles'
 import {
-  getUmpireCompetiton,
-  getUmpireCompetitonData,
-  setUmpireCompition,
-  setUmpireCompitionData,
+  getUmpireCompetitionId,
+  getUmpireCompetitionData,
+  setUmpireCompetitionId,
+  setUmpireCompetitionData,
 } from '../../util/sessionStorage';
 import moment from 'moment';
 import { isEqual } from 'lodash';
@@ -262,7 +262,7 @@ class UmpireRoster extends Component {
     let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
     this.setState({ loading: true });
 
-    const umpireCompetitionData = getUmpireCompetitonData();
+    const umpireCompetitionData = getUmpireCompetitionData();
     const parsedData = umpireCompetitionData ? JSON.parse(umpireCompetitionData) : {};
     let competitionOrganisation = parsedData ? parsedData.competitionOrganisation : {};
     if (competitionOrganisation && competitionOrganisation.id) {
@@ -289,20 +289,20 @@ class UmpireRoster extends Component {
         let firstComp = compList.length > 0 && compList[0].id;
         let compData = compList.length > 0 && compList[0];
 
-        if (getUmpireCompetiton()) {
-          let compId = JSON.parse(getUmpireCompetiton());
+        if (getUmpireCompetitionId()) {
+          let compId = JSON.parse(getUmpireCompetitionId());
           let index = compList.findIndex(x => x.id === compId);
           if (index > -1) {
             firstComp = compList[index].id;
             compData = compList[index];
           } else {
-            setUmpireCompition(firstComp);
-            setUmpireCompitionData(JSON.stringify(compData));
+            setUmpireCompetitionId(firstComp);
+            setUmpireCompetitionData(JSON.stringify(compData));
           }
         } else {
           // setUmpireCompId(firstComp)
-          setUmpireCompition(firstComp);
-          setUmpireCompitionData(JSON.stringify(compData));
+          setUmpireCompetitionId(firstComp);
+          setUmpireCompetitionData(JSON.stringify(compData));
         }
 
         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
@@ -560,8 +560,8 @@ class UmpireRoster extends Component {
         break;
       }
     }
-    setUmpireCompition(selectedComp);
-    setUmpireCompitionData(JSON.stringify(compObj));
+    setUmpireCompetitionId(selectedComp);
+    setUmpireCompetitionData(JSON.stringify(compObj));
 
     let compKey = compID.competitionUniqueKey;
 

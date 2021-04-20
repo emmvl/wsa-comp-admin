@@ -26,7 +26,7 @@ import {
 import Loader from '../../customComponents/loader';
 // import LoaderImg from 'react-loader-spinner'
 import { setTimeout } from 'timers';
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitionData } from '../../util/sessionStorage';
 import ImageLoader from '../../customComponents/ImageLoader';
 import {
   // isArrayNotEmpty,
@@ -84,14 +84,14 @@ class LiveScoreAddTeam extends Component {
   componentDidMount() {
     let sourceIdAvailable = false;
     if (this.state.screenKey == 'umpire') {
-      if (getUmpireCompetitonData()) {
+      if (getUmpireCompetitionData()) {
         if (this.state.isEdit) {
           this.props.liveScoreGetTeamDataAction(this.state.teamId);
           this.setState({ load: true });
         } else {
           this.props.liveScoreAddTeamform({ key: 'addTeam' });
         }
-        const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+        const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitionData());
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0;
         sourceIdAvailable = sourceId ? true : false;
         this.setState({
@@ -686,7 +686,7 @@ class LiveScoreAddTeam extends Component {
   handleSubmit = e => {
     let compId = null;
     if (this.state.screenKey == 'umpire') {
-      const { id } = JSON.parse(getUmpireCompetitonData());
+      const { id } = JSON.parse(getUmpireCompetitionData());
       compId = id;
     } else {
       const { id } = JSON.parse(getLiveScoreCompetiton());

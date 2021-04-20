@@ -8,7 +8,7 @@ import {
   getAuthToken,
   getLiveScoreCompetiton,
   getOrganisationData,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
 } from 'util/sessionStorage';
 import history from 'util/history';
 import { isArrayNotEmpty, regexNumberExpression } from 'util/helpers';
@@ -1341,7 +1341,7 @@ const LiveScoreAxiosApi = {
   addEditUmpire(data, isUmpire, isUmpireCoach) {
     const body = data;
     const id = JSON.parse(localStorage.getItem('umpireCompetitionId'));
-    const compData = JSON.parse(getUmpireCompetitonData());
+    const compData = JSON.parse(getUmpireCompetitionData());
     const { organisationId } = getOrganisationData();
     let compOrgId = compData ? compData.organisationId : 0;
     let isCompParent = organisationId === compOrgId;

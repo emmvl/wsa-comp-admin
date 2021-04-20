@@ -29,11 +29,11 @@ import {
   setPageNumberAction,
 } from '../../store/actions/umpireAction/umpirePaymentAction';
 import {
-  // getUmpireCompetiton,
-  setUmpireCompition,
+  // getUmpireCompetitionId,
+  setUmpireCompetitionId,
   getOrganisationData,
-  setUmpireCompitionData,
-  // getUmpireCompetitonData,
+  setUmpireCompetitionData,
+  // getUmpireCompetitionData,
   // getLiveScoreUmpireCompition,
   // getLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompition,
@@ -433,8 +433,8 @@ class UmpirePayments extends Component {
       }
     }
 
-    setUmpireCompition(selectedComp);
-    setUmpireCompitionData(JSON.stringify(compObj));
+    setUmpireCompetitionId(selectedComp);
+    setUmpireCompetitionData(JSON.stringify(compObj));
 
     setLiveScoreUmpireCompition(selectedComp);
     setLiveScoreUmpireCompitionData(JSON.stringify(compObj));

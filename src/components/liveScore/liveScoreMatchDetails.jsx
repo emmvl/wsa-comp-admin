@@ -33,7 +33,7 @@ import {
   liveScoreUpdatePlayerMinuteRecordAction,
 } from '../../store/actions/LiveScoreAction/liveScorePlayerMinuteTrackingAction';
 import { isArrayNotEmpty } from '../../util/helpers';
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitionData } from '../../util/sessionStorage';
 import { getLiveScoreGamePositionsList } from '../../store/actions/LiveScoreAction/liveScoreGamePositionAction';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import DashboardLayout from '../../pages/dashboardLayout';
@@ -282,10 +282,10 @@ class LiveScoreMatchDetails extends Component {
     }
 
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
+      if (getUmpireCompetitionData()) {
         if (isMatchId) {
-          isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
-          this.setState({ competitionId: getUmpireCompetitonData().id });
+          isLineUpEnable = getUmpireCompetitionData().lineupSelectionEnabled;
+          this.setState({ competitionId: getUmpireCompetitionData().id });
         } else {
           history.push('/matchDayMatches');
         }
@@ -320,8 +320,8 @@ class LiveScoreMatchDetails extends Component {
 
     let competition = null;
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        competition = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        competition = JSON.parse(getUmpireCompetitionData());
       } else {
         history.push('/matchDayCompetitions');
       }
@@ -761,8 +761,8 @@ class LiveScoreMatchDetails extends Component {
 
     let scoreType = '';
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        scoreType = getUmpireCompetitonData().scoringType;
+      if (getUmpireCompetitionData()) {
+        scoreType = getUmpireCompetitionData().scoringType;
       } else {
         history.push('/matchDayCompetitions');
       }
@@ -864,8 +864,8 @@ class LiveScoreMatchDetails extends Component {
   setAttendanceValue = (playerId, period, field, key) => {
     let competition = null;
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        competition = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        competition = JSON.parse(getUmpireCompetitionData());
       } else {
         history.push('/matchDayCompetitions');
       }
@@ -950,8 +950,8 @@ class LiveScoreMatchDetails extends Component {
   getTeamPlayerStatusColumn = (data, team, teamId) => {
     let competition = null;
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        competition = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        competition = JSON.parse(getUmpireCompetitionData());
       } else {
         history.push('/matchDayCompetitions');
       }
@@ -4276,9 +4276,9 @@ class LiveScoreMatchDetails extends Component {
 
   AddPlayerModalView() {
     let playerId = null;
-    if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
+    if (getUmpireCompetitionData() || getLiveScoreCompetiton()) {
       const { id: competitionId, organisationId } = this.state.umpireKey
-        ? JSON.parse(getUmpireCompetitonData())
+        ? JSON.parse(getUmpireCompetitionData())
         : JSON.parse(getLiveScoreCompetiton());
       const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
       const { team1Players, team2Players } = this.props.liveScoreMatchState;
@@ -4374,8 +4374,8 @@ class LiveScoreMatchDetails extends Component {
   onSavePlayerTrack(trackResultData) {
     let competition = null;
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        competition = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        competition = JSON.parse(getUmpireCompetitionData());
       } else {
         history.push('/matchDayCompetitions');
       }
@@ -4499,13 +4499,13 @@ class LiveScoreMatchDetails extends Component {
           {this.headerView()}
 
           <Content>
-            {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) &&
+            {(getLiveScoreCompetiton() || (getUmpireCompetitionData() && umpireKey === 'umpire')) &&
               this.umpireScore_View()}
-            {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) &&
+            {(getLiveScoreCompetiton() || (getUmpireCompetitionData() && umpireKey === 'umpire')) &&
               this.team_View()}
-            {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) &&
+            {(getLiveScoreCompetiton() || (getUmpireCompetitionData() && umpireKey === 'umpire')) &&
               this.ModalView()}
-            {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) &&
+            {(getLiveScoreCompetiton() || (getUmpireCompetitionData() && umpireKey === 'umpire')) &&
               this.AddPlayerModalView()}
           </Content>
         </Layout>

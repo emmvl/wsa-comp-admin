@@ -19,7 +19,7 @@ import {
 import {
   getUmpireCompId,
   setUmpireCompId,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
 } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from '../../util/helpers';
 import history from 'util/history';
@@ -69,7 +69,7 @@ class UmpireDivisions extends Component {
             ? this.props.umpireCompetitionState.umpireComptitionList
             : [];
 
-        let compId = JSON.parse(getUmpireCompId());
+        let compId = getUmpireCompId() ? JSON.parse(getUmpireCompId()) : null;
         let firstComp = compId
           ? compId
           : competitionList && !!competitionList.length
@@ -77,7 +77,7 @@ class UmpireDivisions extends Component {
           : null;
         if (firstComp && firstComp !== compId) setUmpireCompId(firstComp);
 
-        const storedUmpireCompetition = getUmpireCompetitonData();
+        const storedUmpireCompetition = getUmpireCompetitionData();
         const parsedData = JSON.parse(storedUmpireCompetition);
         const umpireCompetitionData = parsedData ? parsedData : null;
         if (!!umpireCompetitionData && organisationId && firstComp) {

@@ -7,7 +7,7 @@ import { Layout, Table, Pagination, Modal } from 'antd';
 import AppConstants from 'themes/appConstants';
 import AppColor from 'themes/appColor';
 import { liveScore_MatchFormate } from 'themes/dateformate';
-import { getUmpireCompetiton, getUmpireCompetitonData } from 'util/sessionStorage';
+import { getUmpireCompetitionId, getUmpireCompetitionData } from 'util/sessionStorage';
 import history from 'util/history';
 import { isArrayNotEmpty } from 'util/helpers';
 import { umpireCompetitionListAction } from 'store/actions/umpireAction/umpireCompetetionAction';
@@ -193,8 +193,8 @@ class AssignUmpire extends Component {
           ? this.props.umpireCompetitionState.umpireComptitionList
           : [];
         let firstComp = compList.length > 0 && compList[0].id;
-        if (getUmpireCompetiton()) {
-          let compId = JSON.parse(getUmpireCompetiton());
+        if (getUmpireCompetitionId()) {
+          let compId = JSON.parse(getUmpireCompetitionId());
           firstComp = compId;
         }
         let { assignUmpireListPageSize } = this.props.assignUmpireState;
@@ -222,7 +222,7 @@ class AssignUmpire extends Component {
         this_obj.props.location.state.record.lastName
       : null;
     let userId = localStorage.getItem('userId');
-    const competition = JSON.parse(getUmpireCompetitonData());
+    const competition = JSON.parse(getUmpireCompetitionData());
     let rosterLocked = competition.recordUmpireType === 'USERS' ? true : false;
     let orgId = this.props.location.state
       ? this.props.location.state.record
