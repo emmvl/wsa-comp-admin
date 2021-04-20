@@ -13,7 +13,11 @@ import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
 
 import { isArrayNotEmpty } from '../../util/helpers';
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage';
+import {
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  getOrganisationData,
+} from '../../util/sessionStorage';
 
 import { umpireCompetitionListAction } from '../../store/actions/umpireAction/umpireCompetetionAction';
 import {
@@ -64,14 +68,14 @@ class UmpirePaymentSetting extends Component {
   }
 
   componentDidMount() {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     this.setState({ loading: true });
-    this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+    if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     this.props.getRefBadgeData();
   }
 
   async componentDidUpdate(prevProps, prevState) {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     if (!isEqual(prevProps.umpireCompetitionState, this.props.umpireCompetitionState)) {
       // if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
       if (!this.props.umpireCompetitionState.onLoad) {
@@ -81,12 +85,11 @@ class UmpirePaymentSetting extends Component {
           ? this.props.umpireCompetitionState.umpireComptitionList
           : [];
         let firstComp = !!competitionList.length && competitionList[0].id;
-
-        if (getUmpireCompId()) {
-          let compId = JSON.parse(getUmpireCompId());
+        let compId = getUmpireCompetitionId();
+        if (compId) {
           firstComp = compId;
         } else {
-          setUmpireCompId(firstComp);
+          if (firstComp) setUmpireCompetitionId(firstComp);
         }
 
         if (!!competitionList.length) {
@@ -545,7 +548,7 @@ class UmpirePaymentSetting extends Component {
     const { isOrganiser } = competitionList.find(competition => competition.id === compID);
 
     this.props.liveScoreGetDivision(compID);
-    setUmpireCompId(compID);
+    setUmpireCompetitionId(compID);
 
     this.setState({ selectedComp: compID, isOrganiserView: isOrganiser });
   };
@@ -560,7 +563,7 @@ class UmpirePaymentSetting extends Component {
   };
 
   handleSave = () => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     const { selectedComp, paymentSettingsData, isOrganiserView, allowPayment } = this.state;
 
     const paymentSettingsDataCopy = JSON.parse(JSON.stringify(paymentSettingsData));

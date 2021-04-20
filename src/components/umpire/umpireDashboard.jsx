@@ -723,7 +723,7 @@ class UmpireDashboard extends Component {
       !prevUrl ||
       !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)
     ) {
-      const organisationData = localStorage.getItem('setOrganisationData');
+      const organisationData = getOrganisationData();
       const parsedData = organisationData ? JSON.parse(organisationData) : {};
       let organisationId = parsedData && parsedData.organisationId ? parsedData.organisationId : 0;
       const orgData = getOrganisationData();

@@ -466,13 +466,13 @@ let userHttpApi = {
   },
 
   updateBannerCount(payload) {
-    const { organisationId } = getOrganisationData();
+    const { organisationId } = getOrganisationData() || {};
     const url = `api/bannerCount?organisationId=${organisationId}`;
     return Method.dataPost(url, token, payload);
   },
 
   async getBannerCount(orgId) {
-    const { organisationId } = getOrganisationData();
+    const { organisationId } = getOrganisationData() || {};
     const url = `api/bannerCount?organisationId=${organisationId}`;
     return Method.dataGet(url, token);
   },

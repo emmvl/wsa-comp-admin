@@ -38,6 +38,7 @@ import {
   getGlobalYear,
   setCompetitionID,
   getCompetitonId,
+  getOrganisationData,
 } from 'util/sessionStorage';
 import {
   getYearAndCompetitionOwnAction,
@@ -563,9 +564,10 @@ class CompetitionCourtAndTimesAssign extends Component {
 
   handleSavePreferences = values => {
     const compIdNumber = getCompetitonId();
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
 
-    this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, values);
+    if (compIdNumber && organisationId)
+      this.props.saveTeamTimeslotsPreferences(compIdNumber, organisationId, values);
   };
 
   headerView = () => (

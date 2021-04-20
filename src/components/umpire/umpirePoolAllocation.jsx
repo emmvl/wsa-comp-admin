@@ -28,10 +28,9 @@ import { getUmpireList } from '../../store/actions/umpireAction/umpireAction';
 import { getRefBadgeData } from '../../store/actions/appAction';
 
 import {
-  getUmpireCompetitionData,
-  getUmpireCompId,
-  setUmpireCompId,
-  setUmpireCompetitionData,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  getOrganisationData,
 } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from '../../util/helpers';
 import history from 'util/history';
@@ -72,14 +71,14 @@ class UmpirePoolAllocation extends Component {
   }
 
   componentDidMount() {
-    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    let { organisationId } = getOrganisationData() || {};
     this.setState({ loading: true });
     if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     this.props.getRefBadgeData();
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
 
     const { deletedUmpirePoolId, newUmpirePool } = this.props.umpirePoolAllocationState;
 
@@ -95,11 +94,11 @@ class UmpirePoolAllocation extends Component {
             ? competitionList[0].id
             : 0;
 
-        if (getUmpireCompId()) {
-          let compId = JSON.parse(getUmpireCompId());
+        if (getUmpireCompetitionId()) {
+          let compId = getUmpireCompetitionId();
           firstComp = compId ? compId : 0;
         } else {
-          if (firstComp) setUmpireCompId(firstComp);
+          if (firstComp) setUmpireCompetitionId(firstComp);
         }
 
         if (organisationId && firstComp) {
@@ -266,12 +265,12 @@ class UmpirePoolAllocation extends Component {
   };
 
   onChangeComp = compId => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     const { competitionList } = this.state;
 
     const { isOrganiser } = competitionList.find(competition => competition.id === compId);
 
-    setUmpireCompId(compId);
+    setUmpireCompetitionId(compId);
 
     this.props.getUmpirePoolData({ orgId: organisationId ? organisationId : 0, compId });
     this.setState({
@@ -451,7 +450,7 @@ class UmpirePoolAllocation extends Component {
   };
 
   handleDeletePoolOk = () => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     const { selectedComp, umpirePoolIdToDelete } = this.state;
 
     this.props.deleteUmpirePoolData({
@@ -478,7 +477,7 @@ class UmpirePoolAllocation extends Component {
   };
 
   handleOkSavePool = e => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
 
     if (!!this.state.newPoolName.length) {
       let poolObj = {
@@ -633,8 +632,8 @@ class UmpirePoolAllocation extends Component {
   };
 
   handleLoadMore = () => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-    const compId = JSON.parse(getUmpireCompId());
+    const { organisationId } = getOrganisationData() || {};
+    const compId = getUmpireCompetitionId();
     const { currentPage_Data } = this.props.umpireState;
 
     const offset = 10 * currentPage_Data;
@@ -645,7 +644,7 @@ class UmpirePoolAllocation extends Component {
   // save new data
   handleSave = () => {
     const { selectedComp, assignedData } = this.state;
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
 
     const body = assignedData.map(dataItem => ({
       id: dataItem.id,

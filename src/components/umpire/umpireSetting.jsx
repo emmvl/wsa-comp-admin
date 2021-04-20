@@ -20,7 +20,11 @@ import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
 import { isArrayNotEmpty } from '../../util/helpers';
 import { umpireCompetitionListAction } from '../../store/actions/umpireAction/umpireCompetetionAction';
-import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage';
+import {
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  getOrganisationData,
+} from '../../util/sessionStorage';
 import {
   getUmpireAllocationSettings,
   saveUmpireAllocationSettings,
@@ -69,9 +73,9 @@ class UmpireSetting extends PureComponent {
   }
 
   componentDidMount() {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     this.setState({ loading: true });
-    this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+    if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -84,22 +88,22 @@ class UmpireSetting extends PureComponent {
           : [];
         const competitionList = JSON.parse(JSON.stringify(compListProps));
 
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { organisationId } = getOrganisationData() || {};
 
-        let firstComp = competitionList.length > 0 && competitionList[0].id;
-
-        if (getUmpireCompId()) {
-          const compId = JSON.parse(getUmpireCompId());
+        let firstComp =
+          competitionList && competitionList.length > 0 ? competitionList[0]?.id : null;
+        const compId = getUmpireCompetitionId();
+        if (compId) {
           firstComp = compId;
         } else {
-          setUmpireCompId(firstComp);
+          if (firstComp) setUmpireCompetitionId(firstComp);
         }
 
-        if (!!competitionList.length) {
+        if (!!competitionList.length && firstComp) {
           this.props.liveScoreGetDivision(firstComp);
         }
 
-        const compKey = !!competitionList.length && competitionList[0].competitionUniqueKey;
+        const compKey = !!competitionList.length ? competitionList[0].competitionUniqueKey : null;
 
         competitionList.forEach(item => {
           if (item.organisationId === organisationId) {
@@ -109,8 +113,8 @@ class UmpireSetting extends PureComponent {
           }
         });
 
-        const isOrganiser = competitionList.find(competition => competition.id === firstComp)
-          ?.isOrganiser;
+        const selectedComp = competitionList.find(competition => competition.id === firstComp);
+        const isOrganiser = selectedComp ? selectedComp?.isOrganiser : false;
 
         this.setState({
           competitionList,
@@ -414,7 +418,7 @@ class UmpireSetting extends PureComponent {
     const { isOrganiser } = competitionList.find(competition => competition.id === compID);
 
     this.props.liveScoreGetDivision(compID);
-    setUmpireCompId(compID);
+    setUmpireCompetitionId(compID);
 
     this.setState({ selectedComp: compID, isOrganiserView: isOrganiser });
   };
@@ -757,7 +761,7 @@ class UmpireSetting extends PureComponent {
   };
 
   handleSave = () => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     const { selectedComp, allocationSettingsData } = this.state;
 
     const noUmpiresSettingArray = allocationSettingsData

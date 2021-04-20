@@ -28,15 +28,12 @@ const tagManagerArgs = {
 };
 // const tawkTo = require('tawkto-react');
 // const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c';
+const organisationData = getOrganisationData();
 const userData = {
-  name: getOrganisationData()
-    ? getOrganisationData().firstName +
-      ' ' +
-      getOrganisationData().lastName +
-      ' | ' +
-      getOrganisationData().name
+  name: organisationData
+    ? organisationData.firstName + ' ' + organisationData.lastName + ' | ' + organisationData.name
     : '',
-  email: getOrganisationData() ? getOrganisationData().userEmail : '',
+  email: organisationData ? organisationData.userEmail : '',
 };
 
 TagManager.initialize(tagManagerArgs);

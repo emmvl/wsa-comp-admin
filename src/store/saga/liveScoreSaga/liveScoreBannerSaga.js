@@ -155,7 +155,7 @@ function* liveScoreRemoveBannerImageSaga(action) {
       action.ratioType,
     );
     if (result.status === 1) {
-      const { organisationId } = getOrganisationData();
+      const { organisationId } = getOrganisationData() || {};
       const res = yield call(LiveScoreAxiosApi.liveScoreBannerList, null, organisationId);
       yield put({
         type: ApiConstants.API_LIVE_SCORE_BANNERS_SUCCESS,

@@ -1772,7 +1772,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
       this.props.venueConstraintPostAction(postObject);
 
       const { competitionId } = this.state;
-      const { organisationId } = getOrganisationData();
+      const { organisationId } = getOrganisationData() || {};
 
       const divisionsFieldsConfigurationsPayload = this.getDivisionsFieldsConfigurationsPayload(
         venueConstrainstData.competitionDivisionsFieldsConfigurations,

@@ -757,7 +757,7 @@ class LiveScoreDashboard extends Component {
       invoiceFailedLoad: false,
       instalmentRetryModalVisible: false,
       retryPaymentMethod: 1,
-      selectedRow: null
+      selectedRow: null,
     };
     this_obj = this;
     this.props.initializeCompData();
@@ -821,7 +821,7 @@ class LiveScoreDashboard extends Component {
   }
 
   getPlayersToPayList = page => {
-    const { organisationUniqueKey } = getOrganisationData();
+    const { organisationUniqueKey } = getOrganisationData() || {};
     const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
     let { liveScorePlayerstoPayListPageSize } = this.props.liveScoreDashboardState;
     liveScorePlayerstoPayListPageSize = liveScorePlayerstoPayListPageSize
@@ -888,10 +888,10 @@ class LiveScoreDashboard extends Component {
   retryPayment = record => {
     const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
     let paidByUserId = isArrayNotEmpty(record.paidByUsers)
-    ? record.paidByUsers[0].paidByUserId
-    : null;
+      ? record.paidByUsers[0].paidByUserId
+      : null;
     let payload = {};
-    if(record.processTypeName == "instalment") {
+    if (record.processTypeName == 'instalment') {
       payload = {
         processTypeName: record.processTypeName,
         registrationUniqueKey: record.registrationUniqueKey,
@@ -899,10 +899,9 @@ class LiveScoreDashboard extends Component {
         divisionId: record.divisionId,
         competitionId: uniqueKey,
         paidByUserId: paidByUserId,
-        checkCardAvailability: 0
+        checkCardAvailability: 0,
       };
-    }
-    else{
+    } else {
       payload = {
         processTypeName: record.processTypeName,
         registrationUniqueKey: record.registrationUniqueKey,
@@ -911,7 +910,7 @@ class LiveScoreDashboard extends Component {
         competitionId: uniqueKey,
       };
     }
-    this.setState({ retryPaymentLoad: true,  selectedRow: record});
+    this.setState({ retryPaymentLoad: true, selectedRow: record });
     this.props.liveScorePlayersToPayRetryPaymentAction(payload);
   };
 
@@ -1205,21 +1204,21 @@ class LiveScoreDashboard extends Component {
             </Tooltip>
           </div>
         </div>
-        {this.state.liveScoreCompIsParent &&
-                    <div className="col-sm text-right">
-                        <NavLink
-                            to={{
-                                pathname: '/matchDaySingleGameFee',
-                                state: { key: 'dashboard', item: null }
-                            }}
-                            className="text-decoration-none"
-                        >
-                            <Button className="primary-add-comp-form" type="primary">
-                                {AppConstants.singleGameFees}
-                            </Button>
-                        </NavLink>
-                    </div>
-                }
+        {this.state.liveScoreCompIsParent && (
+          <div className="col-sm text-right">
+            <NavLink
+              to={{
+                pathname: '/matchDaySingleGameFee',
+                state: { key: 'dashboard', item: null },
+              }}
+              className="text-decoration-none"
+            >
+              <Button className="primary-add-comp-form" type="primary">
+                {AppConstants.singleGameFees}
+              </Button>
+            </NavLink>
+          </div>
+        )}
       </div>
     );
   };

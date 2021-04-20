@@ -19,7 +19,12 @@ import {
   updateInnerHorizontalData,
   initializeCompData,
 } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction';
-import { getLiveScoreCompetiton, getGlobalYear, setGlobalYear } from '../util/sessionStorage';
+import {
+  getLiveScoreCompetiton,
+  getGlobalYear,
+  setGlobalYear,
+  getOrganisationData,
+} from '../util/sessionStorage';
 import history from '../util/history';
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from '../store/actions/appAction';
 import { clearDataOnCompChangeAction } from '../store/actions/LiveScoreAction/liveScoreMatchAction';
@@ -79,8 +84,8 @@ class InnerHorizontalMenu extends React.Component {
 
   async componentDidUpdate(nextProps) {
     if (this.props.userState.onLoad == false && this.state.orgState) {
-      if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+      const { organisationId } = getOrganisationData() || {};
+      if (organisationId) {
         if (this.props.menu === 'liveScore') {
           if (nextProps.appState == this.props.appState) {
             if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
@@ -130,7 +135,7 @@ class InnerHorizontalMenu extends React.Component {
         const compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList)
           ? this.props.innerHorizontalState.competitionList
           : [];
-        const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        const { organisationId } = getOrganisationData() || {};
         if (!isArrayNotEmpty(compList)) {
           message.config({
             duration: 1.5,
@@ -146,11 +151,12 @@ class InnerHorizontalMenu extends React.Component {
           localStorage.setItem('yearId', defaultYear);
           setGlobalYear(defaultYear);
           if (!this.props.innerHorizontalState.error && this.state.count < 1) {
-            this.props.innerHorizontalCompetitionListAction(
-              organisationId,
-              defaultYear,
-              this.props.innerHorizontalState.competitionList,
-            );
+            if (organisationId && defaultYear)
+              this.props.innerHorizontalCompetitionListAction(
+                organisationId,
+                defaultYear,
+                this.props.innerHorizontalState.competitionList,
+              );
             this.setState({ count: this.state.count + 1 });
           }
           return;
@@ -202,13 +208,14 @@ class InnerHorizontalMenu extends React.Component {
     // localStorage.setItem("LiveScoreCompetition", undefined);
     localStorage.setItem('yearId', yearId);
     setGlobalYear(yearId);
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     this.props.clearDataOnCompChangeAction();
-    this.props.innerHorizontalCompetitionListAction(
-      organisationId,
-      yearId,
-      this.props.innerHorizontalState.competitionList,
-    );
+    if (organisationId)
+      this.props.innerHorizontalCompetitionListAction(
+        organisationId,
+        yearId,
+        this.props.innerHorizontalState.competitionList,
+      );
 
     history.push('/matchDayDashboard');
   };

@@ -192,7 +192,7 @@ class LiveScoreEditBanners extends Component {
     if (getLiveScoreCompetiton()) {
       id = JSON.parse(getLiveScoreCompetiton()).id;
     }
-    const { organisationId } = getOrganisationData();
+    const { organisationId } = getOrganisationData() || {};
 
     // const showOnhome = showOnHome === true ? 1 : 0;
     // const showOndraws = showOnDraws === true ? 1 : 0;

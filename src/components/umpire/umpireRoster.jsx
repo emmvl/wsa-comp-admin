@@ -22,6 +22,7 @@ import {
   getUmpireCompetitionData,
   setUmpireCompetitionId,
   setUmpireCompetitionData,
+  getOrganisationData,
 } from '../../util/sessionStorage';
 import moment from 'moment';
 import { isEqual } from 'lodash';
@@ -259,7 +260,7 @@ class UmpireRoster extends Component {
       await this.setState({ sortBy, sortOrder, offsetData, status, umpireRole });
     }
 
-    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    let { organisationId } = getOrganisationData() || {};
     this.setState({ loading: true });
 
     const umpireCompetitionData = getUmpireCompetitionData();
@@ -290,7 +291,7 @@ class UmpireRoster extends Component {
         let compData = compList.length > 0 && compList[0];
 
         if (getUmpireCompetitionId()) {
-          let compId = JSON.parse(getUmpireCompetitionId());
+          let compId = getUmpireCompetitionId();
           let index = compList.findIndex(x => x.id === compId);
           if (index > -1) {
             firstComp = compList[index].id;
@@ -300,7 +301,7 @@ class UmpireRoster extends Component {
             setUmpireCompetitionData(JSON.stringify(compData));
           }
         } else {
-          // setUmpireCompId(firstComp)
+          // setUmpireCompetitionId(firstComp)
           setUmpireCompetitionId(firstComp);
           setUmpireCompetitionData(JSON.stringify(compData));
         }

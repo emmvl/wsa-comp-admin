@@ -252,8 +252,8 @@ class UmpirePayments extends Component {
     if (!this.isBecsSetupDone()) {
       this.props.history.push('/orgBecsSetup');
     }
-    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-    this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+    let { organisationId } = getOrganisationData() || {};
+    if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     const { umpirePaymentObject } = this.props.umpirePaymentState;
     let page = 1;
     let sortBy = this.state.sortBy;

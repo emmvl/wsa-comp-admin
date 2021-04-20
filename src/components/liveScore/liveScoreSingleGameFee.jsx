@@ -148,7 +148,7 @@ class LiveScoreSingleGameFee extends Component {
 
   getLivescoreGameList(page) {
     const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
-    const { organisationUniqueKey } = getOrganisationData();
+    const { organisationUniqueKey } = getOrganisationData() || {};
     let payload = {
       competitionId: uniqueKey,
       organisationId: organisationUniqueKey,
