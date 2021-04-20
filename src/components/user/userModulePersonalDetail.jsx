@@ -297,15 +297,19 @@ const columns = [
               </Menu.Item>
             </>
           )}
-          <Menu.Item
-            key="1"
-            onClick={() => openInvoicePage({
-              registrationId: e.registrationId,
-              userRegId: (!e.isRegisterer && e.teamId && e.paidByThisUser) ? e.userRegUniquekey : null,
-            })}
-          >
-            <span>{AppConstants.invoice}</span>
-          </Menu.Item>
+          { (!e.isRegisterer && e.teamId && !e.paidByThisUser)
+            ? null
+            : (
+              <Menu.Item
+                key="1"
+                onClick={() => openInvoicePage({
+                  registrationId: e.registrationId,
+                  userRegId: (!e.isRegisterer && e.teamId && e.paidByThisUser) ? e.userRegUniquekey : null,
+                })}
+              >
+                <span>{AppConstants.invoice}</span>
+              </Menu.Item>
+          )}
         </SubMenu>
       </Menu>
     ),
