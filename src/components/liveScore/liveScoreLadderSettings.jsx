@@ -13,7 +13,7 @@ import {
   ladderSettingPostDATA,
 } from '../../store/actions/LiveScoreAction/liveScoreLadderSettingAction';
 import { isArrayNotEmpty } from '../../util/helpers';
-import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getOrganisationData } from '../../util/sessionStorage';
 import Loader from '../../customComponents/loader';
 import history from '../../util/history';
 
@@ -279,7 +279,7 @@ class LiveScoreLadderSettings extends Component {
   };
 
   publicLadderLink = () => {
-    let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    let { organisationUniqueKey } = getOrganisationData() || {};
 
     return (
       <div className="content-view mt-5 pt-3">
@@ -307,7 +307,7 @@ class LiveScoreLadderSettings extends Component {
   };
 
   publiDrawsLink = () => {
-    let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    let { organisationUniqueKey } = getOrganisationData() || {};
 
     return (
       <div className="content-view mt-5 pt-3">

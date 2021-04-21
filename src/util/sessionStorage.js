@@ -162,33 +162,26 @@ const getDraws_division_grade = () => {
   return localStorage.draws_division_grade;
 };
 
-const getUmpireCompetiton = () => {
-  return localStorage.umpireCompetitionId;
+const getUmpireCompetitionId = () => {
+  return localStorage.umpireCompetitionId
+    ? Number.parseInt(localStorage.umpireCompetitionId)
+    : null;
 };
 
-const setUmpireCompition = umpireCompetitionId => {
+const setUmpireCompetitionId = umpireCompetitionId => {
   localStorage.setItem('umpireCompetitionId', umpireCompetitionId);
 };
 
-const getUmpireCompetitonData = () => {
+const getUmpireCompetitionData = () => {
   return localStorage.umpireCompetitionData;
 };
 
-const setUmpireCompitionData = umpireCompetitionData => {
+const setUmpireCompetitionData = umpireCompetitionData => {
   localStorage.setItem('umpireCompetitionData', umpireCompetitionData);
-};
-
-const getUmpireCompId = () => {
-  return localStorage.umpireCompId;
-};
-
-const setUmpireCompId = umpireCompId => {
-  localStorage.setItem('umpireCompId', umpireCompId);
 };
 
 const clearUmpireStorage = () => {
   let keysToRemove = [
-    'umpireCompId',
     'umpireCompetitionData',
     'umpireCompetitionId',
     'own_competition',
@@ -325,12 +318,10 @@ export {
   getDraws_roundTime,
   setDraws_division_grade,
   getDraws_division_grade,
-  getUmpireCompetiton,
-  setUmpireCompition,
-  setUmpireCompitionData,
-  getUmpireCompetitonData,
-  getUmpireCompId,
-  setUmpireCompId,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  setUmpireCompetitionData,
+  getUmpireCompetitionData,
   clearUmpireStorage,
   getLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompitionData,

@@ -162,7 +162,7 @@ class RegistrationPayments extends Component {
 
   //on customer transaction export button click
   onCustomerTransactionExport() {
-    const { stripeCustomerAccountId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { stripeCustomerAccountId } = getOrganisationData() || {};
     const customerId = stripeCustomerAccountId;
     this.props.exportCustomerTransactionApi(customerId);
   }

@@ -105,7 +105,7 @@ class LiveScoreSettingsView extends Component {
     } = this.props;
     const { screenName, selectedComp, edit } = this.state;
     const orgData = getOrganisationData();
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = orgData;
 
     localStorage.setItem('regInvitees', 'true');
     this.setState({
@@ -397,7 +397,7 @@ class LiveScoreSettingsView extends Component {
 
     let orgId = null;
     if (this.props.location.state === 'add') {
-      const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+      const { organisationId } = getOrganisationData() || {};
       orgId = organisationId;
     }
 

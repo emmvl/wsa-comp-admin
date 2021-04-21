@@ -10,7 +10,7 @@ import { isArrayNotEmpty, teamListDataCheck } from '../../util/helpers';
 import history from '../../util/history';
 import {
   getLiveScoreCompetiton,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
   setOwn_competition,
   setGlobalYear,
 } from '../../util/sessionStorage';
@@ -294,8 +294,8 @@ class LiveScoreMatchesList extends Component {
     }
 
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        const { id, sourceId, competitionOrganisation } = JSON.parse(getUmpireCompetitionData());
         let compOrg = competitionOrganisation ? competitionOrganisation.id : 0;
         this.setState({
           competitionId: id,
@@ -378,8 +378,8 @@ class LiveScoreMatchesList extends Component {
   onExport() {
     let competition = null;
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        competition = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        competition = JSON.parse(getUmpireCompetitionData());
       } else {
         history.push('/matchDayCompetitions');
       }

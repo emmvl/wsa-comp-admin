@@ -33,7 +33,7 @@ import {
 } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction';
 import { liveScore_MatchFormate, liveScore_formateDate } from '../../themes/dateformate';
 import history from '../../util/history';
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitionData } from '../../util/sessionStorage';
 import { isArrayNotEmpty } from '../../util/helpers';
 import ValidationConstants from '../../themes/validationConstant';
 
@@ -318,9 +318,9 @@ class LiveScoreIncidentList extends Component {
     let { sortOrder } = this.state;
 
     if (umpireKey) {
-      if (getUmpireCompetitonData()) {
+      if (getUmpireCompetitionData()) {
         checkLivScoreCompIsParent().then(value => {
-          const { id, competitionOrganisation } = JSON.parse(getUmpireCompetitonData());
+          const { id, competitionOrganisation } = JSON.parse(getUmpireCompetitionData());
           const compOrgId = competitionOrganisation ? competitionOrganisation.id : 0;
           this.setState({ compOrgId, liveScoreCompIsParent: value });
           let { liveScoreIncidentPageSize } = this.props.liveScoreIncidentState;
@@ -457,7 +457,7 @@ class LiveScoreIncidentList extends Component {
 
     let compId = null;
     if (umpireKey) {
-      const { id } = JSON.parse(getUmpireCompetitonData());
+      const { id } = JSON.parse(getUmpireCompetitionData());
       compId = id;
     } else {
       const { id } = JSON.parse(getLiveScoreCompetiton());
@@ -484,7 +484,7 @@ class LiveScoreIncidentList extends Component {
     const { umpireKey } = this.props.liveScoreIncidentState;
     let compId = null;
     if (umpireKey) {
-      const { id } = JSON.parse(getUmpireCompetitonData());
+      const { id } = JSON.parse(getUmpireCompetitionData());
       compId = id;
     } else {
       const { id } = JSON.parse(getLiveScoreCompetiton());
@@ -517,7 +517,7 @@ class LiveScoreIncidentList extends Component {
     const { umpireKey, liveScoreIncidentPageSize = 10 } = this.props.liveScoreIncidentState;
     let compId = null;
     if (umpireKey) {
-      const { id } = JSON.parse(getUmpireCompetitonData());
+      const { id } = JSON.parse(getUmpireCompetitionData());
       compId = id;
     } else {
       const { id } = JSON.parse(getLiveScoreCompetiton());
@@ -555,7 +555,7 @@ class LiveScoreIncidentList extends Component {
     const { umpireKey } = this.props.liveScoreIncidentState;
     let compId = null;
     if (umpireKey) {
-      const { id } = JSON.parse(getUmpireCompetitonData());
+      const { id } = JSON.parse(getUmpireCompetitionData());
       compId = id;
     } else {
       const { id } = JSON.parse(getLiveScoreCompetiton());

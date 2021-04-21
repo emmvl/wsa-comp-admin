@@ -26,11 +26,11 @@ import ValidationConstants from 'themes/validationConstant';
 import { isArrayNotEmpty } from 'util/helpers';
 import history from 'util/history';
 import {
-  getUmpireCompetiton,
-  setUmpireCompition,
-  setUmpireCompitionData,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
+  setUmpireCompetitionData,
   getOrganisationData,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
 } from 'util/sessionStorage';
 import { userExportFilesAction } from 'store/actions/appAction';
 import {
@@ -85,7 +85,7 @@ function checkUmpireUserRoll(rolesArr, key) {
 function tableSort(key) {
   let sortBy = key;
   let sortOrder = null;
-  const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+  const { organisationId } = getOrganisationData() || {};
   if (this_obj.state.sortBy !== key) {
     sortOrder = 'ASC';
   } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
@@ -95,13 +95,14 @@ function tableSort(key) {
   }
 
   this_obj.setState({ sortBy, sortOrder });
-  this_obj.props.getUmpireList({
-    organisationId,
-    competitionId: this_obj.state.selectedComp,
-    offset: this_obj.state.offsetData,
-    sortBy,
-    sortOrder,
-  });
+  if (organisationId && this_obj.state.selectedComp)
+    this_obj.props.getUmpireList({
+      organisationId,
+      competitionId: this_obj.state.selectedComp,
+      offset: this_obj.state.offsetData,
+      sortBy,
+      sortOrder,
+    });
 }
 
 class Umpire extends Component {
@@ -131,18 +132,16 @@ class Umpire extends Component {
           onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
           render: (rank, record) => {
             const { rankedUmpiresCount } = this.props.umpireState;
-            const organisationData = localStorage.getItem('setOrganisationData');
-            const parsedOrganisation = organisationData ? JSON.parse(organisationData) : null;
-            const currentOrganisationId = parsedOrganisation
-              ? parsedOrganisation?.organisationId
-              : null;
+
+            const { organisationId } = getOrganisationData() || {};
+
             const competitionOrganisationId = JSON.parse(
               localStorage.getItem('umpireCompetitionData'),
             )?.organisationId;
 
             return (
               <Form>
-                {currentOrganisationId === competitionOrganisationId ? (
+                {organisationId === competitionOrganisationId ? (
                   <Select
                     onChange={(i, option) => this.handleSelectChange(i, option, record.id)}
                     value={record.rank ? record.rank : ''}
@@ -314,8 +313,8 @@ class Umpire extends Component {
 
   handleSelectChange = (i, option, id) => {
     const { rankedUmpiresCount } = this.props.umpireState;
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-    const competitionId = localStorage.getItem('umpireCompetitionId');
+    const { organisationId } = getOrganisationData() || {};
+    const competitionId = getUmpireCompetitionId();
     if (competitionId && organisationId && option.children === rankedUmpiresCount + 1) {
       this.props.updateUmpireRank({
         competitionId,
@@ -336,9 +335,9 @@ class Umpire extends Component {
   };
 
   switchShiftHandler = updateRankType => {
-    const { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    const { organisationId } = getOrganisationData() || {};
     const { umpireRank, umpireId } = this.state;
-    const competitionId = localStorage.getItem('umpireCompetitionId');
+    const competitionId = getUmpireCompetitionId();
     if (competitionId)
       this.props.updateUmpireRank({
         competitionId,
@@ -400,11 +399,11 @@ class Umpire extends Component {
       await this.setState({ sortBy, sortOrder, offsetData, searchText });
     }
 
-    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    let { organisationId } = getOrganisationData() || {};
     this.setState({ loading: true });
     if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     this.props.getRefBadgeData(this.props.appstate.accreditation);
-    const competitionId = JSON.parse(localStorage.getItem('umpireCompetitionId'));
+    const competitionId = getUmpireCompetitionId();
     if (!!competitionId) {
       this.props.getRankedUmpiresCount({ competitionId });
     }
@@ -417,13 +416,13 @@ class Umpire extends Component {
         let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
           ? this.props.umpireCompetitionState.umpireComptitionList
           : [];
-        let firstComp = compList && compList.length > 0 ? compList[0].id : null;
+        let firstComp = compList && compList.length > 0 ? compList[0]?.id : null;
         let compData = compList && compList.length > 0 ? compList[0] : null;
 
-        let unparsedData = getUmpireCompetiton();
-        let compId = unparsedData ? JSON.parse(unparsedData) : null;
-        unparsedData = getUmpireCompetitonData();
-        const storedCompData = unparsedData ? JSON.parse(unparsedData) : null;
+        const compId = getUmpireCompetitionId();
+        const storedCompData = getUmpireCompetitionData()
+          ? JSON.parse(getUmpireCompetitionData())
+          : null;
         if (compId) {
           let index =
             compList && Array.isArray(compList) ? compList.findIndex(x => x.id === compId) : -1;
@@ -439,28 +438,24 @@ class Umpire extends Component {
           }
         }
 
-        if (firstComp && firstComp !== compId) setUmpireCompition(firstComp);
-        if (!isEqual(compData, storedCompData)) setUmpireCompitionData(JSON.stringify(compData));
+        if (firstComp) setUmpireCompetitionId(firstComp);
+        if (!isEqual(compData, storedCompData)) setUmpireCompetitionData(JSON.stringify(compData));
 
         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-        let orgItem = await getOrganisationData();
-        let userOrganisationId = orgItem ? orgItem.organisationId : 0;
-        let compOrgId = compData ? compData.organisationId : 0;
+        let orgItem = getOrganisationData();
+        let userOrganisationId = orgItem ? orgItem?.organisationId : null;
+        let compOrgId = compData ? compData.organisationId : null;
         let compOrganisationId = compData
           ? compData.competitionOrganisation
             ? compData.competitionOrganisation.id
-            : 0
-          : 0;
+            : null
+          : null;
         let isCompParent = userOrganisationId === compOrgId;
         this.setState({ isCompParent, compOrganisationId });
         let sortBy = this.state.sortBy;
         let sortOrder = this.state.sortOrder;
-        unparsedData = localStorage.getItem('setOrganisationData');
-        let parsedData = unparsedData ? JSON.parse(unparsedData) : null;
-        const organisationId = parsedData?.organisationId;
-        unparsedData = getUmpireCompetiton();
-        parsedData = unparsedData ? JSON.parse(unparsedData) : null;
-        const competitionId = parsedData;
+        const { organisationId } = getOrganisationData() || {};
+        const competitionId = getUmpireCompetitionId();
         if (organisationId && competitionId) {
           this.props.getUmpireList({
             organisationId,
@@ -521,14 +516,17 @@ class Umpire extends Component {
       offsetData: offset,
     });
 
-    this.props.getUmpireList({
-      organisationId: JSON.parse(localStorage.getItem('setOrganisationData')).organisationId,
-      competitionId: localStorage.getItem('umpireCompetitionId'),
-      offset,
-      limit: pageSize_Data,
-      sortBy,
-      sortOrder,
-    });
+    const { organisationId } = getOrganisationData() || {};
+    const competitionId = getUmpireCompetitionId();
+    if (organisationId && competitionId)
+      this.props.getUmpireList({
+        organisationId,
+        competitionId,
+        offset,
+        limit: pageSize_Data,
+        sortBy,
+        sortOrder,
+      });
   };
 
   contentView = () => {
@@ -572,35 +570,29 @@ class Umpire extends Component {
   };
 
   onChangeComp = async compID => {
-    let selectedComp = compID.comp;
-    // setUmpireCompId(selectedComp);
+    let selectedComp = compID?.comp;
 
     const { sortBy, sortOrder } = this.state;
-    let compObj = null;
-    for (let i in this.state.compArray) {
-      if (compID.comp === this.state.compArray[i].id) {
-        compObj = this.state.compArray[i];
-        break;
-      }
-    }
-    let orgItem = await getOrganisationData();
-    let userOrganisationId = orgItem ? orgItem.organisationId : 0;
-    let compOrgId = compObj ? compObj.organisationId : 0;
+    let compObj = this.state.compArray.find(comp => comp.id === selectedComp);
+    let orgItem = getOrganisationData();
+    let userOrganisationId = orgItem ? orgItem.organisationId : null;
+    let compOrgId = compObj ? compObj.organisationId : null;
     let isCompParent = userOrganisationId === compOrgId;
     this.setState({ isCompParent });
 
-    setUmpireCompition(selectedComp);
-    setUmpireCompitionData(JSON.stringify(compObj));
+    if (selectedComp) setUmpireCompetitionId(selectedComp);
+    if (compObj) setUmpireCompetitionData(JSON.stringify(compObj));
 
     let compKey = compID.competitionUniqueKey;
 
-    this.props.getUmpireList({
-      organisationId: JSON.parse(localStorage.getItem('setOrganisationData')).organisationId,
-      competitionId: localStorage.getItem('umpireCompetitionId'),
-      offset: 0,
-      sortBy,
-      sortOrder,
-    });
+    if (userOrganisationId && selectedComp)
+      this.props.getUmpireList({
+        organisationId: userOrganisationId,
+        competitionId: selectedComp,
+        offset: 0,
+        sortBy,
+        sortOrder,
+      });
 
     this.setState({ selectedComp, competitionUniqueKey: compKey });
   };
@@ -611,9 +603,12 @@ class Umpire extends Component {
 
     const { sortBy, sortOrder } = this.state;
     if (e.target.value === null || e.target.value === '') {
+      const orgData = getOrganisationData();
+      const orgId = orgData && orgData.organisationId ? orgData.organisationId : null;
+      const compId = getUmpireCompetitionId();
       this.props.getUmpireList({
-        organisationId: JSON.parse(localStorage.getItem('setOrganisationData')).organisationId,
-        competitionId: localStorage.getItem('umpireCompetitionId'),
+        organisationId: orgId,
+        competitionId: compId,
         offset: 0,
         sortBy,
         sortOrder,
@@ -628,13 +623,17 @@ class Umpire extends Component {
     const code = e.keyCode || e.which;
     if (code === 13) {
       // 13 is the enter keycode
-      this.props.getUmpireList({
-        organisationId: JSON.parse(localStorage.getItem('setOrganisationData')).organisationId,
-        competitionId: localStorage.getItem('umpireCompetitionId'),
-        offset: 0,
-        sortBy,
-        sortOrder,
-      });
+      const { organisationId } = getOrganisationData() || {};
+      const competitionId = getUmpireCompetitionId();
+
+      if (organisationId && competitionId)
+        this.props.getUmpireList({
+          organisationId,
+          competitionId,
+          offset: 0,
+          sortBy,
+          sortOrder,
+        });
     }
   };
 
@@ -644,13 +643,17 @@ class Umpire extends Component {
     const { sortBy, sortOrder } = this.state;
     if (this.state.searchText === null || this.state.searchText === '') {
     } else {
-      this.props.getUmpireList({
-        organisationId: JSON.parse(localStorage.getItem('setOrganisationData')).organisationId,
-        competitionId: localStorage.getItem('umpireCompetitionId'),
-        offset: 0,
-        sortBy,
-        sortOrder,
-      });
+      const { organisationId } = getOrganisationData() || {};
+      const compId = getUmpireCompetitionId();
+      if (compId && organisationId) {
+        this.props.getUmpireList({
+          organisationId,
+          competitionId: compId,
+          offset: 0,
+          sortBy,
+          sortOrder,
+        });
+      }
     }
   };
 

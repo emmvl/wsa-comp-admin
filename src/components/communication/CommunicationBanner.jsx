@@ -65,7 +65,7 @@ class CommunicationBanner extends Component {
 
   componentDidMount() {
     if (getOrganisationData()) {
-      const { organisationId } = getOrganisationData();
+      const { organisationId } = getOrganisationData() || {};
       if (organisationId) {
         this.props.getBannerCnt(organisationId);
         this.props.getLiveScoreBanners(null, organisationId);

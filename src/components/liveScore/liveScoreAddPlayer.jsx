@@ -25,7 +25,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import history from '../../util/history';
 import Loader from '../../customComponents/loader';
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitionData } from '../../util/sessionStorage';
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
 import {
   isArrayNotEmpty,
@@ -73,9 +73,9 @@ class LiveScoreAddPlayer extends Component {
     const { screenKey } = this.state;
 
     if (screenKey == 'umpire') {
-      if (getUmpireCompetitonData()) {
+      if (getUmpireCompetitionData()) {
         const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(
-          getUmpireCompetitonData(),
+          getUmpireCompetitionData(),
         );
         let compOrgId = competitionOrganisation
           ? competitionOrganisation.id
@@ -459,7 +459,7 @@ class LiveScoreAddPlayer extends Component {
       : '';
     let compId = null;
     if (this.state.screenKey == 'umpire') {
-      const { id } = JSON.parse(getUmpireCompetitonData());
+      const { id } = JSON.parse(getUmpireCompetitionData());
       compId = id;
     } else {
       let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));

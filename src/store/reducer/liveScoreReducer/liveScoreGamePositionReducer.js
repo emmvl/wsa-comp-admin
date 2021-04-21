@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants';
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitionData } from '../../../util/sessionStorage';
 
 const initialState = {
   onLoad: false,
@@ -15,7 +15,7 @@ function getFilterPositionData(positionData) {
   if (getLiveScoreCompetiton()) {
     competition = JSON.parse(getLiveScoreCompetiton());
   } else {
-    competition = JSON.parse(getUmpireCompetitonData());
+    competition = JSON.parse(getUmpireCompetitionData());
   }
 
   let positionArray = [];

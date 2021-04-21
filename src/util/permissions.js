@@ -5,7 +5,7 @@ import history from './history';
 import {
   getOrganisationData,
   getLiveScoreCompetiton,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
 } from './sessionStorage';
 
 const organisationTypeRefIdObject = {
@@ -198,7 +198,7 @@ function reverseArray(array) {
 
 async function checkUmpireCompIsParent() {
   const orgItem = await getOrganisationData();
-  const umpireCompetition = await getUmpireCompetitonData();
+  const umpireCompetition = await getUmpireCompetitionData();
   const organisationId = orgItem ? orgItem.organisationId : 0;
   const umpireCompetitionOrgId = umpireCompetition
     ? JSON.parse(umpireCompetition).organisationId

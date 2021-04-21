@@ -33,7 +33,7 @@ import {
   isImageFormatValid,
   isImageSizeValid,
 } from '../../util/helpers';
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitionData } from '../../util/sessionStorage';
 import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction';
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader';
@@ -89,9 +89,9 @@ class LiveScoreAddIncident extends Component {
 
   componentDidMount() {
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
+      if (getUmpireCompetitionData()) {
         const { id, competitionOrganisation, competitionOrganisationId } = JSON.parse(
-          getUmpireCompetitonData(),
+          getUmpireCompetitionData(),
         );
         let compOrgId = competitionOrganisation
           ? competitionOrganisation.id
@@ -282,8 +282,8 @@ class LiveScoreAddIncident extends Component {
 
   setTeamId(teamId) {
     if (this.state.umpireKey) {
-      if (getUmpireCompetitonData()) {
-        const { id } = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        const { id } = JSON.parse(getUmpireCompetitionData());
         this.props.liveScorePlayerListAction(id, teamId);
         this.props.liveScoreUpdateIncidentData(null, 'clearPyarIds');
         this.props.liveScoreUpdateIncidentData(teamId, 'teamId');
@@ -660,8 +660,8 @@ class LiveScoreAddIncident extends Component {
     let compId = null;
 
     if (this.state.umpireKey === 'umpire') {
-      if (getUmpireCompetitonData()) {
-        const { id } = JSON.parse(getUmpireCompetitonData());
+      if (getUmpireCompetitionData()) {
+        const { id } = JSON.parse(getUmpireCompetitionData());
         compId = id;
       }
     } else {

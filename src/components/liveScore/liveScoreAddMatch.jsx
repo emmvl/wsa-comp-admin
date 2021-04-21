@@ -47,7 +47,7 @@ import history from '../../util/history';
 import {
   getLiveScoreCompetiton,
   getOrganisationData,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
 } from '../../util/sessionStorage';
 import { getVenuesTypeAction } from '../../store/actions/appAction';
 import Loader from '../../customComponents/loader';
@@ -153,16 +153,16 @@ class LiveScoreAddMatch extends Component {
 
   async componentDidMount() {
     this.props.getRefBadgeData(this.props.appstate.accreditation);
-    if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
+    if (getUmpireCompetitionData() || getLiveScoreCompetiton()) {
       if (this.state.umpireKey === 'umpire') {
-        let compData = JSON.parse(getUmpireCompetitonData());
+        let compData = JSON.parse(getUmpireCompetitionData());
         let orgItem = await getOrganisationData();
         let userOrganisationId = orgItem ? orgItem.organisationId : 0;
         let compOrg_Id = compData ? compData.organisationId : 0;
         let isCompParent = userOrganisationId === compOrg_Id;
         this.setState({ isCompParent });
         const { id, scoringType, sourceId, competitionOrganisation } = JSON.parse(
-          getUmpireCompetitonData(),
+          getUmpireCompetitionData(),
         );
         let compOrgId = competitionOrganisation ? competitionOrganisation.id : 0;
         this.setState({
@@ -246,7 +246,7 @@ class LiveScoreAddMatch extends Component {
         this.props.ladderSettingGetMatchResultAction();
         this.props.liveScoreUpdateMatchAction('', 'clearData');
         if (this.state.umpireKey === 'umpire') {
-          const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData());
+          const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitionData());
           isLineUpEnable = lineupSelectionEnabled;
           // match_status = status;
         } else {

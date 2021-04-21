@@ -7,7 +7,11 @@ import { Layout, Table, Pagination, Modal } from 'antd';
 import AppConstants from 'themes/appConstants';
 import AppColor from 'themes/appColor';
 import { liveScore_MatchFormate } from 'themes/dateformate';
-import { getUmpireCompetiton, getUmpireCompetitonData } from 'util/sessionStorage';
+import {
+  getUmpireCompetitionId,
+  getUmpireCompetitionData,
+  getOrganisationData,
+} from 'util/sessionStorage';
 import history from 'util/history';
 import { isArrayNotEmpty } from 'util/helpers';
 import { umpireCompetitionListAction } from 'store/actions/umpireAction/umpireCompetetionAction';
@@ -173,7 +177,7 @@ class AssignUmpire extends Component {
   }
 
   componentDidMount() {
-    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+    let organisationId = getOrganisationData() ? getOrganisationData().organisationId : null;
     this.setState({ loading: true });
     this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
 
@@ -192,20 +196,18 @@ class AssignUmpire extends Component {
         let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
           ? this.props.umpireCompetitionState.umpireComptitionList
           : [];
-        let firstComp = compList.length > 0 && compList[0].id;
-        if (getUmpireCompetiton()) {
-          let compId = JSON.parse(getUmpireCompetiton());
-          firstComp = compId;
-        }
-        let { assignUmpireListPageSize } = this.props.assignUmpireState;
-        assignUmpireListPageSize = assignUmpireListPageSize ? assignUmpireListPageSize : 10;
+        let firstComp = compList && compList.length > 0 ? compList[0]?.id : null;
+        let compId = getUmpireCompetitionId();
+        if (compId) firstComp = compId;
+        const { assignUmpireListPageSize = 10 } = this.props.assignUmpireState;
         const body = {
           paging: {
             limit: assignUmpireListPageSize,
             offset: 0,
           },
         };
-        this.props.getAssignUmpireListAction(firstComp, body, this.state.userId);
+        if (firstComp && this.state.userId)
+          this.props.getAssignUmpireListAction(firstComp, body, this.state.userId);
         this.setState({ selectedComp: firstComp, loading: false });
       }
     }
@@ -222,7 +224,7 @@ class AssignUmpire extends Component {
         this_obj.props.location.state.record.lastName
       : null;
     let userId = localStorage.getItem('userId');
-    const competition = JSON.parse(getUmpireCompetitonData());
+    const competition = JSON.parse(getUmpireCompetitionData());
     let rosterLocked = competition.recordUmpireType === 'USERS' ? true : false;
     let orgId = this.props.location.state
       ? this.props.location.state.record
@@ -337,8 +339,7 @@ class AssignUmpire extends Component {
   /// Handle Page change
   handlePageChange = async page => {
     await this.props.setAssignUmpireListPageNumberAction(page);
-    let { assignUmpireListPageSize } = this.props.assignUmpireState;
-    assignUmpireListPageSize = assignUmpireListPageSize ? assignUmpireListPageSize : 10;
+    const { assignUmpireListPageSize = 10 } = this.props.assignUmpireState;
     let offset = page ? assignUmpireListPageSize * (page - 1) : 0;
     const body = {
       paging: {

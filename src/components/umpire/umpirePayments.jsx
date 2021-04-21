@@ -29,11 +29,11 @@ import {
   setPageNumberAction,
 } from '../../store/actions/umpireAction/umpirePaymentAction';
 import {
-  // getUmpireCompetiton,
-  setUmpireCompition,
+  getUmpireCompetitionId,
+  setUmpireCompetitionId,
   getOrganisationData,
-  setUmpireCompitionData,
-  // getUmpireCompetitonData,
+  setUmpireCompetitionData,
+  // getUmpireCompetitionData,
   // getLiveScoreUmpireCompition,
   // getLiveScoreUmpireCompitionData,
   setLiveScoreUmpireCompition,
@@ -252,14 +252,15 @@ class UmpirePayments extends Component {
     if (!this.isBecsSetupDone()) {
       this.props.history.push('/orgBecsSetup');
     }
-    let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
-    this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
+    let { organisationId } = getOrganisationData() || {};
+    const competitionId = getUmpireCompetitionId();
+    if (organisationId) this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS');
     const { umpirePaymentObject } = this.props.umpirePaymentState;
     let page = 1;
     let sortBy = this.state.sortBy;
     let sortOrder = this.state.sortOrder;
     if (umpirePaymentObject) {
-      let selectedComp = umpirePaymentObject.data.compId;
+      let selectedComp = competitionId || umpirePaymentObject.data.compId;
       let offset = umpirePaymentObject.data.pagingBody.paging.offset;
       let searchText = umpirePaymentObject.data.search;
       sortBy = umpirePaymentObject.data.sortBy;
@@ -282,7 +283,12 @@ class UmpirePayments extends Component {
           isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
             ? this.props.umpireCompetitionState.umpireComptitionList
             : [];
-        let firstComp = compList && compList.length && compList[0].id ? compList[0].id : 0;
+        const competitionId = getUmpireCompetitionId();
+        let firstComp = competitionId
+          ? competitionId
+          : compList && compList.length && compList[0].id
+          ? compList[0]?.id
+          : null;
 
         let compKey = compList && compList.length ? compList[0].competitionUniqueKey : null;
         let { sortBy, sortOrder, searchText } = this.state;
@@ -433,8 +439,8 @@ class UmpirePayments extends Component {
       }
     }
 
-    setUmpireCompition(selectedComp);
-    setUmpireCompitionData(JSON.stringify(compObj));
+    setUmpireCompetitionId(selectedComp);
+    setUmpireCompetitionData(JSON.stringify(compObj));
 
     setLiveScoreUmpireCompition(selectedComp);
     setLiveScoreUmpireCompitionData(JSON.stringify(compObj));

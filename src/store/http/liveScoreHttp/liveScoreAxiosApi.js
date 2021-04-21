@@ -8,7 +8,8 @@ import {
   getAuthToken,
   getLiveScoreCompetiton,
   getOrganisationData,
-  getUmpireCompetitonData,
+  getUmpireCompetitionData,
+  getUmpireCompetitionId,
 } from 'util/sessionStorage';
 import history from 'util/history';
 import { isArrayNotEmpty, regexNumberExpression } from 'util/helpers';
@@ -613,7 +614,7 @@ const LiveScoreAxiosApi = {
   liveScoreBannerList(competitionID, organisationID) {
     // var url = `/banners?&competitionIds=${competitionID}&pageType=${1}`;
     // let competitionId = localStorage.getItem("competitionId");
-    const { organisationId } = getOrganisationData();
+    const { organisationId } = getOrganisationData() || {};
     let url = '';
 
     if (competitionID) {
@@ -651,7 +652,7 @@ const LiveScoreAxiosApi = {
     // body.append('showOnChat', showOnChat);
     body.append('format', format);
     body.append('bannerLink', bannerLink);
-    const { organisationId } = getOrganisationData();
+    const { organisationId } = getOrganisationData() || {};
     const url = `/banners?competitionId=${competitionID}&organisationId=${organisationId}`;
     return Method.dataPost(url, token, body);
   },
@@ -681,7 +682,7 @@ const LiveScoreAxiosApi = {
     body.append('id', bannerId);
     body.append('horizontalBannerLink', horizontalBannerLink);
     body.append('squareBannerLink', squareBannerLink);
-    // const { organisationId } = getOrganisationData();
+    // const { organisationId } = getOrganisationData() || {};
     const url = `/banners/communication?organisationId=${organisationID}`;
 
     return Method.dataPost(url, token, body);
@@ -1340,10 +1341,10 @@ const LiveScoreAxiosApi = {
 
   addEditUmpire(data, isUmpire, isUmpireCoach) {
     const body = data;
-    const id = JSON.parse(localStorage.getItem('umpireCompetitionId'));
-    const compData = JSON.parse(getUmpireCompetitonData());
-    const { organisationId } = getOrganisationData();
-    let compOrgId = compData ? compData.organisationId : 0;
+    const id = getUmpireCompetitionId();
+    const compData = getUmpireCompetitionData() ? JSON.parse(getUmpireCompetitionData()) : null;
+    const { organisationId } = getOrganisationData() || {};
+    let compOrgId = compData ? compData.organisationId : null;
     let isCompParent = organisationId === compOrgId;
     let comp_Org_Id = compData
       ? compData.competitionOrganisation
