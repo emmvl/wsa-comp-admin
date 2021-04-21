@@ -3,11 +3,7 @@ import { message } from 'antd';
 
 import AppConstants from 'themes/appConstants';
 import ApiConstants from 'themes/apiConstants';
-// import history from "util/history";
-// import { receiptImportResult } from "util/showImportResult";
 import LiveScoreAxiosApi from '../../http/liveScoreHttp/liveScoreAxiosApi';
-import RegistrationAxiosApi from '../../http/registrationHttp/registrationAxiosApi';
-// import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 import UmpireAxiosApi from 'store/http/umpireHttp/umpireAxios';
 
 function* failSaga(result) {
@@ -63,7 +59,7 @@ function* umpirePaymentListSaga(action) {
 
 function* umpirePaymentTransferSaga(action) {
   try {
-    const result = yield call(RegistrationAxiosApi.umpirePaymentTransfer, action.data);
+    const result = yield call(LiveScoreAxiosApi.umpirePaymentTransfer, action.data);
 
     if (result.status === 1) {
       yield put({

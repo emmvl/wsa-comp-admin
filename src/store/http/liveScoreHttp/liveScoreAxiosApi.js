@@ -1737,6 +1737,12 @@ const LiveScoreAxiosApi = {
     const url = `/round?competitionId=${competitionId}`;
     return Method.dataGet(url, token);
   },
+
+  umpirePaymentTransfer(data) {
+    const { postData } = data;
+    const url = `/api/payments/umpireTransfer`;
+    return Method.dataPost(url, token, postData);
+  },
 };
 
 const Method = {

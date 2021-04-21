@@ -543,11 +543,6 @@ const AxiosApi = {
     const url = `/api/registration/transaction/update`;
     return Method.dataPost(url, token, payload);
   },
-  umpirePaymentTransfer(data) {
-    const { postData } = data;
-    const url = `/api/payments/umpireTransfer`;
-    return Method.dataPost(url, token, postData);
-  },
   getMembershipFeeCapList(organisationUniqueKey, yearRefId) {
     const url = `/api/membershipcap?organisationUniqueKey=${organisationUniqueKey}&yearRefId=${yearRefId}`;
     return Method.dataGet(url, token);
