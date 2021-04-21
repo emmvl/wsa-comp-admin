@@ -48,32 +48,22 @@ function* getUmpirePoolAllocationSaga(action) {
       data: action.payload.compId,
     });
 
-    const hasPoolsAllocation = yield select(state => state.UmpireSettingState.allocateViaPool);
+    const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
 
-    if (hasPoolsAllocation) {
-      const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
-
-      if (result.status === 1) {
-        const pools = result.result.data;
-        pools.forEach(pool => {
-          if (!!pool.umpires.length) {
-            pool.umpires.sort((a, b) => a.poolRank - b.poolRank);
-          }
-        });
-        yield put({
-          type: ApiConstants.API_GET_UMPIRE_POOL_DATA_SUCCESS,
-          result: pools,
-          status: result.status,
-        });
-      } else {
-        yield call(failSaga, result);
-      }
-    } else {
+    if (result.status === 1) {
+      const pools = result.result.data;
+      pools.forEach(pool => {
+        if (!!pool.umpires.length) {
+          pool.umpires.sort((a, b) => a.poolRank - b.poolRank);
+        }
+      });
       yield put({
         type: ApiConstants.API_GET_UMPIRE_POOL_DATA_SUCCESS,
-        result: [],
-        status: 1,
+        result: pools,
+        status: result.status,
       });
+    } else {
+      yield call(failSaga, result);
     }
   } catch (error) {
     yield call(errorSaga, error);
