@@ -27,10 +27,17 @@ function umpireSettingState(state = initialState, action) {
       };
 
     case ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
+      let hasPoolAllocation =
+        action.result.umpireAllocationSettings &&
+        action.result.umpireAllocationSettings.length &&
+        action.result.umpireAllocationSettings.some(
+          setting => setting.umpireAllocationTypeRefId === 243,
+        );
       return {
         ...state,
         allocationSettingsData: action.result,
         onLoad: false,
+        allocateViaPool: hasPoolAllocation,
       };
 
     case ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_LOAD:
@@ -40,10 +47,17 @@ function umpireSettingState(state = initialState, action) {
       };
 
     case ApiConstants.API_SAVE_UMPIRE_ALLOCATION_SETTINGS_SUCCESS:
+      hasPoolAllocation =
+        action.result.umpireAllocationSettings &&
+        action.result.umpireAllocationSettings.length &&
+        action.result.umpireAllocationSettings.some(
+          setting => setting.umpireAllocationTypeRefId === 243,
+        );
       return {
         ...state,
         allocationSettingsData: action.result,
         onLoad: false,
+        allocateViaPool: hasPoolAllocation,
       };
 
     case ApiConstants.API_UMPIRE_FAIL:

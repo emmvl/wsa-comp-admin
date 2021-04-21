@@ -1,4 +1,4 @@
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { put, call, takeEvery, select } from 'redux-saga/effects';
 import { message } from 'antd';
 import AppConstants from 'themes/appConstants';
 import ApiConstants from 'themes/apiConstants';
@@ -43,6 +43,11 @@ function* errorSaga(error) {
 
 function* getUmpirePoolAllocationSaga(action) {
   try {
+    yield put({
+      type: ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_LOAD,
+      data: action.payload.compId,
+    });
+
     const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
 
     if (result.status === 1) {

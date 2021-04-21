@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const AppConstants = { 
+const AppConstants = {
   deprecated: '---',
   login: 'Login',
   password: 'Password',
@@ -1050,6 +1050,7 @@ const AppConstants = {
   umpirePoolsDivision: 'Referee Pools Allocation To Age Groups/Divisions',
   allocateUmpires: 'Allocate Referees',
   noPoolAdded: 'Pools were not added to this competition yet.',
+  poolsDisabled: 'Pools are not enabled for this competition',
   umpireCoach: 'Referee Coach',
   umpirePools: 'Referee Pools',
   competitionVenueAllocation: 'Competition Venue allocation',
@@ -1750,7 +1751,7 @@ const AppConstants = {
   userId: 'User ID',
   competitionId: 'Competition ID',
   instalmentRetryModalTxt: 'Please select the payment type to retry.',
-  creditCardOnly: 'Credit Card'
+  creditCardOnly: 'Credit Card',
 };
 
 export default AppConstants;
