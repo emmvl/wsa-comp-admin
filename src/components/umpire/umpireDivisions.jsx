@@ -342,13 +342,11 @@ class UmpireDivisions extends Component {
           </div>
         ) : (
           <>
-            {!!umpirePoolData && (
-              <>
-                {!!umpirePoolData.length
-                  ? umpirePoolData.map((item, index) => this.poolView(item, index))
-                  : this.noPoolView()}
-              </>
-            )}
+            {this.props.umpireSettingState.allocateViaPool &&
+            !!umpirePoolData &&
+            !!umpirePoolData.length
+              ? umpirePoolData.map((item, index) => this.poolView(item, index))
+              : this.noPoolView()}
           </>
         )}
       </div>
