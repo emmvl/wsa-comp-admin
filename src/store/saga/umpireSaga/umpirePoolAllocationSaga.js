@@ -1,4 +1,4 @@
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { put, call, takeEvery, select } from 'redux-saga/effects';
 import { message } from 'antd';
 import AppConstants from 'themes/appConstants';
 import ApiConstants from 'themes/apiConstants';
@@ -43,22 +43,37 @@ function* errorSaga(error) {
 
 function* getUmpirePoolAllocationSaga(action) {
   try {
-    const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
+    yield put({
+      type: ApiConstants.API_GET_UMPIRE_ALLOCATION_SETTINGS_LOAD,
+      data: action.payload.compId,
+    });
 
-    if (result.status === 1) {
-      const pools = result.result.data;
-      pools.forEach(pool => {
-        if (!!pool.umpires.length) {
-          pool.umpires.sort((a, b) => a.poolRank - b.poolRank);
-        }
-      });
+    const hasPoolsAllocation = yield select(state => state.UmpireSettingState.allocateViaPool);
+    console.log(hasPoolsAllocation);
+    if (hasPoolsAllocation) {
+      const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
+
+      if (result.status === 1) {
+        const pools = result.result.data;
+        pools.forEach(pool => {
+          if (!!pool.umpires.length) {
+            pool.umpires.sort((a, b) => a.poolRank - b.poolRank);
+          }
+        });
+        yield put({
+          type: ApiConstants.API_GET_UMPIRE_POOL_DATA_SUCCESS,
+          result: pools,
+          status: result.status,
+        });
+      } else {
+        yield call(failSaga, result);
+      }
+    } else {
       yield put({
         type: ApiConstants.API_GET_UMPIRE_POOL_DATA_SUCCESS,
-        result: pools,
-        status: result.status,
+        result: [],
+        status: 1,
       });
-    } else {
-      yield call(failSaga, result);
     }
   } catch (error) {
     yield call(errorSaga, error);

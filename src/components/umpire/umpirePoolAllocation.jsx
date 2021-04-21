@@ -1065,14 +1065,24 @@ class UmpirePoolAllocation extends Component {
 
   contentView = () => {
     return (
-      <div className="comp-dash-table-view mt-2">
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          <div className="d-flex flex-row justify-content-between">
-            {this.assignedView()}
-            {this.unassignedView()}
+      <>
+        {this.props.umpireSettingState.allocateViaPool ? (
+          <div className="comp-dash-table-view mt-2">
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <div className="d-flex flex-row justify-content-between">
+                {this.assignedView()}
+                {this.unassignedView()}
+              </div>
+            </DragDropContext>
           </div>
-        </DragDropContext>
-      </div>
+        ) : (
+          <div className="formView my-5">
+            <div className="content-view pt-3">
+              <div className="mt-4 error-message-inside">{AppConstants.poolsDisabled}</div>
+            </div>
+          </div>
+        )}
+      </>
     );
   };
 
@@ -1095,6 +1105,7 @@ class UmpirePoolAllocation extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={this.handleSave}
+                disabled={!this.props.umpireSettingState.allocateViaPool}
               >
                 {AppConstants.save}
               </Button>
@@ -1103,7 +1114,7 @@ class UmpirePoolAllocation extends Component {
                 type="primary"
                 htmlType="submit"
                 onClick={() => {
-                  this.handleSave();
+                  if (this.props.umpireSettingState.allocateViaPool) this.handleSave();
                   history.push('/umpireDivisions');
                 }}
               >
@@ -1170,6 +1181,7 @@ function mapStateToProps(state) {
     umpirePoolAllocationState: state.UmpirePoolAllocationState,
     umpireState: state.UmpireState,
     appState: state.AppState,
+    umpireSettingState: state.UmpireSettingState,
   };
 }
 

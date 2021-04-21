@@ -315,7 +315,13 @@ class UmpireDivisions extends Component {
     );
   }
 
-  noPoolView = () => <div className="mt-4 error-message-inside">{AppConstants.noPoolAdded}</div>;
+  noPoolView = () => (
+    <div className="mt-4 error-message-inside">
+      {!this.props.umpireSettingState.allocateViaPool
+        ? AppConstants.poolsDisabled
+        : AppConstants.noPoolAdded}
+    </div>
+  );
 
   contentView = () => {
     const { umpirePoolData } = this.state;
@@ -404,11 +410,11 @@ class UmpireDivisions extends Component {
 
   footerView = () => {
     const { isOrganiserView, umpirePoolData } = this.state;
-    const isDisabled =
+    const isAllocateDisabled =
       this.props.appState.onLoad ||
       this.props.umpirePoolAllocationState.onLoad ||
-      this.props.liveScoreTeamState.onLoad ||
-      !umpirePoolData?.length;
+      this.props.liveScoreTeamState.onLoad;
+    const isDisabled = isAllocateDisabled || !umpirePoolData?.length;
     return (
       <div className="form-footer-button-wrapper justify-content-between">
         <div className="reg-add-save-button">
@@ -426,7 +432,7 @@ class UmpireDivisions extends Component {
                 style={{ minWidth: 'fit-content' }}
                 type="primary"
                 onClick={this.handleOpenAlgorithm}
-                disabled={isDisabled}
+                disabled={isAllocateDisabled}
               >
                 {AppConstants.allocateUmpires}
               </Button>
@@ -506,6 +512,7 @@ function mapStateToProps(state) {
     appState: state.AppState,
     umpirePoolAllocationState: state.UmpirePoolAllocationState,
     liveScoreTeamState: state.LiveScoreTeamState,
+    umpireSettingState: state.UmpireSettingState,
   };
 }
 

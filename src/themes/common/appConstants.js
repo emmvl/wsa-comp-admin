@@ -1050,6 +1050,7 @@ const AppConstants = {
   umpirePoolsDivision: 'Umpire Pools Allocation To Divisions/Grades',
   allocateUmpires: 'Allocate Umpires',
   noPoolAdded: 'Pools were not added to this competition yet.',
+  poolsDisabled: 'Pools are not enabled for this competition',
   umpireCoach: 'Umpire Coach',
   umpirePools: 'Umpire Pools',
   competitionVenueAllocation: 'Competition Venue allocation',
@@ -1751,7 +1752,7 @@ const AppConstants = {
   competitionId: 'Competition ID',
   instalmentRetryModalTxt: 'Please select the payment type to retry.',
   creditCardOnly: 'Credit Card',
-  available: "Available",
+  available: 'Available',
 };
 
 export default AppConstants;

@@ -11,12 +11,13 @@ import {
   Checkbox,
   Modal,
   InputNumber,
+  message,
 } from 'antd';
 
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import Loader from '../../customComponents/loader';
 import DashboardLayout from '../../pages/dashboardLayout';
-
+import ValidationConstants from '../../themes/validationConstant';
 import AppConstants from '../../themes/appConstants';
 import { isArrayNotEmpty } from '../../util/helpers';
 import { umpireCompetitionListAction } from '../../store/actions/umpireAction/umpireCompetetionAction';
@@ -764,43 +765,52 @@ class UmpireSetting extends PureComponent {
     const { organisationId } = getOrganisationData() || {};
     const { selectedComp, allocationSettingsData } = this.state;
 
-    const noUmpiresSettingArray = allocationSettingsData
-      .filter(item => !item.hasUmpires)
-      .map(item => ({
-        allDivisions: item.allDivisions,
-        divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
-      }));
+    const isNoDivsSelected =
+      allocationSettingsData &&
+      allocationSettingsData.some(setting => !setting?.divisions?.length && !setting?.allDivisions);
 
-    const umpireAllocationSettingsArray = allocationSettingsData
-      .filter(item => !!item.hasUmpires)
-      .map(item => ({
-        activateCoaches: item.activateCoaches,
-        activateReserves: item.activateReserves,
-        allDivisions: item.allDivisions,
-        divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
-        maxNumberOfMatches: item.maxNumberOfMatches,
-        timeBetweenMatches: item.timeBetweenMatches,
-        umpireAllocationTypeRefId: item.umpireAllocationTypeRefId,
-        umpireAllocatorTypeRefId: item.umpireAllocatorTypeRefId,
-      }));
+    if (isNoDivsSelected) {
+      message.config({ maxCount: 1, duration: 0.9 });
+      message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct);
+    } else {
+      const noUmpiresSettingArray = allocationSettingsData
+        .filter(item => !item.hasUmpires)
+        .map(item => ({
+          allDivisions: item.allDivisions,
+          divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
+        }));
 
-    const noUmpiresSetting =
-      !!noUmpiresSettingArray[0]?.divisions.length || !!noUmpiresSettingArray[0]?.allDivisions
-        ? noUmpiresSettingArray[0]
-        : null;
-    const umpireAllocationSettings = !!umpireAllocationSettingsArray.length
-      ? umpireAllocationSettingsArray
-      : [];
+      const umpireAllocationSettingsArray = allocationSettingsData
+        .filter(item => !!item.hasUmpires)
+        .map(item => ({
+          activateCoaches: item.activateCoaches,
+          activateReserves: item.activateReserves,
+          allDivisions: item.allDivisions,
+          divisions: item.allDivisions ? [] : item.divisions.map(division => division.id),
+          maxNumberOfMatches: item.maxNumberOfMatches,
+          timeBetweenMatches: item.timeBetweenMatches,
+          umpireAllocationTypeRefId: item.umpireAllocationTypeRefId,
+          umpireAllocatorTypeRefId: item.umpireAllocatorTypeRefId,
+        }));
 
-    const bodyData = { noUmpiresSetting, umpireAllocationSettings };
+      const noUmpiresSetting =
+        !!noUmpiresSettingArray[0]?.divisions.length || !!noUmpiresSettingArray[0]?.allDivisions
+          ? noUmpiresSettingArray[0]
+          : null;
+      const umpireAllocationSettings = !!umpireAllocationSettingsArray.length
+        ? umpireAllocationSettingsArray
+        : [];
 
-    const saveData = {
-      organisationId,
-      competitionId: selectedComp,
-      body: bodyData,
-    };
+      const bodyData = { noUmpiresSetting, umpireAllocationSettings };
 
-    this.props.saveUmpireAllocationSettings(saveData);
+      const saveData = {
+        organisationId,
+        competitionId: selectedComp,
+        body: bodyData,
+      };
+
+      this.props.saveUmpireAllocationSettings(saveData);
+    }
   };
 
   //////footer view containing all the buttons like submit and cancel

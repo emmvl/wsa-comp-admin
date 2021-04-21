@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const AppConstants = { 
+const AppConstants = {
   deprecated: '---',
   login: 'Login',
   password: 'Password',
@@ -1050,6 +1050,7 @@ const AppConstants = {
   umpirePoolsDivision: 'Referee Pools Allocation To Divisions/Grades',
   allocateUmpires: 'Allocate Referees',
   noPoolAdded: 'Pools were not added to this competition yet.',
+  poolsDisabled: 'Pools are not enabled for this competition',
   umpireCoach: 'Referee Coach',
   umpirePools: 'Referee Pools',
   competitionVenueAllocation: 'Competition Venue allocation',
@@ -1070,7 +1071,8 @@ const AppConstants = {
   childDetails: 'Child Details',
   documents: 'Documents',
   addRegDivision: 'Add Registration Divisions',
-  downLoadImportHeading: 'Download the matches list first then populate referees details to upload ',
+  downLoadImportHeading:
+    'Download the matches list first then populate referees details to upload ',
   assignUmpireToMatch: 'Assign Referees To Matches',
   participateInCompReg: 'Participating-In Competition Registrations',
   ownedCompetitionsReg: 'Owned Competition Registrations',
@@ -1750,7 +1752,7 @@ const AppConstants = {
   userId: 'User ID',
   competitionId: 'Competition ID',
   instalmentRetryModalTxt: 'Please select the payment type to retry.',
-  creditCardOnly: 'Credit Card'
+  creditCardOnly: 'Credit Card',
 };
 
 export default AppConstants;
