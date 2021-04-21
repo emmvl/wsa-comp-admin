@@ -49,7 +49,7 @@ function* getUmpirePoolAllocationSaga(action) {
     });
 
     const hasPoolsAllocation = yield select(state => state.UmpireSettingState.allocateViaPool);
-    console.log(hasPoolsAllocation);
+
     if (hasPoolsAllocation) {
       const result = yield call(UmpireAxiosApi.getUmpirePoolAllocation, action.payload);
 
