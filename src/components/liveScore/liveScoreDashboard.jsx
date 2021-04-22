@@ -916,12 +916,16 @@ class LiveScoreDashboard extends Component {
 
   cashReceived = record => {
     const { uniqueKey } = JSON.parse(getLiveScoreCompetiton());
+    let paidByUserId = isArrayNotEmpty(record.paidByUsers)
+    ? record.paidByUsers[0].paidByUserId
+    : null;
     let payload = {
       processTypeName: record.processTypeName,
       registrationUniqueKey: record.registrationUniqueKey,
       userId: record.userId,
       divisionId: record.divisionId,
       competitionId: uniqueKey,
+      paidByUserId: paidByUserId
     };
 
     this.setState({ retryPaymentLoad: true });
