@@ -752,38 +752,39 @@ class UmpireDashboard extends Component {
             : [];
         let firstComp = compList && compList.length ? compList[0].id : null;
         let compData = compList && compList.length ? compList[0] : null;
-        let tempJson;
-        const unparsed = getUmpireCompetitionId();
-        const umpireCompetition = unparsed ? JSON.parse(unparsed) : null;
+        const umpireCompetition = getUmpireCompetitionId()
+          ? JSON.parse(getUmpireCompetitionId())
+          : null;
         if (umpireCompetition) {
           if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
-            this.setState({ org_Id: compData?.organisationId });
-            tempJson = getLiveScoreUmpireCompition();
-            firstComp = tempJson ? JSON.parse(tempJson) : null;
-            tempJson = getLiveScoreUmpireCompitionData();
-            compData = tempJson ? JSON.parse(tempJson) : null;
+            if (compData) this.setState({ org_Id: compData?.organisationId });
+            firstComp = getLiveScoreUmpireCompition()
+              ? JSON.parse(getLiveScoreUmpireCompition())
+              : null;
+            compData = getLiveScoreUmpireCompitionData()
+              ? JSON.parse(getLiveScoreUmpireCompitionData())
+              : null;
             if (firstComp) setUmpireCompetitionId(firstComp);
             if (compData) setUmpireCompetitionData(JSON.stringify(compData));
           } else {
             firstComp = umpireCompetition;
-            tempJson = getUmpireCompetitionData();
-            compData = tempJson ? JSON.parse(tempJson) : null;
+            compData = getUmpireCompetitionData() ? JSON.parse(getUmpireCompetitionData()) : null;
             this.setState({ org_Id: compData?.organisationId });
           }
         } else {
           if (firstComp) setUmpireCompetitionId(firstComp);
           if (compData) setUmpireCompetitionData(JSON.stringify(compData));
-          this.setState({ org_Id: compData?.organisationId });
+          if (compData) this.setState({ org_Id: compData?.organisationId });
         }
 
         if (!!firstComp) {
           if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
-            let liveScoreUmpireCompetition = getLiveScoreUmpireCompition();
-            let compId = liveScoreUmpireCompetition ? JSON.parse(liveScoreUmpireCompetition) : null;
+            let compId = getLiveScoreUmpireCompition()
+              ? JSON.parse(getLiveScoreUmpireCompition())
+              : null;
             if (compId) this.props.getUmpireDashboardVenueList(compId);
-            liveScoreUmpireCompetition = getLiveScoreUmpireCompitionData();
-            let compObjData = liveScoreUmpireCompetition
-              ? JSON.parse(liveScoreUmpireCompetition)
+            let compObjData = getLiveScoreUmpireCompitionData()
+              ? JSON.parse(getLiveScoreUmpireCompitionData())
               : null;
             const { uniqueKey, organisationId } = compObjData;
 

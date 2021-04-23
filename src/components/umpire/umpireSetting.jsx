@@ -104,7 +104,10 @@ class UmpireSetting extends PureComponent {
           this.props.liveScoreGetDivision(firstComp);
         }
 
-        const compKey = !!competitionList.length ? competitionList[0].competitionUniqueKey : null;
+        const compKey =
+          competitionList && !!competitionList.length
+            ? competitionList[0].competitionUniqueKey
+            : null;
 
         competitionList.forEach(item => {
           if (item.organisationId === organisationId) {
@@ -809,7 +812,7 @@ class UmpireSetting extends PureComponent {
         body: bodyData,
       };
 
-      this.props.saveUmpireAllocationSettings(saveData);
+      if (organisationId && selectedComp) this.props.saveUmpireAllocationSettings(saveData);
     }
   };
 

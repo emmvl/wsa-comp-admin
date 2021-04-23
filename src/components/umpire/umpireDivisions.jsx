@@ -77,13 +77,13 @@ class UmpireDivisions extends Component {
           : null;
         if (firstComp && firstComp !== compId) setUmpireCompetitionId(firstComp);
 
-        const storedUmpireCompetition = getUmpireCompetitionData();
-        const parsedData = JSON.parse(storedUmpireCompetition);
-        const umpireCompetitionData = parsedData ? parsedData : null;
+        const umpireCompetitionData = getUmpireCompetitionData()
+          ? JSON.parse(getUmpireCompetitionData())
+          : null;
         if (!!umpireCompetitionData && organisationId && firstComp) {
           this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
         }
-        if (firstComp) {
+        if (firstComp && this.props.umpireSettingState.allocateViaPool) {
           this.props.liveScoreGetDivision(firstComp);
           this.props.liveScoreGetRounds(firstComp);
         }
@@ -95,19 +95,18 @@ class UmpireDivisions extends Component {
 
         const selectedComp = competitionList
           ? competitionList.find(item => item.id === firstComp)
-          : {};
+          : null;
         const isOrganiser =
-          selectedComp && selectedComp.organisationId && organisationId
-            ? selectedComp.organisationId === organisationId
+          selectedComp && selectedComp?.organisationId && organisationId
+            ? selectedComp?.organisationId === organisationId
             : false;
 
-        if (firstComp)
-          this.setState({
-            selectedComp: firstComp,
-            loading: false,
-            competitionUniqueKey: compKey,
-            isOrganiserView: isOrganiser,
-          });
+        this.setState({
+          selectedComp: firstComp,
+          loading: false,
+          competitionUniqueKey: compKey,
+          isOrganiserView: isOrganiser,
+        });
       }
     }
 
@@ -412,7 +411,10 @@ class UmpireDivisions extends Component {
       this.props.appState.onLoad ||
       this.props.umpirePoolAllocationState.onLoad ||
       this.props.liveScoreTeamState.onLoad;
-    const isDisabled = isAllocateDisabled || !umpirePoolData?.length;
+    const isDisabled =
+      isAllocateDisabled ||
+      !umpirePoolData?.length ||
+      !this.props.umpireSettingState.allocateViaPool;
     return (
       <div className="form-footer-button-wrapper justify-content-between">
         <div className="reg-add-save-button">
