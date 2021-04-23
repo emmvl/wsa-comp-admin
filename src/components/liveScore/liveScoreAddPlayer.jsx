@@ -358,7 +358,7 @@ class LiveScoreAddPlayer extends Component {
           <div className="col-sm">
             <InputWithHead
               auto_complete="new-mnbId"
-              heading={AppConstants.playerId}
+              heading={AppConstants.externalPlayerId}
               placeholder={AppConstants.enterPlayerID}
               onChange={mnbPlayerId =>
                 this.props.liveScoreUpdatePlayerDataAction(mnbPlayerId.target.value, 'mnbPlayerId')
