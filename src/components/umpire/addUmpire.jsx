@@ -196,7 +196,7 @@ class AddUmpire extends Component {
         'Last Name': umpireData.lastName,
         'Email Address': umpireData.email,
         'Contact no': umpireData.mobileNumber,
-        umpireNewAffiliateName,
+        umpireNewAffiliateName: affiliates,
         teamsNames: umpireData.teamId,
       });
       this.setState({
