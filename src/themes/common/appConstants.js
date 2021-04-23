@@ -1753,6 +1753,7 @@ const AppConstants = {
   instalmentRetryModalTxt: 'Please select the payment type to retry.',
   creditCardOnly: 'Credit Card',
   available: 'Available',
+  externalPlayerId: 'External Player ID',
 };
 
 export default AppConstants;
