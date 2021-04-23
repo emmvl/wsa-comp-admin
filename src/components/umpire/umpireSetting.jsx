@@ -840,7 +840,12 @@ class UmpireSetting extends PureComponent {
           htmlType="submit"
           onClick={() => {
             if (isOrganiserView && !!allocationSettingsData) this.handleSave();
-            history.push('/umpirePoolAllocation');
+            const isNoDivsSelected =
+              allocationSettingsData &&
+              allocationSettingsData.some(
+                setting => !setting?.divisions?.length && !setting?.allDivisions,
+              );
+            if (!isNoDivsSelected) history.push('/umpirePoolAllocation');
           }}
         >
           {AppConstants.next}
