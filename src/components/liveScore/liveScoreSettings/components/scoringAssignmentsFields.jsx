@@ -159,7 +159,9 @@ const ScoringAssignmentsFields = ({ onInputChange, values }) => {
 
 ScoringAssignmentsFields.defaultProps = {
   onInputChange: () => {},
-  values: {},
+  values: {
+    scoring: 'SINGLE',
+  },
 };
 
 export default ScoringAssignmentsFields;
