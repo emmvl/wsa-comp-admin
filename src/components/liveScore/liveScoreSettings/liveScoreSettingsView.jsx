@@ -1170,7 +1170,7 @@ class LiveScoreSettingsView extends Component {
           </div>
         </div>
 
-        { hideWholeScoringSection &&
+        { !hideWholeScoringSection &&
           <div className="formView content-view pt-4 mb-5">
             <span className="text-heading-large pt-5">{AppConstants.scoring}</span>
 
