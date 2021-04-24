@@ -232,7 +232,7 @@ function umpireState(state = initialState, action) {
     case ApiConstants.GET_UMPIRE_TEAMS_SUCCESS:
       const umpire = action.data;
       if (umpire.email) {
-        const affiliates = umpire.selectedOrganisations.map(({ id, name }) => {
+        const affiliates = umpire.organisations.map(({ id, name }) => {
           const org = state.affilateList?.find(affiliate => affiliate.organisationId === id);
           const newId = org ? org.id : id;
           return { name, id: newId };
@@ -240,6 +240,10 @@ function umpireState(state = initialState, action) {
         const selectedTeams = umpire.selectedTeams.map(({ id, name }) => ({ id, name }));
         const affiliateIds = affiliates.map(affiliate => affiliate.id);
         const teamIds = selectedTeams.map(({ id }) => id);
+        const selectedOrganisations = umpire.selectedOrganisations.map(({ compOrgId, name }) => ({
+          id: compOrgId,
+          name,
+        }));
 
         return {
           ...state,
@@ -248,6 +252,7 @@ function umpireState(state = initialState, action) {
           teamsList: umpire.teams,
           umpireCheckbox: umpire.isUmpire,
           umpireCoachCheckBox: umpire.isUmpireCoach,
+          affililateList: umpire.organisations,
           affiliateId: affiliateIds,
           umpireData: {
             ...state.umpireData,
@@ -258,6 +263,7 @@ function umpireState(state = initialState, action) {
             lastName: umpire.lastName,
             mobileNumber: umpire.mobileNumber,
             email: umpire.email,
+            affiliates: selectedOrganisations,
           },
         };
       } else {

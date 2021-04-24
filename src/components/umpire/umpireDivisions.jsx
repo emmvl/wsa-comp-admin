@@ -83,7 +83,7 @@ class UmpireDivisions extends Component {
         if (!!umpireCompetitionData && organisationId && firstComp) {
           this.props.getUmpirePoolData({ orgId: organisationId, compId: firstComp });
         }
-        if (firstComp && this.props.umpireSettingState.allocateViaPool) {
+        if (firstComp) {
           this.props.liveScoreGetDivision(firstComp);
           this.props.liveScoreGetRounds(firstComp);
         }
