@@ -10,7 +10,7 @@ const ScoringAssignmentsFields = ({ onInputChange, values }) => {
 
   return (
     <>
-      <div className="contextualHelp-RowDirection">
+      {/* <div className="contextualHelp-RowDirection">
         <Form.Item
           name="scoring"
           rules={[
@@ -66,7 +66,7 @@ const ScoringAssignmentsFields = ({ onInputChange, values }) => {
             </div>
           </Radio.Group>
         </Form.Item>
-      </div>
+      </div> */}
 
       {isScoringEnabled && (
         <>

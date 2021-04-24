@@ -660,6 +660,8 @@ class LiveScoreSettingsView extends Component {
 
     const competition = get(umpireCompetitionState, 'umpireComptitionList', []);
 
+    const hideWholeScoringSection = process.env.REACT_APP_SCORING_ASSIGNMENTS_FIELDS_ENABLED === 0 ? true : false;
+
     return (
       <div>
         <div className="formView content-view pt-4 mb-5">
@@ -1168,18 +1170,20 @@ class LiveScoreSettingsView extends Component {
           </div>
         </div>
 
-        <div className="formView content-view pt-4 mb-5">
-          <span className="text-heading-large pt-5">{AppConstants.scoring}</span>
+        { hideWholeScoringSection &&
+          <div className="formView content-view pt-4 mb-5">
+            <span className="text-heading-large pt-5">{AppConstants.scoring}</span>
 
-          <ScoringAssignmentsFields
-            onInputChange={this.handleInputChange}
-            values={{
-              scoring,
-              whoScoring,
-              acceptScoring,
-            }}
-          />
-        </div>
+            <ScoringAssignmentsFields
+              onInputChange={this.handleInputChange}
+              values={{
+                scoring,
+                whoScoring,
+                acceptScoring,
+              }}
+            />
+          </div>
+        }
 
         <div className="formView content-view pt-4 mb-5">
           {/* timer view */}
