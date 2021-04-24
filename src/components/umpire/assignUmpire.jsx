@@ -235,7 +235,7 @@ class AssignUmpire extends Component {
     let assignBody = [
       {
         createdBy: parseInt(userId),
-        id: null,
+        id: competition.id,
         matchId: record.id,
         organisationId: orgId,
         sequence: umpireKey == 'user1' ? 1 : 2,
