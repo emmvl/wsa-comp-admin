@@ -1019,7 +1019,7 @@ class UmpirePoolAllocation extends Component {
                         type="primary"
                         onClick={this.handleAddUmpirePool}
                       >
-                        + {AppConstants.umpirePools}
+                        + {AppConstants.umpirePool}
                       </Button>
                     </div>
                   )}
