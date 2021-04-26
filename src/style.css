@@ -110,6 +110,10 @@ code {
   margin-right: -27px;
 }
 
+.ml-10 {
+  margin-left: 10px !important;
+}
+
 @media (max-width: 767px) {
   .ml-n20 {
     margin-left: -10px;

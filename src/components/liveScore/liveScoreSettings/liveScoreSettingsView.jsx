@@ -59,7 +59,7 @@ import {
   trackFullPeriod,
 } from 'components/liveScore/liveScoreSettings/constants/liveScoreSettingsConstants';
 import FoulsFields from 'components/liveScore/liveScoreSettings/components/foulsFields';
-
+import SinBinLengthOfTime from './components/sinBinLengthTime';
 const { Header, Footer } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
@@ -1269,6 +1269,10 @@ class LiveScoreSettingsView extends Component {
             <FoulsFields values={foulsSettings} onChange={this.handleInputChange} />
           </div>
         )}
+
+        <div className="formView content-view pt-4 mb-5">
+          <SinBinLengthOfTime values={foulsSettings} onChange={this.handleInputChange} />
+        </div>
 
         <div className="formView content-view pt-4 mb-5">
           <span className="text-heading-large pt-5">{AppConstants.competitionInvitees}</span>
