@@ -1103,7 +1103,7 @@ class LiveScoreAddMatch extends Component {
                   onChange={umpire1Name =>
                     this.props.liveScoreUpdateMatchAction(umpire1Name, 'umpire1NameSelection')
                   }
-                  placeholder="Select Umpire 1 Name"
+                  placeholder={AppConstants.selectUmpire1Name}
                   // value={umpire1Name ? umpire1Name : undefined}
                   value={umpire1NameMainId || undefined}
                 >
@@ -1126,7 +1126,7 @@ class LiveScoreAddMatch extends Component {
                   onChange={umpire2Name =>
                     this.props.liveScoreUpdateMatchAction(umpire2Name, 'umpire2NameSelection')
                   }
-                  placeholder="Select Umpire 2 Name"
+                  placeholder={AppConstants.selectUmpire2Name}
                   value={umpire2NameMainId || undefined}
                 >
                   {newUmpireList.map(item => (
@@ -1231,7 +1231,7 @@ class LiveScoreAddMatch extends Component {
                       this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag');
                     }}
                     value={umpire1Orag || undefined}
-                    placeholder="Select Umpire 1 Organisation"
+                    placeholder={AppConstants.selectUmpire1Organisation}
                   >
                     {isArrayNotEmpty(clubListData) &&
                       clubListData.map(item => (
@@ -1252,7 +1252,7 @@ class LiveScoreAddMatch extends Component {
                       this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag');
                     }}
                     value={umpire2Orag || undefined}
-                    placeholder="Select Umpire 2 Organisation"
+                    placeholder={AppConstants.selectUmpire2Organisation}
                   >
                     {isArrayNotEmpty(clubListData) &&
                       clubListData.map(item => (

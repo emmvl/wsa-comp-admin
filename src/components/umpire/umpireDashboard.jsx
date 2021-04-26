@@ -187,7 +187,7 @@ const columnsInvite = [
     render: round => <span>{round.name}</span>,
   },
   {
-    title: 'Umpire 1',
+    title: AppConstants.umpire1,
     dataIndex: 'umpires',
     key: 'umpires_1',
     sorter: true,
@@ -206,7 +206,7 @@ const columnsInvite = [
     },
   },
   {
-    title: 'Umpire 1 Organisation',
+    title: AppConstants.umpire1Club,
     dataIndex: 'umpires',
     key: 'umpires1_Org',
     sorter: false,
@@ -456,7 +456,7 @@ const columns = [
     render: round => <span>{round.name}</span>,
   },
   {
-    title: 'Umpire 1',
+    title: AppConstants.umpire1,
     dataIndex: 'umpires',
     key: '_umpires_1',
     sorter: true,
@@ -474,7 +474,7 @@ const columns = [
     },
   },
   {
-    title: 'Umpire 1 Organisation',
+    title: AppConstants.umpire1Club,
     dataIndex: 'umpires',
     key: '_umpires1_Org',
     sorter: false,
