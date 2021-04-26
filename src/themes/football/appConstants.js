@@ -1676,7 +1676,7 @@ const AppConstants = {
   fairPlayVoucher: 'QLD Fair Play Voucher',
   totalFee: 'Total Fee',
   paidAmount: 'Paid Amount',
-  membershipFeesGST: 'Membership Federation (excl. GST)',
+  membershipFeesGST: 'Membership Fees - Member Federation (excl. GST)',
   nominationFeesExclGst: 'Nomination Fees (excl. GST)',
   competitionFeesExclGst: 'Competition Fees (excl. GST)',
   affiliateCompetitionFeesExclGst: 'Affiliate Competition Fees (excl. GST)',
