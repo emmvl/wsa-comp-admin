@@ -531,7 +531,7 @@ class InnerHorizontalMenu extends React.Component {
                   {liveScoreCompIsParent && (
                     <Menu.Item key="13">
                       <NavLink to="/matchDayVenueChange">
-                        <span>Court Change</span>
+                        <span>{AppConstants.courtChange}</span>
                       </NavLink>
                     </Menu.Item>
                   )}
