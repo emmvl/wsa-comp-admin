@@ -1060,6 +1060,7 @@ const AppConstants = {
   noPoolAdded: 'Pools were not added to this competition yet.',
   poolsDisabled: 'Pools are not enabled for this competition',
   umpireCoach: 'Umpire Coach',
+  umpirePool: 'Umpire Pool',
   umpirePools: 'Umpire Pools',
   competitionVenueAllocation: 'Competition Venue allocation',
   divisionToFieldLinkage: 'Division to Field Linkage',
@@ -1540,7 +1541,7 @@ const AppConstants = {
   toPool: 'to pool',
   umpireAlreadyInPool: 'This umpire is already added to this pool.',
   confirmUnassignMsg:
-    'This umpire is also added to another pool. Would you like to move him to Unassigned section?',
+    'This umpire is also added to another pool. Would you like to move them to Unassigned section?',
   removeFromAllPools: 'Remove from all pools',
   poolAddedSuccessMsg: 'New pool was added successfully',
   poolRemovedSuccessMsg: 'Pool was removed successfully',
