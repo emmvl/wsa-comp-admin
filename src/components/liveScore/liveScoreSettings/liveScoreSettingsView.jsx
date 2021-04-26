@@ -313,6 +313,7 @@ class LiveScoreSettingsView extends Component {
       timeoutsToQuarters,
       whoScoring,
       acceptScoring,
+      additionalTime,
       extraTime,
       extraTimeFor,
       extraTimeType,
@@ -428,6 +429,7 @@ class LiveScoreSettingsView extends Component {
     formData.append('whoScoring', whoScoring);
     formData.append('acceptScoring', acceptScoring);
     formData.append('extraTime', extraTime);
+    formData.append('additionalTime', additionalTime);
     formData.append('extraTimeFor', extraTimeFor);
     formData.append('extraTimeType', extraTimeType);
     formData.append('extraTimeDuration', extraTimeDuration);
@@ -647,6 +649,7 @@ class LiveScoreSettingsView extends Component {
       venue,
       Logo,
       timerType,
+      additionalTime,
       extraTime,
       extraTimeType,
       extraTimeDuration,
@@ -1250,6 +1253,19 @@ class LiveScoreSettingsView extends Component {
           </div>
 
           {this.timeoutsView()}
+
+          <Checkbox
+            className={`single-checkbox w-100`}
+            onChange={e =>
+              this.props.onChangeSettingForm({
+                key: 'additionalTime',
+                data: e.target.checked,
+              })
+            }
+            checked={additionalTime}
+          >
+            {AppConstants.allowAddedTime}
+          </Checkbox>
 
           <ExtraTimeFields
             values={{
