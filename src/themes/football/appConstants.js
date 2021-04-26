@@ -71,7 +71,7 @@ const AppConstants = {
   sameAddress: 'Use same Address as Participant',
   additionalInfoReqd: 'Additional Information required',
   additionalPersonalInfoReqd: 'Additional Personal Information required',
-  haveYouEverPlayed: 'Have you ever played Netball before:',
+  haveYouEverPlayed: 'Have you ever played Football before:',
   confirmTransferTo: 'Please confirm who you would like to transfer to',
   yes: 'Yes',
   no: 'No',
@@ -323,7 +323,7 @@ const AppConstants = {
   startTime: 'Start Time',
   endTime: 'End Time',
   addAnotherDay: 'Add Day',
-  courts: 'Courts',
+  courts: 'Fields',
   applyTo: 'Apply to',
   addAnother: 'Add another',
   inbox: 'Actionbox',
@@ -425,10 +425,18 @@ const AppConstants = {
   matchID: 'mnbMatchId',
   homeTeam: 'Home Team',
   awayTeam: 'Away Team',
+  umpire1Id: 'Referee 1 Id',
+  umpire1Response: 'Referee 1 Response',
   umpire1Name: 'Referee 1 Name',
   enterUmpire1name: 'Enter Referee 1 Name',
+  selectUmpire1Name: 'Select Referee 1 Name',
+  selectUmpire1Organisation: 'Select Referee 1 Organisation',
+  umpire2Id: 'Referee 2 Id',
+  umpire2Response: 'Referee 2 Response',
   umpire2Name: 'Referee 2 Name',
   enterUmpire2name: 'Enter Referee 2 Name',
+  selectUmpire2Name: 'Select Referee 2 Name',
+  selectUmpire2Organisation: 'Select Referee 2 Organisation',
   umpire1Club: 'Referee 1 Organisation',
   umpire2Club: 'Referee 2 Organisation',
   scorer1: 'Scorer 1',
@@ -816,10 +824,10 @@ const AppConstants = {
       3. Search for your venue.\n\n
       4. Click and drop a pin on the centre of the field then copy and paste both the Longitude and Latitude.`,
   overRideSlotMsg:
-    'Only click if the Field has different availability to the Venue ie. Field 1 is only available for matches from 9am but the other courts are free from 8am',
+    'Only click if the Field has different availability to the Venue ie. Field 1 is only available for matches from 9am but the other fields are free from 8am',
   gameDayMsg: 'Add the days of the week, matches can be played at this venue. Click + Add Day.',
   courtsMsg:
-    'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Field.',
+    'Add the Fields at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Field.',
   activeNewsMsg: 'A list of all of the news that currently appears in the Game Day App',
   todayMatchMsg:
     'A list of all the matches being played on this day. This list shows whether scorers have been set, attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.',
@@ -836,7 +844,7 @@ const AppConstants = {
       Abandon Matches - Abandon one, a number or all matches that are incomplete or not played.\n\n
       End Matches - End one, a number or all matches.\n\n
       Double Header - Create a double header where two rounds are played in the one round allocation ie. Round 2 is rained out and the association decides to play Round 2 and Round 3 together as two half matches.`,
-  courtChangeMsg: 'Move the matches on one, many or all Venues, Courts to another Venue, Field.',
+  courtChangeMsg: 'Move the matches on one, many or all Venues, Fields to another Venue, Field.',
   shortNameMsg: 'The short name is used in the APP to make it easier for users to search.',
   recordUmpireMsg:
     'The Scorer or Manager of a match will document the Referee names and the Clubs they belong to.',
@@ -879,8 +887,8 @@ const AppConstants = {
   timeSlotEvenRotationMsg: 'Age Groups, Divisions and Teams equally rotate through the timeslots.',
   allocateToSameTimeslotMsg: 'Age Groups and Divisions can be allocated to a Timeslot.',
   affiliateDirectory: 'Affiliate Directory',
-  evenRotationMsgFor_V_T: 'Evenly rotate Age Groups or Divisions to Courts.',
-  allocateToSameCourtMsg: 'Allocate Age Groups or Divisions to the same courts.',
+  evenRotationMsgFor_V_T: 'Evenly rotate Age Groups or Divisions to Fields.',
+  allocateToSameCourtMsg: 'Allocate Age Groups or Divisions to the same fields.',
   noPreferenceMsgFor_V_T: 'There is No Preference for Field Rotations or Allocations',
   newTeamUserMsg:
     'Add a user who has NOT created an account in the App, is an administrator or has registered.',
@@ -911,7 +919,7 @@ const AppConstants = {
   regFormSpecialNoteMsg:
     'Detail any special notes you would like to include on the Registration Form.',
   regFormPhotoMsg:
-    'These are stored in "Our Organisation" Photos. You can display as many photos as you would like to Users to show them your uniform, courts, logo etc.',
+    'These are stored in "Our Organisation" Photos. You can display as many photos as you would like to Users to show them your uniform, fields, logo etc.',
   replyContactDetailMsg:
     'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
   howUserRegisterMsg: 'Define how Users can Register for your Competition.',
@@ -1701,7 +1709,7 @@ const AppConstants = {
   address1: 'Address1',
   address2: 'Address2',
   postalCode: 'Postal Code',
-  ofCourts: '# Of Courts',
+  ofCourts: '# Of Fields',
   historicalGrade: 'Historical Division',
   historicalResult: 'Historical Result',
   errorMessage: 'Error Message',

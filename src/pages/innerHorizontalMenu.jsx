@@ -655,52 +655,52 @@ class InnerHorizontalMenu extends React.Component {
           >
             <Menu.Item key="1">
               <NavLink to="/umpireDashboard">
-                <span>Dashboard</span>
+                <span>{AppConstants.dashboard}</span>
               </NavLink>
             </Menu.Item>
-            <SubMenu key="Umpires" title={<span>Umpires</span>}>
+            <SubMenu key="Umpires" title={<span>{AppConstants.umpires}</span>}>
               <Menu.Item key="2">
                 <NavLink to="/umpire">
-                  <span>Umpires</span>
+                  <span>{AppConstants.umpires}</span>
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="3">
                 <NavLink to="/umpireRoster">
-                  <span>Umpire Roster</span>
+                  <span>{AppConstants.umpireRoster}</span>
                 </NavLink>
               </Menu.Item>
-              <SubMenu key="umpireAllocation" title={<span>Umpire Allocation</span>}>
+              <SubMenu key="umpireAllocation" title={<span>{AppConstants.umpireAllocation}</span>}>
                 <Menu.Item key="6">
                   <NavLink to="/umpireSetting">
-                    <span>Settings</span>
+                    <span>{AppConstants.settings}</span>
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="5">
                   <NavLink to="/umpirePoolAllocation">
-                    <span>Pools</span>
+                    <span>{AppConstants.pools}</span>
                   </NavLink>
                 </Menu.Item>
                 <Menu.Item key="4">
                   <NavLink to="/umpireDivisions">
-                    <span>Divisions</span>
+                    <span>{AppConstants.divisions}</span>
                   </NavLink>
                 </Menu.Item>
               </SubMenu>
             </SubMenu>
-            <SubMenu key="payments" title={<span>Payments</span>}>
+            <SubMenu key="payments" title={<span>{AppConstants.payments}</span>}>
               <Menu.Item key="7">
                 <NavLink to="/umpirePayment">
-                  <span>Payments</span>
+                  <span>{AppConstants.payments}</span>
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="8">
                 <NavLink to="/umpirePayout">
-                  <span>Payouts</span>
+                  <span>{AppConstants.payouts}</span>
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="9">
                 <NavLink to="/umpirePaymentSetting">
-                  <span>Settings</span>
+                  <span>{AppConstants.settings}</span>
                 </NavLink>
               </Menu.Item>
             </SubMenu>
