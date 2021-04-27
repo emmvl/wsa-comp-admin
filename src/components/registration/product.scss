@@ -1371,3 +1371,7 @@ input[type='number'] {
 .removeAction:hover {
   cursor: pointer;
 }
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  color: var(--app-menu-text);
+}

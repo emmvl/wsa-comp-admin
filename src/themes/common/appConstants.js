@@ -791,6 +791,8 @@ const AppConstants = {
   extraTimeCheckboxTitle: 'Extra time for a Draw in Round Matches',
   oneExtraTimeForDraw: 'Allow only one extra time for a draw',
   extraTimeForAllDraws: 'Allow extra time for all draws in this Match',
+  sinBinLengthOfTimeLabel: 'Sin Bin Length Of Time:',
+  sinBinLengthOfTimeKey: 'sinBinLengthOfTime',
   timeouts: 'Timeouts',
   applyToHalves: 'Apply to Halves',
   applyToQuarters: 'Apply to Quarters',
