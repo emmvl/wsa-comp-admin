@@ -787,6 +787,7 @@ const AppConstants = {
   totalPages: 'Total pages',
   currentPage: 'Current page',
   buzzer: 'Buzzer',
+  allowAddedTime: 'Allow Added time',
   extraTimeLabel: 'Extra Time',
   extraTimeCheckboxTitle: 'Extra time for a Draw in Round Matches',
   oneExtraTimeForDraw: 'Allow only one extra time for a draw',

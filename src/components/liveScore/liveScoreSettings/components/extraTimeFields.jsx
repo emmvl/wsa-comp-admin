@@ -101,7 +101,7 @@ const ExtraTimeFields = ({ values, onInputChange }) => {
                       }
                       placeholder="Select type"
                       optionFilterProp="children"
-                      value={extraTimeType}
+                      value={extraTimeType && extraTimeType !== 'null' ? extraTimeType : ''}
                     >
                       {extraTimeTypes.map(item => (
                         <Option key={item.value} value={item.value}>
@@ -137,26 +137,26 @@ const ExtraTimeFields = ({ values, onInputChange }) => {
 
               {(extraTimeType === extraTimeTypeValues.halves ||
                 extraTimeType === extraTimeTypeValues.quarters) && (
-                <div className="col-sm-3">
-                  <Form.Item
-                    name="extraTimeMainBreak"
-                    rules={[
-                      {
-                        required: true,
-                        message: [],
-                      },
-                    ]}
-                  >
-                    <InputWithHead
-                      required="pt-0"
-                      heading={AppConstants.mainBreak}
-                      placeholder={AppConstants.mainBreak}
+                  <div className="col-sm-3">
+                    <Form.Item
                       name="extraTimeMainBreak"
-                      onChange={handleExtraTimeFieldChange}
-                    />
-                  </Form.Item>
-                </div>
-              )}
+                      rules={[
+                        {
+                          required: true,
+                          message: [],
+                        },
+                      ]}
+                    >
+                      <InputWithHead
+                        required="pt-0"
+                        heading={AppConstants.mainBreak}
+                        placeholder={AppConstants.mainBreak}
+                        name="extraTimeMainBreak"
+                        onChange={handleExtraTimeFieldChange}
+                      />
+                    </Form.Item>
+                  </div>
+                )}
 
               {extraTimeType === extraTimeTypeValues.quarters && (
                 <div className="col-sm-3">
